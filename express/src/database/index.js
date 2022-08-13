@@ -26,22 +26,22 @@ db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 // Define Models.
 // Importing database tables/models to create and use.
 db.users = require("./models/users.js")(db.sequelize, DataTypes);
-db.forumPosts = require("./models/forumPosts.js")(db.sequelize, DataTypes);
-db.replyPosts = require("./models/replyPosts.js")(db.sequelize, DataTypes);
+db.homeworkPosts = require("./models/homeworkPosts.js")(db.sequelize, DataTypes);
+// db.replyPosts = require("./models/replyPosts.js")(db.sequelize, DataTypes);
 
 // Relate post and user through foreign key.
 // Relating Posts table to the Users table with a foreign key.
-db.forumPosts.belongsTo(db.users, { foreignKey: { name: "email", allowNull: false } });
-// Relating Reply Posts table to the Forum posts table with a foreign key.
-db.replyPosts.belongsTo(db.forumPosts, { foreignKey: { name: "forumPosts_id", allowNull: false } });
-// Relating Reply Posts table to the Users table with a foreign key.
-db.replyPosts.belongsTo(db.users, { foreignKey: { name: "email", allowNull: false } });
+db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "name", allowNull: true } });
+// // Relating Reply Posts table to the Forum posts table with a foreign key.
+// db.replyPosts.belongsTo(db.forumPosts, { foreignKey: { name: "forumPosts_id", allowNull: false } });
+// // Relating Reply Posts table to the Users table with a foreign key.
+// db.replyPosts.belongsTo(db.users, { foreignKey: { name: "email", allowNull: false } });
 
 // Include a sync option with seed data logic included.
 db.sync = async () => {
     // Sync schema.
     // Creates the tables defined in Models if not created
-    await db.sequelize.sync();
+    await db.sequelize.sync({force: true});
 
     // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
     // await db.sequelize.sync({ force: true }); <-- This will delete all tables and recreate them So if more tables are added then the current command inuse wont do anything because that only works if no tables are created.
@@ -67,7 +67,10 @@ async function addData() {
 
     // Sample User data to add into the database user table.
     // let hashedPassword = await argon2.hash("abc123", { type: argon2.argon2id });
-    await db.users.create({ hashed_password: "abc123", name: "Test", group: "none" });
+    await db.users.create({ name: "Test", hashed_password: "abc123", group: "none" });
+    await db.users.create({ name: "Jazib Khalid", hashed_password: "jazib", group: "14-15 (Group 4)" });
+    await db.users.create({ name: "Admin", hashed_password: "maadminboard", group: "none" });
+
 
 }
 

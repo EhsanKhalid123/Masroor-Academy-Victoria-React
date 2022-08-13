@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules & from components
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { getUser, removeUser } from "../data/repository";
+import { getUser, removeUser, loggedInUser, removeLoggedInUser, removeSelectedId } from "../data/repository";
 
 // Importing the components
 import Navigation from './Navigation';
@@ -17,6 +17,7 @@ import MessageContext from "../data/MessageContext";
 import Friends from "../components/Friends";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./Dashboard";
+import Homework from "./Homework";
 
 // Functional Component for App
 function App() {
@@ -40,12 +41,16 @@ function App() {
   // Const Function for storing in state Variables and for sending to child elements
   const loginUser = (user) => {
     setUser(user);
+    loggedInUser(user.name);
+
   };
 
   // Const Function for removing state for user and sending it to child elements
   const logoutUser = () => {
     removeUser();
     setUser(null);
+    removeLoggedInUser();
+    removeSelectedId();
   };
 
   // Returns below elements to from the function App.
@@ -74,6 +79,9 @@ function App() {
             {/* {user !== null &&
               <Route path="/MyProfile" element={<MyProfile user={user} loginUser={loginUser} logoutUser={logoutUser} /> } />
             } */}
+            {user !== null &&
+              <Route path="/Homework" element={<Homework user={user} />} />
+            }
             <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
             {/* <Route path="/Sign-up" element={<Signup loginUser={loginUser} />} /> */}
             {user === null &&

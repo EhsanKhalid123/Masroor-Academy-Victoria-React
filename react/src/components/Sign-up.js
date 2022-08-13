@@ -1,13 +1,12 @@
 
-/* REFERENCE:
-   Some of the Code below is taken & adapted from Lab Examples of Week 8 and 9. 
-*/
-
 // Importing React classes and functions from node modules
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { findUser, createUser, setUser } from "../data/repository";
 import MessageContext from "../data/MessageContext";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 // Functional Component for Signup Page
 function Sign_up(props) {
@@ -17,6 +16,7 @@ function Sign_up(props) {
     const [values, setValues] = useState({ name: "", username: "", email: "", password: "" });
     const [errors, setErrors] = useState({});
     const { setMessage } = useContext(MessageContext);
+    const [startDate, setStartDate] = useState(new Date());
 
     // Generic change handler.
     const handleInputChange = (event) => {
@@ -109,6 +109,8 @@ function Sign_up(props) {
         return trimmedValues;
     };
 
+
+
     // Returns HTML elements and content to display on the pages
     return (
 
@@ -121,28 +123,29 @@ function Sign_up(props) {
             <hr style={{ width: "50%", marginBottom: "20px", borderWidth: "1px", backgroundColor: "#5dc7d8" }} />
             <p>&nbsp;</p>
             <form className="sign-up-form" onSubmit={handleSubmit} noValidate>
-                {/* Name Field */}
-                <div className="form-group">
-                    <label htmlFor="name"><b>Name:</b></label>
-                    <input type="text" className="form-control" id="name" name="name" placeholder="Please enter your name" value={values.name} onChange={handleInputChange} required />
-                    {errors.name && (
-                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
-                    )}
-                </div>
-                {/* Username Field */}
-                <div className="form-group">
-                    <label htmlFor="name"><b>Username:</b></label>
-                    <input type="text" className="form-control" id="username" name="username" placeholder="Please enter your username" value={values.username} onChange={handleInputChange} required />
-                    {errors.username && (
-                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.username}</p>
-                    )}
-                </div>
                 {/* Email Field */}
                 <div className="form-group">
                     <label htmlFor="email"><b>Email:</b></label>
                     <input type="email" className="form-control" id="email" name="email" placeholder="Please enter your email" value={values.email} onChange={handleInputChange} required />
                     {errors.email && (
                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.email}</p>
+                    )}
+                </div>
+                {/* Name Field */}
+                <div className="form-group">
+                    <label htmlFor="name"><b>Full name:</b></label>
+                    <input type="text" className="form-control" id="name" name="name" placeholder="Please enter your Full name" value={values.name} onChange={handleInputChange} required />
+                    {errors.name && (
+                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
+                    )}
+                </div>
+                {/* Username Field */}
+                <div className="form-group">
+                    <label htmlFor="name"><b>Date of Birth:</b></label>
+                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                    <input type="text" className="form-control" id="username" name="username" placeholder="Day/Month/Year" value={values.username} onChange={handleInputChange} required />
+                    {errors.username && (
+                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.username}</p>
                     )}
                 </div>
                 {/* Password Field */}

@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) =>
         group: {
             type: DataTypes.STRING(32),
             allowNull: false
+        },
+        Homework: {
+            type: DataTypes.STRING(128),
+            allowNull: true
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

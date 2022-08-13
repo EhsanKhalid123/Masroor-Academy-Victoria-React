@@ -33,7 +33,7 @@ app.get("/users", async (req, res) => {
 // Add user routes.
 // Endpoints imported from other folder to keep code clean. Routes gets the URL link info and then imports controllers that have endpoints.
 require("./src/routes/usersRoutes.js")(express, app);
-require("./src/routes/forumPostsRoutes.js")(express, app);
+require("./src/routes/homeworkPostsRoutes.js")(express, app);
 require("./src/routes/replyPostsRoutes.js")(express, app);
 
 // Set port, listen for requests.

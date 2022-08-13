@@ -9,6 +9,7 @@ import axios from "axios";
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:4000";
 const USER_KEY = "user";
+const SELECT_KEY = "SelectedID";
 
 // --- User ---------------------------------------------------------------------------------------
 // Verify User Request For API from DB
@@ -24,8 +25,8 @@ async function verifyUser(name, password) {
 }
 
 // Get User Details Request For API from DB
-async function getProfile(email) {
-  const response = await axios.get(API_HOST + `/VCApi/users/get/${email}`);
+async function getProfile(name) {
+  const response = await axios.get(API_HOST + `/VCApi/users/get/${name}`);
 
   return response.data;
 }
@@ -79,8 +80,8 @@ async function getPosts() {
 }
 
 // Create post Request For API from DB
-async function createPost(post) {
-  const response = await axios.post(API_HOST + "/VCApi/posts/create", post);
+async function createPost(homework) {
+  const response = await axios.post(API_HOST + "/VCApi/posts/create", homework);
 
   return response.data;
 }
@@ -151,6 +152,31 @@ function removeUser() {
   localStorage.removeItem(USER_KEY);
 }
 
+function selectedId(name) {
+  localStorage.setItem(SELECT_KEY, JSON.stringify(name));
+}
+
+function loggedInUser(name) {
+  localStorage.setItem("LoggedIn", JSON.stringify(name));
+}
+
+function getloggedInUser() {
+  return JSON.parse(localStorage.getItem("LoggedIn"));
+}
+
+// Removes user from Local Storage
+function removeLoggedInUser() {
+  localStorage.removeItem("LoggedIn");
+}
+
+function getSelectedId() {
+  return JSON.parse(localStorage.getItem(SELECT_KEY));
+}
+
+function removeSelectedId() {
+  localStorage.removeItem(SELECT_KEY);
+}
+
 // Exports all these functions to be used by other componenets
 export {
   verifyUser, findUser, createUser,
@@ -158,5 +184,6 @@ export {
   getUser, removeUser, deleteUserDB,
   getProfile, updateUser, setUser, deletePost2,
   createReplyPost, getReplyPosts, deleteReplyPost2,
-  getProfileUsers, deleteReplyPost, deleteReplyPost3
+  getProfileUsers, deleteReplyPost, deleteReplyPost3, selectedId, getSelectedId,
+  getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId
 }

@@ -8,23 +8,17 @@ const { Sequelize } = require("sequelize");
 // Creating a Sequelize instance and Table.
 module.exports = (sequelize, DataTypes) =>
     // Defining the table name.
-    sequelize.define("forumPosts", {
+    sequelize.define("homeworkPosts", {
         // Defining Table Fields/Data with properties.
-        forumPosts_id: {
+        homeworkPosts_id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
         // Defining Posts field in the table with properties of SQL.
-        postText: {
-            type: DataTypes.STRING(600),
+        homeworkText: {
+            type: DataTypes.STRING(100),
             allowNull: false
-        },
-        // Defining Table Fields/Data with properties.
-        postDate: {
-            type: DataTypes.DATE(),
-            allowNull: false,
-            defaultValue: Sequelize.NOW
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

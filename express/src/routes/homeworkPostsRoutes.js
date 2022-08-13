@@ -5,7 +5,7 @@
 
 module.exports = (express, app) => {
   // Importing libraries and files
-  const controller = require("../controllers/forumPostsController.js");
+  const controller = require("../controllers/homeworkPostsController.js");
   const router = express.Router();
 
   // Select all posts.

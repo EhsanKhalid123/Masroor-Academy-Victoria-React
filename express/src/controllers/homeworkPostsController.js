@@ -9,16 +9,16 @@ const db = require("../database");
 // Endpoint for selecting all posts from the database.
 exports.all = async (req, res) => {
   // Gets all posts from DB and does Eager Loading to display User information related to the user who made posts.
-  const posts = await db.forumPosts.findAll({ include: { model: db.users, as: "user" } });
-  res.json(posts);
+  const homeworks = await db.homeworkPosts.findAll({ include: { model: db.users, as: "user" } });
+  res.json(homeworks);
 };
 
 // Endpoint for creating a post in the database.
 // Routes are delcared in Routes folder.
 exports.create = async (req, res) => {
-  const post = await db.forumPosts.create({
-    postText: req.body.postText,
-    email: req.body.email
+  const post = await db.homeworkPosts.create({
+    homeworkText: req.body.homeworkText,
+    name: req.body.name
   });
 
   res.json(post);
@@ -26,11 +26,11 @@ exports.create = async (req, res) => {
 
 // Remove/Deletes a post from the database.
 exports.delete = async (req, res) => {
-  const forumPosts_id = req.body.forumPosts_id;
+  const forumPosts_id = req.body.homeworkPosts_id;
 
   let removed = false;
 
-  const post = await db.forumPosts.findByPk(forumPosts_id);
+  const post = await db.homeworkPosts.findByPk(forumPosts_id);
   if (post !== null) {
     await post.destroy();
     removed = true;
@@ -52,7 +52,7 @@ exports.delete2 = async (req, res) => {
   //   removed = true;
   // }
 
-  const post = await db.forumPosts.destroy({ where: { email: email } });
+  const post = await db.homeworkPosts.destroy({ where: { email: email } });
 
 
   return res.json(post);
