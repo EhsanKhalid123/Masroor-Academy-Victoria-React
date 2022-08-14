@@ -26,8 +26,8 @@ async function verifyUser(id, password) {
 }
 
 // Get User Details Request For API from DB
-async function getProfile(name) {
-  const response = await axios.get(API_HOST + `/VCApi/users/get/${name}`);
+async function getProfile(id) {
+  const response = await axios.get(API_HOST + `/VCApi/users/get/${id}`);
 
   return response.data;
 }
@@ -95,8 +95,8 @@ async function deletePost(postID) {
 }
 
 // Delete All posts associated with User Request For API from DB
-async function deletePost2(email) {
-  const response = await axios.post(API_HOST + "/VCApi/posts/delete2", email);
+async function deletePost2(id) {
+  const response = await axios.post(API_HOST + "/VCApi/posts/delete2", id);
 
   return response.data;
 }

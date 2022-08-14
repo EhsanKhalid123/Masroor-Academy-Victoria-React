@@ -41,20 +41,20 @@ exports.delete = async (req, res) => {
 
 // Remove a specific users posts from the database to avoid foreign Key Constraint Fail.
 exports.delete2 = async (req, res) => {
-  const email = req.body.email;
+  const id = req.body.id;
 
   let removed = false;
 
-  // const post = await db.forumPosts.findAll({where: { email: email }});
+  // const post2 = await db.homeworkPosts.findAll({ where: { id: id } });
 
-  // // if(post !== null) {
-  //   await post.destroy();
+  // if(post2 !== null) {
+  //   await post2.destroy();
   //   removed = true;
   // }
 
-  const post = await db.homeworkPosts.destroy({ where: { email: email } });
+  const post = await db.homeworkPosts.destroy({ where: { id: id } });
 
-
-  return res.json(post);
+  return res.json(removed);
 };
+
 

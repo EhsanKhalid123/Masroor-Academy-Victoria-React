@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) =>
         group: {
             type: DataTypes.STRING(32),
             allowNull: false
+        },
+        gender: {
+            type: DataTypes.STRING(15),
+            allowNull: false
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

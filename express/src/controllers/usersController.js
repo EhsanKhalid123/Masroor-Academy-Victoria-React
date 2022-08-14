@@ -70,11 +70,11 @@ exports.update = async (req, res) => {
 
 // Remove a user from the database.
 exports.delete = async (req, res) => {
-  const email = req.body.email;
+  const id = req.body.id;
 
   let removed = false;
 
-  const user = await db.users.findByPk(email);
+  const user = await db.users.findByPk(id);
   if (user !== null) {
     await user.destroy();
     removed = true;

@@ -58,7 +58,7 @@ function Homework(props) {
         // setPosts([...posts, newPost]);
 
         // Reset post content.
-        setPost("");
+        setHomework("");
         setErrorMessage("");
     };
 
@@ -95,9 +95,9 @@ function Homework(props) {
                                     <div>
                                         <div>
                                             {/* Only Display the following Elements if the email of the post matches the logged in user */}
-                                            {props.user.name === "Admin" &&
+                                            {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
                                                 <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deletePost(userPosts); setHomeworks(await getPosts()); }} >Delete</button>
-                                            }
+                                            {/* } */}
                                                                                     
                                         </div>
                                     </div>

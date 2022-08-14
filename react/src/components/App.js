@@ -14,7 +14,7 @@ import MyProfile from "./MyProfile";
 import EditProfile from './EditProfile';
 import Forum from './Forum';
 import MessageContext from "../data/MessageContext";
-import Friends from "../components/Friends";
+import About from "./About";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./Dashboard";
 import Homework from "./Homework";
@@ -84,6 +84,7 @@ function App() {
               <Route path="/Homework" element={<Homework user={user} />} />
             }
             <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
+            <Route path="/About" element={<About loginUser={loginUser} />} />
             {/* <Route path="/Sign-up" element={<Signup loginUser={loginUser} />} /> */}
             {user === null &&
               <Route path="/" element={<Home user={user} />} />

@@ -22,9 +22,14 @@ function Navigation(props) {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
           {props.user === null &&
+            <>
             <li className="nav-item">
-              <Link className="nav-link2" to="/Home">Home</Link>
+              <Link className="nav-link2 nav-link" to="/Home">Home</Link>
             </li>
+            <li className="nav-item">
+            <Link className="nav-link2 nav-link" to="/About">About Us</Link>
+          </li>
+          </>
           }
             {/* The following links only appear if user is logged in */}
             {props.user !== null &&

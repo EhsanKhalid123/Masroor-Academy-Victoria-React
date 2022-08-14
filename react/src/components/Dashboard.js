@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { selectedId, getPosts, selectedId2, getProfileUsers } from "../data/repository";
+import { selectedId, getPosts, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deletePost2 } from "../data/repository";
 
 function Dashboad(props) {
 
@@ -9,7 +9,7 @@ function Dashboad(props) {
     const [users, setUsersData] = useState([]);
     // const [homeworks, setHomeworks] = useState([]);
     const [userData, setUserData] = useState([]);
-    const [post, setPost] = useState("");
+    const [user, setUser] = useState([]);
     const [homeworks, setPosts] = useState([]);
     const [replyPosts, setReplyPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -26,9 +26,9 @@ function Dashboad(props) {
             setIsLoading(false);
         }
 
-        // // Loads User Data from DB
+        // Loads User Data from DB
         // async function loadUserDetails() {
-        //     const currentDetails = await getProfile(props.user.name);
+        //     const currentDetails = await getProfile(getSelectedId());
         //     setUserData(currentDetails)
         //     setIsLoading(false);
 
@@ -46,6 +46,13 @@ function Dashboad(props) {
         loadPosts();
     }, []);
 
+    const deleteSelectedUser = async (event) => {
+        const currentDetails = await getProfile(getSelectedId());
+        setUser(currentDetails);
+        const id = { id: getSelectedId()};
+        deletePost2(id);
+        deleteUserDB(user);
+    }
 
     return (
         <div>
@@ -53,10 +60,10 @@ function Dashboad(props) {
                 {props.user.name}'s Dashboard
             </h1>
             <h4 className="text-center" style={{ paddingTop: "0px", color: "#112c3f" }}>
-                Student ID: <b>{props.user.id}</b>
+                Enrolled ID: <b>{props.user.id}</b>
             </h4>
             <p>&nbsp;</p>
-            {props.user.name !== "Admin" ?
+            {props.user.name !== "Admin" && props.user.name !== "Teacher" ?
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-6 mb-4">
@@ -273,7 +280,7 @@ function Dashboad(props) {
                         {/* Mapping Users state Variable to access its content easily to display in Table */}
                         {users.map((userDetails) =>
                             <tbody>
-                                {userDetails.name !== props.user.name && (userDetails.name != "Test") &&
+                                {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                     <tr key={userDetails.name}>
                                         <td></td>
                                         <td style={{color: "#112c3f"}}>{userDetails.id}</td>
@@ -282,9 +289,13 @@ function Dashboad(props) {
 
                                         <td>
                                             <Link to="/Homework">
-                                                
                                                 <button className="btn2 btn-custom" onClick={() => {selectedId(userDetails.id); selectedId2(userDetails.name)}}>Select</button>
                                             </Link>
+                                            {props.user.name === "Admin" &&
+                                                <Link to="/Dashboard">
+                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => {await selectedId(userDetails.id); await deleteSelectedUser()}} >Delete</button>
+                                               </Link>
+                                               }
                                         </td>
                                     </tr>
                                 }
