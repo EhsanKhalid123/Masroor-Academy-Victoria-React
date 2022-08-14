@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules & from components
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { getUser, removeUser, loggedInUser, removeLoggedInUser, removeSelectedId } from "../data/repository";
+import { getUser, removeUser, loggedInUser, removeLoggedInUser, removeSelectedId, removeSelectedId2 } from "../data/repository";
 
 // Importing the components
 import Navigation from './Navigation';
@@ -51,6 +51,7 @@ function App() {
     setUser(null);
     removeLoggedInUser();
     removeSelectedId();
+    removeSelectedId2();
   };
 
   // Returns below elements to from the function App.

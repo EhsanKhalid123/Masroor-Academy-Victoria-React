@@ -52,6 +52,9 @@ function Dashboad(props) {
             <h1 className="text-center" style={{ paddingTop: "50px", color: "#112c3f" }}>
                 {props.user.name}'s Dashboard
             </h1>
+            <h4 className="text-center" style={{ paddingTop: "0px", color: "#112c3f" }}>
+                Student ID: <b>{props.user.id}</b>
+            </h4>
             <p>&nbsp;</p>
             {props.user.name !== "Admin" ?
                 <div className="container">
@@ -72,7 +75,7 @@ function Dashboad(props) {
                                                 :
                                                 homeworks.map((homework) =>
                                                     <>
-                                                        {homework.name === props.user.name &&
+                                                        {homework.id === props.user.id &&
                                                             <div className="card-body">{homework.homeworkText}</div>
                                                         }
 
