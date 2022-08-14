@@ -103,8 +103,8 @@ async function deletePost2(id) {
 
 // --- Reply Post ---------------------------------------------------------------------------------------
 // Create Reply Post Request For API from DB
-async function createReplyPost(post) {
-  const response = await axios.post(API_HOST + "/VCApi/replyPosts/create", post);
+async function createReplyPost(announcementText) {
+  const response = await axios.post(API_HOST + "/VCApi/replyPosts/create", announcementText);
 
   return response.data;
 }

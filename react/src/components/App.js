@@ -12,7 +12,7 @@ import Signup from './Sign-up';
 import Login from './Login';
 import MyProfile from "./MyProfile";
 import EditProfile from './EditProfile';
-import Forum from './Forum';
+import Announcements from './Announcements';
 import MessageContext from "../data/MessageContext";
 import About from "./About";
 import ErrorPage from "./ErrorPage";
@@ -63,7 +63,7 @@ function App() {
         {/* Props being passed to each component and Router is used for Navigating to pages */}
         <Router>
           <Header />
-          <Navigation user={user} logoutUser={logoutUser} />
+          <Navigation user={user} loginUser={loginUser} logoutUser={logoutUser} />
           <Routes>
             {user !== null &&
               <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
@@ -86,6 +86,13 @@ function App() {
             <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
             <Route path="/About" element={<About loginUser={loginUser} />} />
             {/* <Route path="/Sign-up" element={<Signup loginUser={loginUser} />} /> */}
+            {user !== null &&
+            <>
+              {(user.name === "Teacher" ||  user.name === "Admin") &&
+                <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+              }
+            </>
+            }
             {user === null &&
               <Route path="/" element={<Home user={user} />} />
             }

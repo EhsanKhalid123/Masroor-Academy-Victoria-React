@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { selectedId, getPosts, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deletePost2 } from "../data/repository";
+import { selectedId, getPosts, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deletePost2, createReplyPost, getReplyPosts, deleteReplyPost } from "../data/repository";
 
 function Dashboad(props) {
 
@@ -13,7 +13,8 @@ function Dashboad(props) {
     const [homeworks, setPosts] = useState([]);
     const [replyPosts, setReplyPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const [announcement, setAnnouncement] = useState("");
+    const [announcements, setAnnouncements] = useState([]);
 
     // Load users from DB.
     useEffect(() => {
@@ -41,7 +42,15 @@ function Dashboad(props) {
 
         }
 
+        async function loadAnnouncements() {
+            const currentPosts = await getReplyPosts();
+
+            setAnnouncements(currentPosts);
+            setIsLoading(false);
+        }
+
         // Calls the functions above
+        loadAnnouncements();
         loadUserDetails();
         loadPosts();
     }, []);
@@ -49,7 +58,7 @@ function Dashboad(props) {
     const deleteSelectedUser = async (event) => {
         const currentDetails = await getProfile(getSelectedId());
         setUser(currentDetails);
-        const id = { id: getSelectedId()};
+        const id = { id: getSelectedId() };
         deletePost2(id);
         deleteUserDB(user);
     }
@@ -64,7 +73,35 @@ function Dashboad(props) {
             </h4>
             <p>&nbsp;</p>
             {props.user.name !== "Admin" && props.user.name !== "Teacher" ?
+
                 <div className="container">
+
+                    <div className="profile-card" style={{padding: "0 20px 2% 20px"}}>
+                        <div className="text-center">
+                            <div className="card">
+                                <h5 className="card-header card text-white bg-custom">Announcements:</h5>
+                                {isLoading ?
+                                    <div className="card-body text-center">
+                                        <span className="text-muted">Loading Annoucements...</span>
+                                    </div>
+                                    :
+                                    announcements.length === 0 ?
+                                        <div className="text-center text-muted">
+                                            <div className="card-body">No Annoucements Posted!</div>  
+                                        </div>
+                                        :
+                                        announcements.map((userPosts) =>
+                                            <div>
+                                                <div className="card-body" style={{padding: "5px"}}>{userPosts.announcementText}</div>
+                                            </div>
+                                        )
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+
+
                     <div className="row">
                         <div className="col-lg-6 mb-4">
                             <div className="card">
@@ -266,13 +303,15 @@ function Dashboad(props) {
                 :
                 // props.user.name === "Admin" &&
                 <div>
+                    <p>&nbsp;</p>
+
                     <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th></th>
                                 <th>ID</th>
-                                <th style={{color: "#112c3f"}} scope="col">Name</th>
-                                <th style={{color: "#112c3f"}} scope="col">Group</th>
+                                <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                 <th></th>
 
                             </tr>
@@ -281,24 +320,30 @@ function Dashboad(props) {
                         {users.map((userDetails) =>
                             <tbody>
                                 {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
-                                    <tr key={userDetails.name}>
-                                        <td></td>
-                                        <td style={{color: "#112c3f"}}>{userDetails.id}</td>
-                                        <td style={{color: "#112c3f"}} scope="row">{userDetails.name}</td>
-                                        <td style={{color: "#112c3f"}}>{userDetails.group}</td>
+                                    <>
+                                        {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal")) &&
+                                            <tr key={userDetails.name}>
+                                                <td></td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
+                                                <td style={{ color: "#112c3f" }} scope="row">{userDetails.name}</td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
-                                        <td>
-                                            <Link to="/Homework">
-                                                <button className="btn2 btn-custom" onClick={() => {selectedId(userDetails.id); selectedId2(userDetails.name)}}>Select</button>
-                                            </Link>
-                                            {props.user.name === "Admin" &&
-                                                <Link to="/Dashboard">
-                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => {await selectedId(userDetails.id); await deleteSelectedUser()}} >Delete</button>
-                                               </Link>
-                                               }
-                                        </td>
-                                    </tr>
+                                                <td>
+                                                    <Link to="/Homework">
+                                                        <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
+                                                    </Link>
+                                                    {props.user.name === "Admin" &&
+                                                        <Link to="/Dashboard">
+                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
+                                                        </Link>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </>
                                 }
+
+
                             </tbody>
                         )}
                     </table>

@@ -21,24 +21,38 @@ function Navigation(props) {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-          {props.user === null &&
-            <>
-            <li className="nav-item">
-              <Link className="nav-link2 nav-link" to="/Home">Home</Link>
-            </li>
-            <li className="nav-item">
-            <Link className="nav-link2 nav-link" to="/About">About Us</Link>
-          </li>
-          </>
-          }
+            {props.user === null &&
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link2 nav-link" to="/Home">Home</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link2 nav-link" to="/About">About Us</Link>
+                </li>
+              </>
+            }
             {/* The following links only appear if user is logged in */}
             {props.user !== null &&
               <>
                 <li className="nav-item">
-                  <Link className="nav-link2" to="/Dashboard">Dashboard</Link>
+                  <Link className="nav-link2 nav-link" to="/Dashboard">Dashboard</Link>
                 </li>
               </>
             }
+
+<div>
+          {props.user !== null &&
+          <>
+            {(props.user.name === "Teacher" || props.user.name === "Admin") &&
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link2 nav-link" to="/Announcements">Annoucements</Link>
+                </li>
+              </>
+            }
+      </>
+}
+</div>
           </ul>
           <ul className="navbar-nav">
             {/* Button Display changes according to if user is logged in or not */}

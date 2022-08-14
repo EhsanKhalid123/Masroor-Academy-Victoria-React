@@ -11,8 +11,8 @@ exports.all = async (req, res) => {
     // const posts = await db.replyPosts.findAll();
     // const posts = await db.replyPosts.findAll({include: {model: db.forumPosts, as: "forumPostsID"} && {model: db.users, as: "users"} });
 
-    const posts = await db.replyPosts.findAll({
-        include: [{ model: db.forumPosts, as: "forumPost" }, { model: db.users, as: "user" }]
+    const posts = await db.announcements.findAll({
+        
     });
 
 
@@ -22,10 +22,8 @@ exports.all = async (req, res) => {
 // Endpoint for creating a post in the database.
 // Routes are delcared in Routes folder.
 exports.create = async (req, res) => {
-    const post = await db.replyPosts.create({
-        replyText: req.body.replyText,
-        forumPosts_id: req.body.forumPosts_id,
-        email: req.body.email
+    const post = await db.announcements.create({
+        announcementText: req.body.announcementText,
     });
 
     res.json(post);
@@ -33,11 +31,11 @@ exports.create = async (req, res) => {
 
 // Remove a post from the database.
 exports.delete = async (req, res) => {
-    const replyPosts_id = req.body.replyPosts_id;
+    const announcement_id = req.body.announcement_id;
 
     let removed = false;
 
-    const post = await db.replyPosts.findByPk(replyPosts_id);
+    const post = await db.announcements.findByPk(announcement_id);
     if (post !== null) {
         await post.destroy();
         removed = true;

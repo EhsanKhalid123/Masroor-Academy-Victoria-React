@@ -27,7 +27,7 @@ db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 // Importing database tables/models to create and use.
 db.users = require("./models/users.js")(db.sequelize, DataTypes);
 db.homeworkPosts = require("./models/homeworkPosts.js")(db.sequelize, DataTypes);
-// db.replyPosts = require("./models/replyPosts.js")(db.sequelize, DataTypes);
+db.announcements = require("./models/announcements.js")(db.sequelize, DataTypes);
 
 // Relate post and user through foreign key.
 // Relating Posts table to the Users table with a foreign key.
@@ -69,8 +69,8 @@ async function addData() {
     // let hashedPassword = await argon2.hash("abc123", { type: argon2.argon2id });
     await db.users.create({ id: "1", name: "Jazib Khalid", hashed_password: "jazib", group: "14-15 (Group 4)", gender: "Atfal" });
     await db.users.create({ id: "2", name: "Test2", hashed_password: "jazib", group: "12-13 (Group 3)", gender: "Atfal" });
-    await db.users.create({ id: "3", name: "Test3", hashed_password: "jazib", group: "9-11 (Group 2)", gender: "Atfal" });
-    await db.users.create({ id: "4", name: "Test4", hashed_password: "jazib", group: "7-8 (Group 1)", gender: "Atfal" });
+    await db.users.create({ id: "3", name: "Test3", hashed_password: "jazib", group: "9-11 (Group 2)", gender: "Nasirat" });
+    await db.users.create({ id: "4", name: "Test4", hashed_password: "jazib", group: "7-8 (Group 1)", gender: "Nasirat" });
     await db.users.create({ id: "FemaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Female" });
     await db.users.create({ id: "MaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Male" });
     await db.users.create({ id: "Admin", name: "Admin", hashed_password: "maadminboard", group: "none", gender: "Admin" });
