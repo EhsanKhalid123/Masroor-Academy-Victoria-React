@@ -321,7 +321,7 @@ function Dashboad(props) {
                             <tbody>
                                 {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                     <>
-                                        {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal")) &&
+                                        {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal") || (props.user.id === "Admin")) &&
                                             <tr key={userDetails.name}>
                                                 <td></td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
