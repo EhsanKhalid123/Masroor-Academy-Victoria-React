@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Masroor Academy Victoria - Student Portal / School Management Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Masroor Academy is a private school for the Ahmadiyya Muslim Community Organisation.
+This website is a school management website, where students will be able to see their
+final results/grades, their attendance and total classes that were run. Students will be
+able to see their homeworks and their syllabus as well as see their progress and all the
+work they have completed.
+Teachers will be able to record attendance for each student as well as give their marks,
+add homework and add announcements.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+### `Admin Account`
 
-### `npm start`
+Admin's can see a list of all enrolled students and select any and add homework for them.
+Admin's can also delete their homeworks.
+Admin's can delete and enroll students.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### `Teachers Dashboard`
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Teacher's can see a list of all enrolled students and select any and add homework for them.
+Teacher's can also delete their homeworks.
 
-### `npm test`
+### `Students Dashboard`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+All Students have their own dashboard displaying their enrolled classes sylabbus based on their age.
+Students can see their homework added by the teachers/admin.
 
-### `npm run build`
+**Note:**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This website is still under development and may have few bugs and issues.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Developer:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Designed/Created by Ehsan Khalid as an voluntary head of IT Department in Masroor Academy Admin Board.
+The website is created under my company EK Creations.
+Github repo link: https://github.com/EhsanKhalid123/Masroor-Academy-Victoria-React 
