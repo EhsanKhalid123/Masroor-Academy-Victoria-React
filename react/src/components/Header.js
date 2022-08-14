@@ -13,12 +13,12 @@ function Header() {
         // Header Code uses simple HTML elements
         // url(" + "URL LINK HERE" + ") - Note to self Syntax for using websites for images
         // IMAGE REFERENCE: Image taken from free image provider website https://unsplash.com/ 
-        <div className="p-5 text-center bg-image" style={{ backgroundImage: `url("/assets/images/Nature-Wallpaper-Desktop-Background-138-1600x900.jpg")`, backgroundSize: "200%", backgroundRepeat: "no-repeat", height: "200px" }}>
+        <div className="p-5 text-center bg-image" style={{ backgroundImage: `url("/assets/images/istockphoto-1192265107-170667a.jpg")`, backgroundSize: "50%", height: "200px" }}>
             <div className="mask" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', height: "100px" }}>
                 <div className="d-flex justify-content-center align-items-center h-100">
                     <div className="text-white">
-                        <h1 className="mb-3">Masroor Academy - Victoria</h1>
-                        <h4 className="mb-3">Student's School Portal</h4>
+                        <h1 className="mb-3">Masroor Academy Victoria</h1>
+                        <h4 className="mb-3">Students Portal</h4>
                     </div>
                 </div>
             </div>

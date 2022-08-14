@@ -24,14 +24,14 @@ exports.one = async (req, res) => {
 
 // Select one user from the database.
 exports.one2 = async (req, res) => {
-  const user = await db.users.findByPk(req.params.name);
+  const user = await db.users.findByPk(req.params.id);
 
   res.json(user);
 };
 
 // Select one user from the database if email and password are a match.
 exports.login = async (req, res) => {
-  const user = await db.users.findByPk(req.query.name);
+  const user = await db.users.findByPk(req.query.id);
 
   if (user === null || user.hashed_password !== req.query.password)
     // Login failed.

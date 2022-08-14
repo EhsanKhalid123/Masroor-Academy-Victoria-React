@@ -23,14 +23,14 @@ function Navigation(props) {
           <ul className="navbar-nav mr-auto">
           {props.user === null &&
             <li className="nav-item">
-              <Link className="nav-link" to="/Home">Home</Link>
+              <Link className="nav-link2" to="/Home">Home</Link>
             </li>
           }
             {/* The following links only appear if user is logged in */}
             {props.user !== null &&
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/Dashboard">Dashboard</Link>
+                  <Link className="nav-link2" to="/Dashboard">Dashboard</Link>
                 </li>
               </>
             }
@@ -40,17 +40,17 @@ function Navigation(props) {
             {props.user === null ?
               <div className="form-inline my-2 my-lg-0">
                 <Link to="/Sign-in">
-                  <button className="btn btn-warning my-2 my-sm-0" type="submit">Sign-in</button>
+                  <button className="btn btn-custom my-2 my-sm-0" type="submit">Sign-in</button>
                 </Link>
               </div>
               :
               <>
                 <li className="nav-item">
-                  <span className="nav-link" style={{ color: "Black" }}>Welcome, {props.user.name}</span>
+                  <span className="nav-link" style={{ color: "#112c3f" }}>Welcome, {props.user.name}</span>
                 </li>
                 <div className="form-inline my-2 my-lg-0">
                   <Link to="/Sign-in" onClick={props.logoutUser}>
-                    <button className="btn btn-warning my-2 my-sm-0" type="submit">Logout</button>
+                    <button className="btn btn-custom my-2 my-sm-0" type="submit">Logout</button>
                   </Link>
                 </div>
               </>

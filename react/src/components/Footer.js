@@ -18,14 +18,14 @@ function Footer() {
                 <ul className="list-unstyled list-inline text-center py-2">
                     <li className="list-inline-item">
                         <h5 className="mb-1 text-uppercase footer-parralax-text">Masroor Academy Victoria</h5>
-                        <p style={{ color: "white", fontSize: "20px", margin: "0 20px 20px 20px" }}>Students School Portal - View Progress and Results</p>
+                        <p style={{ color: "white", fontSize: "20px", margin: "0 20px 20px 20px" }}>Students Portal</p>
                     </li>
                 </ul>
             </div>
 
             {/* Bottom Footer - Copyright Section */}
-            <div className="footer-copyright text-center py-3 " style={{ backgroundColor: "#27b8cfba" }}><b>© 2022 Copyright:</b>
-                <Link to="/" style={{ color: "#c30000" }}> <b>Masroor Academy - Victoria</b></Link>
+            <div className="footer-copyright text-center py-3 " style={{ backgroundColor: "#112c3f" }}><b style={{ color: "white" }}>© 2022 Copyright:</b>
+                <Link to="/" style={{ color: "#dc3545" }}> <b>Masroor Academy - Victoria</b></Link>
             </div>
 
         </footer>

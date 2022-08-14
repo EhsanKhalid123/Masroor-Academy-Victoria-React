@@ -10,11 +10,12 @@ import axios from "axios";
 const API_HOST = "http://localhost:4000";
 const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
+const SELECT_KEY2 = "SelectedID2";
 
 // --- User ---------------------------------------------------------------------------------------
 // Verify User Request For API from DB
-async function verifyUser(name, password) {
-  const response = await axios.get(API_HOST + "/VCApi/users/Sign-in", { params: { name, password } });
+async function verifyUser(id, password) {
+  const response = await axios.get(API_HOST + "/VCApi/users/Sign-in", { params: { id, password } });
   const user = response.data;
 
   // NOTE: In this example the login is also persistent as it is stored in local storage.
@@ -152,8 +153,12 @@ function removeUser() {
   localStorage.removeItem(USER_KEY);
 }
 
-function selectedId(name) {
-  localStorage.setItem(SELECT_KEY, JSON.stringify(name));
+function selectedId(id) {
+  localStorage.setItem(SELECT_KEY, JSON.stringify(id));
+}
+
+function selectedId2(name) {
+  localStorage.setItem(SELECT_KEY2, JSON.stringify(name));
 }
 
 function loggedInUser(name) {
@@ -173,8 +178,16 @@ function getSelectedId() {
   return JSON.parse(localStorage.getItem(SELECT_KEY));
 }
 
+function getSelectedId2() {
+  return JSON.parse(localStorage.getItem(SELECT_KEY2));
+}
+
 function removeSelectedId() {
   localStorage.removeItem(SELECT_KEY);
+}
+
+function removeSelectedId2() {
+  localStorage.removeItem(SELECT_KEY2);
 }
 
 // Exports all these functions to be used by other componenets
@@ -185,5 +198,6 @@ export {
   getProfile, updateUser, setUser, deletePost2,
   createReplyPost, getReplyPosts, deleteReplyPost2,
   getProfileUsers, deleteReplyPost, deleteReplyPost3, selectedId, getSelectedId,
-  getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId
+  getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
+  getSelectedId2, removeSelectedId2, selectedId2
 }

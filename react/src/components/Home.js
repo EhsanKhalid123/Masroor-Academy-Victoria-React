@@ -14,10 +14,10 @@ function Home() {
                 <p>&nbsp;</p>
                 <h3 className="home-welcome display-5">Welcome to Masroor Academy Victoria</h3>
                 <img src={logo} className="home-logo-image" alt="logo" style={{width: "13%"}} />
-                <hr style={{ width: "90%", borderWidth: "1px", backgroundColor: "#5dc7d8" }} />
+                <hr style={{ width: "90%", borderWidth: "1px", backgroundColor: "#aa0001" }} />
                 <div style={{ padding: "0 10% 5% 10%" }}>
                 <Link to="/Sign-in">
-                  <button className="btn btn-warning my-2 my-sm-0" style={{fontSize: "30px"}} type="submit">
+                  <button className="btn btn-custom my-2 my-sm-0" style={{fontSize: "30px"}} type="submit">
                     Login
                   </button>
                 </Link>

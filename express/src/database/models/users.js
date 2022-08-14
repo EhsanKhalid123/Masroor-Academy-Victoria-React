@@ -11,9 +11,13 @@ module.exports = (sequelize, DataTypes) =>
     sequelize.define("users", {
 
         // Defining Table Fields/Data with properties.
+        id: {
+            type: DataTypes.STRING(20),
+            primaryKey: true
+        },
         name: {
             type: DataTypes.STRING(40),
-            primaryKey: true
+            allowNull: false
         },
         hashed_password: {
             type: DataTypes.STRING(32),
@@ -22,10 +26,6 @@ module.exports = (sequelize, DataTypes) =>
         group: {
             type: DataTypes.STRING(32),
             allowNull: false
-        },
-        Homework: {
-            type: DataTypes.STRING(128),
-            allowNull: true
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

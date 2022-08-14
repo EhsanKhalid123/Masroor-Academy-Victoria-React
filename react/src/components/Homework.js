@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { deletePost, getSelectedId, createPost, getPosts, selectedId } from "../data/repository";
+import { deletePost, getSelectedId, createPost, getPosts, selectedId, getSelectedId2 } from "../data/repository";
 
 // Functional Component for Navigation Bar
 function Homework(props) {
@@ -45,7 +45,7 @@ function Homework(props) {
         }
 
         // Create a post.
-        const newHomework = { homeworkText: trimmedPost, name: getSelectedId()};
+        const newHomework = { homeworkText: trimmedPost, id: getSelectedId()};
         await createPost(newHomework);
 
         newHomework.user = { username: props.user.username };
@@ -69,25 +69,28 @@ function Homework(props) {
         <p>&nbsp;</p>
         <form onSubmit={handleSubmit} >
                 <div className="form-group">
-                    <h3 className="text-center" style={{ margin: "0 25% 10px 25%", width: "50%", textAlign: "left" }}>Add Homework for Student {getSelectedId()}</h3>
+                    <h3 className="text-center" style={{ margin: "0 25% 10px 25%", width: "50%", textAlign: "left" }}>Add Homework for Student {getSelectedId2()}</h3>
                     <h5 className="text-center"> Make Sure to Please Delete the Previous Homework Once Done!</h5>
-                    <textarea style={{ margin: "auto", width: "40%", height: "50px", border: "solid 2px #5dc7d8" }} className="form-control" id="homeworkText" name="homeworkText" rows="3" value={homework} onChange={handleInputChange} />
+                    <textarea style={{ margin: "auto", width: "40%", height: "50px", border: "solid 2px #2d6d99" }} className="form-control" id="homeworkText" name="homeworkText" rows="3" value={homework} onChange={handleInputChange} />
                 </div>
                 {errorMessage && (
                     <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errorMessage}</p>
                 )}
-                <button type="submit" style={{ textAlign: "right", margin: "0 0 0 30%", padding: "5px 25px 5px 25px" }} className="text-center btn btn-outline-primary mr-sm-2" >Add</button>
-                <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-outline-danger mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}}  >Cancel</button>
+                <button type="submit" style={{ textAlign: "right", margin: "0 0 0 30%", padding: "5px 25px 5px 25px" }} className="text-center btn btn-outline-primary2 mr-sm-2" >Add</button>
+                <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-outline-danger mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}} >Clear</button>
+                <Link to="/Dashboard">
+                    <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-success mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}}  >Go Back to Dashboard</button>    
+                </Link>
             </form>
             <p>&nbsp;</p>
             {homeworks.map((userPosts) => 
                         <div>
-                            {userPosts.name === getSelectedId() &&
+                            {userPosts.id === getSelectedId() &&
                             <div className="posts card" >
                                 <div className="card-body">
-                                    <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{userPosts.name}</h5>
+                                    <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{userPosts.user.name}</h5>
                                     <p style={{ margin: "0 0 10% 0" }}></p>
-                                    <p style={{ clear: "both", float: "left", textAlign: "left" }} className="card-text">{userPosts.homeworkText}</p>
+                                    <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f" }} className="card-text">{userPosts.homeworkText}</p>
 
                                     <div>
                                         <div>
