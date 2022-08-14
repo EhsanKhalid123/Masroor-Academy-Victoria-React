@@ -69,7 +69,11 @@ async function addData() {
     // let hashedPassword = await argon2.hash("abc123", { type: argon2.argon2id });
     await db.users.create({ name: "Test", hashed_password: "abc123", group: "none" });
     await db.users.create({ name: "Jazib Khalid", hashed_password: "jazib", group: "14-15 (Group 4)" });
+    await db.users.create({ name: "Test2", hashed_password: "jazib", group: "12-13 (Group 3)" });
+    await db.users.create({ name: "Test3", hashed_password: "jazib", group: "9-11 (Group 2)" });
+    await db.users.create({ name: "Test4", hashed_password: "jazib", group: "7-8 (Group 1)" });
     await db.users.create({ name: "Admin", hashed_password: "maadminboard", group: "none" });
+    await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", name: "Test" });
 
 
 }
