@@ -7,7 +7,7 @@
 import axios from "axios";
 
 // --- Constants ----------------------------------------------------------------------------------
-const API_HOST = "http://localhost:4000";
+const API_HOST = "https://masroor-academy-victoria.herokuapp.com";
 const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
 const SELECT_KEY2 = "SelectedID2";

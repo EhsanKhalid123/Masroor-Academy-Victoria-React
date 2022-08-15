@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix react"
   },
   "author": "Ehsan Khalid",
   "license": "ISC",
@@ -15,6 +17,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.21.3"
+    "open": "^8.4.0",
+    "sequelize": "^6.21.3",
+    "tcp-ping": "^0.1.1"
   }
 }
