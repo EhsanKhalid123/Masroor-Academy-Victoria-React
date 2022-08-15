@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9957dae7.css",
+    "main.js": "/static/js/main.c22c29b1.js",
+    "static/js/787.cc09de24.chunk.js": "/static/js/787.cc09de24.chunk.js",
+    "static/media/Masroor Academy Logo 2.png": "/static/media/Masroor Academy Logo 2.037932b9cf6137f729fa.png",
+    "index.html": "/index.html",
+    "main.9957dae7.css.map": "/static/css/main.9957dae7.css.map",
+    "main.c22c29b1.js.map": "/static/js/main.c22c29b1.js.map",
+    "787.cc09de24.chunk.js.map": "/static/js/787.cc09de24.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9957dae7.css",
+    "static/js/main.c22c29b1.js"
+  ]
+}

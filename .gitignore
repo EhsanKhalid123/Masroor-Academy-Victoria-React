@@ -3,8 +3,9 @@
 # dependencies
 react/node_modules
 /node_modules
-src/database/config.js
-react/build
+.env
+#react/build
+
 /.pnp
 .pnp.js
 
