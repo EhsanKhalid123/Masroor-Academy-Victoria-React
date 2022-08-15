@@ -1,5 +1,7 @@
 # Masroor Academy Victoria - Student Portal / School Management Website
 
+Link to Website: https://masroor-academy-victoria.herokuapp.com/
+
 Masroor Academy is a private school for the Ahmadiyya Muslim Community Organisation.
 This website is a school management website, where students will be able to see their
 final results/grades, their attendance and total classes that were run. Students will be
