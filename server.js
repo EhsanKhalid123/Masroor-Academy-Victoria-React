@@ -40,6 +40,29 @@ if (process.env.NODE_ENV === "production"){
   app.use(express.static('react/build'))
 }
 
+// List of all the files that should be served as-is
+let protected = ['About.js', 'App.css', 'Masroor Academy Victoria 2.ico', 'Announcement.js', 'Dashboard.js', 'ErrorPage.js', 'Home.js', 'Homework.js', 'Login.js', 'Sign-in']
+
+app.get("*", (req, res) => {
+
+  let path = req.params['0'].substring(1)
+
+  if (protected.includes(path)) {
+    // Return the actual file
+    res.sendFile(`react/build/${path}`);
+  } else {
+    // Otherwise, redirect to /build/index.html
+    res.sendFile(`react/build/index.html`);
+  }
+});
+
+// app.get("*", (req, res) => {
+//   let url = path.join(__dirname, 'react/build', 'index.html');
+//   if (!url.startsWith('/app/')) // since we're on local windows
+//     url = url.substring(1);
+//   res.sendFile(url);
+// });
+
 // var https = require("http");
 //   setInterval(function() {
 //     https.get("https://masroor-academy-victoria.herokuapp.com/");
