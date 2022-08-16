@@ -65,16 +65,16 @@ if (process.env.NODE_ENV === "production"){
 
 // var https = require("http");
 //   setInterval(function() {
-//     https.get("https://masroor-academy-victoria.herokuapp.com/");
+//     https.get("https://masroor-academy-vic.herokuapp.com/");
 // }, 100000); // every 5 minutes (300000)
 
 var http = require("http");
 setInterval(function() {
-    http.get("http://masroor-academy-victoria.herokuapp.com/");
+    http.get("http://masroor-academy-vic.herokuapp.com/");
 }, 100000); // every 5 minutes (300000)
 
 (function wakeup() {
-  require('open')('https://masroor-academy-victoria.herokuapp.com/', (err) => {
+  require('open')('https://masroor-academy-vic.herokuapp.com/', (err) => {
     if (err) throw err;
     console.log('Woke up!');
     setTimeout(wakeup, 100000); //29m
@@ -82,7 +82,7 @@ setInterval(function() {
 })();
 
 var tcpp = require('tcp-ping');
-tcpp.ping({ address: 'https://masroor-academy-victoria.herokuapp.com/', port: 443 }, function(err, data) {
+tcpp.ping({ address: 'https://masroor-academy-vic.herokuapp.com/', port: 443 }, function(err, data) {
     console.log(data, err);
 });
 
