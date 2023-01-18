@@ -8,7 +8,7 @@ function Footer() {
     // Returns HTML content to display on pages
     return (
 
-        // Footer code adapted from Bootstrap Official Documents, I made changes to it 
+        // Footer code adapted from Bootstrap Official Documents
         // https://mdbootstrap.com/docs/b4/jquery/navigation/footer/
 
         <footer className="page-footer font-small" style={{ backgroundColor: "#f0f0f0" }}>

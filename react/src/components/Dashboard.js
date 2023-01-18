@@ -1,39 +1,27 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { selectedId, getPosts, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deletePost2, createReplyPost, getReplyPosts, deleteReplyPost } from "../data/repository";
+import { selectedId, getHomeworks, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2, getAnnouncements } from "../data/repository";
 
 function Dashboad(props) {
 
 
     const [users, setUsersData] = useState([]);
-    // const [homeworks, setHomeworks] = useState([]);
-    const [userData, setUserData] = useState([]);
     const [user, setUser] = useState([]);
-    const [homeworks, setPosts] = useState([]);
-    const [replyPosts, setReplyPosts] = useState([]);
+    const [homeworks, setHomeworks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [announcement, setAnnouncement] = useState("");
     const [announcements, setAnnouncements] = useState([]);
 
     // Load users from DB.
     useEffect(() => {
 
-        // Loads Posts from DB
-        async function loadPosts() {
-            const currentPosts = await getPosts();
+        // Loads Homeworks from DB
+        async function loadHomeworks() {
+            const currentHomeworks = await getHomeworks();
 
-            setPosts(currentPosts);
+            setHomeworks(currentHomeworks);
             setIsLoading(false);
         }
-
-        // Loads User Data from DB
-        // async function loadUserDetails() {
-        //     const currentDetails = await getProfile(getSelectedId());
-        //     setUserData(currentDetails)
-        //     setIsLoading(false);
-
-        // }
 
         async function loadUserDetails() {
             const currentDetails = await getProfileUsers();
@@ -43,23 +31,23 @@ function Dashboad(props) {
         }
 
         async function loadAnnouncements() {
-            const currentPosts = await getReplyPosts();
+            const currentAnnouncements = await getAnnouncements();
 
-            setAnnouncements(currentPosts);
+            setAnnouncements(currentAnnouncements);
             setIsLoading(false);
         }
 
         // Calls the functions above
         loadAnnouncements();
         loadUserDetails();
-        loadPosts();
+        loadHomeworks();
     }, []);
 
     const deleteSelectedUser = async (event) => {
         const currentDetails = await getProfile(getSelectedId());
         setUser(currentDetails);
         const id = { id: getSelectedId() };
-        deletePost2(id);
+        deleteHomeworks2(id);
         deleteUserDB(user);
     }
 
@@ -76,7 +64,7 @@ function Dashboad(props) {
 
                 <div className="container">
 
-                    <div className="profile-card" style={{padding: "0 20px 2% 20px"}}>
+                    <div className="profile-card" style={{ padding: "0 20px 2% 20px" }}>
                         <div className="text-center">
                             <div className="card">
                                 <h5 className="card-header card text-white bg-custom">Announcements:</h5>
@@ -87,12 +75,12 @@ function Dashboad(props) {
                                     :
                                     announcements.length === 0 ?
                                         <div className="text-center text-muted">
-                                            <div className="card-body">No Annoucements Posted!</div>  
+                                            <div className="card-body">No Annoucements Posted!</div>
                                         </div>
                                         :
-                                        announcements.map((userPosts) =>
+                                        announcements.map((announcement) =>
                                             <div>
-                                                <div className="card-body" style={{padding: "5px"}}>{userPosts.announcementText}</div>
+                                                <div className="card-body" style={{ padding: "5px" }}>{announcement.announcementText}</div>
                                             </div>
                                         )
                                 }
@@ -119,17 +107,16 @@ function Dashboad(props) {
                                                 :
                                                 homeworks.map((homework) =>
                                                     <>
-                                                        {homework.id === props.user.id &&
+                                                        {props.user.id === homework.id &&
                                                             <div className="card-body">{homework.homeworkText}</div>
-                                                        }
-
+                                                        }   
+                                                        
                                                     </>
                                                 )}
                                         </div>
 
                                     </div>
 
-                                    {/* <a href="#" className="btn btn-outline-primary btn-sm">Card link</a> */}
                                 </div>
                             </div>
                         </div>
@@ -294,14 +281,12 @@ function Dashboad(props) {
                                         </div>
                                     </div>
 
-                                    {/* <a href="#" className="btn btn-outline-primary btn-sm">Card link</a> */}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 :
-                // props.user.name === "Admin" &&
                 <div>
                     <p>&nbsp;</p>
 

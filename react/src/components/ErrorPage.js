@@ -1,5 +1,4 @@
 import '../Error404.css';
-import { Link } from "react-router-dom";
 
 function ErrorPage() {
   
@@ -14,7 +13,6 @@ function ErrorPage() {
       <div className="err2">4</div>
       <div className="msg">
         Sorry the page does not exist!
-        {/* <p>Go back to <Link to="/Home">Home Page</Link></p> */}
       </div>
     </div>
     </div>

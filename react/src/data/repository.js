@@ -7,8 +7,8 @@
 import axios from "axios";
 
 // --- Constants ----------------------------------------------------------------------------------
-// const API_HOST = "http://localhost:4000";
-const API_HOST = "https://masroor-academy-vic.herokuapp.com";
+const API_HOST = "http://localhost:4000";
+// const API_HOST = "https://masroor-academy-vic.herokuapp.com";
 const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
 const SELECT_KEY2 = "SelectedID2";
@@ -16,7 +16,7 @@ const SELECT_KEY2 = "SelectedID2";
 // --- User ---------------------------------------------------------------------------------------
 // Verify User Request For API from DB
 async function verifyUser(id, password) {
-  const response = await axios.get(API_HOST + "/VCApi/users/Sign-in", { params: { id, password } });
+  const response = await axios.get(API_HOST + "/MAApi/users/Sign-in", { params: { id, password } });
   const user = response.data;
 
   // NOTE: In this example the login is also persistent as it is stored in local storage.
@@ -28,35 +28,35 @@ async function verifyUser(id, password) {
 
 // Get User Details Request For API from DB
 async function getProfile(id) {
-  const response = await axios.get(API_HOST + `/VCApi/users/get/${id}`);
+  const response = await axios.get(API_HOST + `/MAApi/users/get/${id}`);
 
   return response.data;
 }
 
 // Get User Details Request For API from DB
 async function getProfileUsers() {
-  const response = await axios.get(API_HOST + `/VCApi/users`);
+  const response = await axios.get(API_HOST + `/MAApi/users`);
 
   return response.data;
 }
 
 // Find User Details Request For API from DB
 async function findUser(email) {
-  const response = await axios.get(API_HOST + `/VCApi/users/select/${email}`);
+  const response = await axios.get(API_HOST + `/MAApi/users/select/${email}`);
 
   return response.data;
 }
 
 // Create User Request For API to DB
 async function createUser(user) {
-  const response = await axios.post(API_HOST + "/VCApi/users", user);
+  const response = await axios.post(API_HOST + "/MAApi/users", user);
 
   return response.data;
 }
 
 // Update User Details Request For API to DB
 async function updateUser(user, email) {
-  const response = await axios.post(API_HOST + `/VCApi/users/update/${email}`, user);
+  const response = await axios.post(API_HOST + `/MAApi/users/update/${email}`, user);
 
   const updatedUser = response.data;
 
@@ -68,75 +68,62 @@ async function updateUser(user, email) {
 
 // Delete User Request For API from DB
 async function deleteUserDB(user) {
-  const response = await axios.post(API_HOST + "/VCApi/users/delete", user);
+  const response = await axios.post(API_HOST + "/MAApi/users/delete", user);
 
   return response.data;
 }
 
 // --- Post ---------------------------------------------------------------------------------------
 // Get Post Details Request For API from DB
-async function getPosts() {
-  const response = await axios.get(API_HOST + "/VCApi/posts");
+async function getHomeworks() {
+  const response = await axios.get(API_HOST + "/MAApi/homeworks");
 
   return response.data;
 }
 
-// Create post Request For API from DB
-async function createPost(homework) {
-  const response = await axios.post(API_HOST + "/VCApi/posts/create", homework);
+// Create Homework Request For API from DB
+async function createHomeworks(homework) {
+  const response = await axios.post(API_HOST + "/MAApi/homeworks/create", homework);
 
   return response.data;
 }
 
-// Delete Post Request For API from DB
-async function deletePost(postID) {
-  const response = await axios.post(API_HOST + "/VCApi/posts/delete", postID);
+// Delete Homework Request For API from DB
+async function deleteHomeworks(homeworkID) {
+  const response = await axios.post(API_HOST + "/MAApi/homeworks/delete", homeworkID);
 
   return response.data;
 }
 
-// Delete All posts associated with User Request For API from DB
-async function deletePost2(id) {
-  const response = await axios.post(API_HOST + "/VCApi/posts/delete2", id);
+// Delete All Homework associated with User Request For API from DB
+async function deleteHomeworks2(id) {
+  const response = await axios.post(API_HOST + "/MAApi/homeworks/delete2", id);
 
   return response.data;
 }
 
-// --- Reply Post ---------------------------------------------------------------------------------------
-// Create Reply Post Request For API from DB
-async function createReplyPost(announcementText) {
-  const response = await axios.post(API_HOST + "/VCApi/replyPosts/create", announcementText);
+// --- Announcements ---------------------------------------------------------------------------------------
+// Create Announcements Request For API from DB
+async function createAnnouncements(announcement) {
+  const response = await axios.post(API_HOST + "/MAApi/announcements/create", announcement);
 
   return response.data;
 }
 
-// Get Replied Posts Request For API from DB
-async function getReplyPosts() {
-  const response = await axios.get(API_HOST + "/VCApi/replyPosts");
+// Get Announcements Request For API from DB
+async function getAnnouncements() {
+  const response = await axios.get(API_HOST + "/MAApi/announcements");
 
   return response.data;
 }
 
-// Delete Replied Post Request For API from DB
-async function deleteReplyPost(post) {
-  const response = await axios.post(API_HOST + "/VCApi/replyPosts/delete", post);
+// Delete Announcements Request For API from DB
+async function deleteAnnouncements(announcement) {
+  const response = await axios.post(API_HOST + "/MAApi/announcements/delete", announcement);
 
   return response.data;
 }
 
-// Delete all posts associated with original post Request For API from DB
-async function deleteReplyPost2(forumPosts_id) {
-  const response = await axios.post(API_HOST + "/VCApi/replyPosts/delete2", forumPosts_id);
-
-  return response.data;
-}
-
-// Delete all posts associated with original post and the user Request For API from DB
-async function deleteReplyPost3(post) {
-  const response = await axios.post(API_HOST + "/VCApi/replyPosts/delete3", post);
-
-  return response.data;
-}
 
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
@@ -194,11 +181,11 @@ function removeSelectedId2() {
 // Exports all these functions to be used by other componenets
 export {
   verifyUser, findUser, createUser,
-  getPosts, createPost, deletePost,
+  getHomeworks, createHomeworks, deleteHomeworks,
   getUser, removeUser, deleteUserDB,
-  getProfile, updateUser, setUser, deletePost2,
-  createReplyPost, getReplyPosts, deleteReplyPost2,
-  getProfileUsers, deleteReplyPost, deleteReplyPost3, selectedId, getSelectedId,
+  getProfile, updateUser, setUser, deleteHomeworks2,
+  createAnnouncements, getAnnouncements,
+  getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
   getSelectedId2, removeSelectedId2, selectedId2
 }

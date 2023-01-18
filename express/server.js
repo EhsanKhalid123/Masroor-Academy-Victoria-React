@@ -18,23 +18,12 @@ app.use(express.json());
 // Add CORS suport.
 app.use(cors());
 
-// Simple Hello World route.
-// Sample Endpoint added in this page.
-// app.get("/", (req, res) => {
-//   res.json({ message: "Hello World!" });
-// });
-
-// Sample Endpoint
-app.get("/users", async (req, res) => {
-  const users = await db.users.findAll();
-  res.json(users);
-});
 
 // Add user routes.
 // Endpoints imported from other folder to keep code clean. Routes gets the URL link info and then imports controllers that have endpoints.
 require("./src/routes/usersRoutes.js")(express, app);
 require("./src/routes/homeworkPostsRoutes.js")(express, app);
-require("./src/routes/replyPostsRoutes.js")(express, app);
+require("./src/routes/announcementRoutes.js")(express, app);
 
 if (process.env.NODE_ENV === "production"){
   app.use(express.static('react/build'))
@@ -63,28 +52,27 @@ if (process.env.NODE_ENV === "production"){
 //   res.sendFile(url);
 // });
 
-// var https = require("http");
-//   setInterval(function() {
-//     https.get("https://masroor-academy-vic.herokuapp.com/");
+
+
+// UnComment All Lines Below
+
+// var http = require("http");
+// setInterval(function() {
+//     http.get("http://masroor-academy-vic.herokuapp.com/");
 // }, 100000); // every 5 minutes (300000)
 
-var http = require("http");
-setInterval(function() {
-    http.get("http://masroor-academy-vic.herokuapp.com/");
-}, 100000); // every 5 minutes (300000)
+// (function wakeup() {
+//   require('open')('https://masroor-academy-vic.herokuapp.com/', (err) => {
+//     if (err) throw err;
+//     console.log('Woke up!');
+//     setTimeout(wakeup, 100000); //29m
+//   });
+// })();
 
-(function wakeup() {
-  require('open')('https://masroor-academy-vic.herokuapp.com/', (err) => {
-    if (err) throw err;
-    console.log('Woke up!');
-    setTimeout(wakeup, 100000); //29m
-  });
-})();
-
-var tcpp = require('tcp-ping');
-tcpp.ping({ address: 'https://masroor-academy-vic.herokuapp.com/', port: 443 }, function(err, data) {
-    console.log(data, err);
-});
+// var tcpp = require('tcp-ping');
+// tcpp.ping({ address: 'https://masroor-academy-vic.herokuapp.com/', port: 443 }, function(err, data) {
+//     console.log(data, err);
+// });
 
 // Set port, listen for requests.
 // Starts the Server on Port 4000.

@@ -1,28 +1,27 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { deletePost, getSelectedId, createPost, getPosts, selectedId, getSelectedId2 } from "../data/repository";
+import { deleteHomeworks, getSelectedId, createHomeworks, getHomeworks, getSelectedId2 } from "../data/repository";
 
 // Functional Component for Navigation Bar
 function Homework(props) {
 
     const [errorMessage, setErrorMessage] = useState(null);
     const [homework, setHomework] = useState("");
-    const [post, setPost] = useState("");
     const [homeworks, setHomeworks] = useState([]);
 
-     // Load posts, replied posts and user Details from DB.
+     // Load Homeworks, Announcements and user Details from DB.
      useEffect(() => {
 
-        // Loads Posts from DB
-        async function loadPosts() {
-            const currentPosts = await getPosts();
+        // Loads Homeworks from DB
+        async function loadHomeworks() {
+            const currentHomeworks = await getHomeworks();
 
-            setHomeworks(currentPosts);
+            setHomeworks(currentHomeworks);
         }
 
         // Calls the functions above
-        loadPosts();
+        loadHomeworks();
     }, []);
 
         // Handler for when textbox value changes
@@ -35,29 +34,26 @@ function Homework(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Trim the post text.
-        const trimmedPost = homework.trim();
+        // Trim the Homework text.
+        const trimmedHomework = homework.trim();
 
         // Validation Code
-        if (trimmedPost === "") {
+        if (trimmedHomework === "") {
             setErrorMessage("Homework is Empty!");
             return;
         }
 
-        // Create a post.
-        const newHomework = { homeworkText: trimmedPost, id: getSelectedId()};
-        await createPost(newHomework);
+        // Create a Homework.
+        const newHomework = { homeworkText: trimmedHomework, id: getSelectedId()};
+        await createHomeworks(newHomework);
 
         newHomework.user = { username: props.user.username };
 
         // Update Page/Refresh the Data
-        const currentPosts = await getPosts();
-        setHomeworks(currentPosts);
+        const currentHomeworks = await getHomeworks();
+        setHomeworks(currentHomeworks);
 
-        // Add post to locally stored posts. Below Commented out code locally stores state and not refreshes data like above code does.
-        // setPosts([...posts, newPost]);
-
-        // Reset post content.
+        // Reset Homework content.
         setHomework("");
         setErrorMessage("");
     };
@@ -83,20 +79,20 @@ function Homework(props) {
                 </Link>
             </form>
             <p>&nbsp;</p>
-            {homeworks.map((userPosts) => 
+            {homeworks.map((homeworkPosts) => 
                         <div>
-                            {userPosts.id === getSelectedId() &&
-                            <div className="posts card" >
+                            {homeworkPosts.id === getSelectedId() &&
+                            <div className="postedContent card" >
                                 <div className="card-body">
-                                    <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{userPosts.user.name}</h5>
+                                    <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.user.name}</h5>
                                     <p style={{ margin: "0 0 10% 0" }}></p>
-                                    <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f" }} className="card-text">{userPosts.homeworkText}</p>
+                                    <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f" }} className="card-text">{homeworkPosts.homeworkText}</p>
 
                                     <div>
                                         <div>
                                             {/* Only Display the following Elements if the email of the post matches the logged in user */}
                                             {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
-                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deletePost(userPosts); setHomeworks(await getPosts()); }} >Delete</button>
+                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
                                             {/* } */}
                                                                                     
                                         </div>

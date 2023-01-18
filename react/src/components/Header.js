@@ -10,9 +10,7 @@ function Header() {
         // Bootstrap classes used to style the header using simple HTML elements
         // Code adapted from https://mdbootstrap.com/docs/standard/navigation/headers/
 
-        // Header Code uses simple HTML elements
         // url(" + "URL LINK HERE" + ") - Note to self Syntax for using websites for images
-        // IMAGE REFERENCE: Image taken from free image provider website https://unsplash.com/ 
         <div className="p-5 text-center bg-image" style={{ backgroundImage: `url("/assets/images/istockphoto-1192265107-170667a.jpg")`, backgroundSize: "50%", height: "200px" }}>
             <div className="mask" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', height: "100px" }}>
                 <div className="d-flex justify-content-center align-items-center h-100">

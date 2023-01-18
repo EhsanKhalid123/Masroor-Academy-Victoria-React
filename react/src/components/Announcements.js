@@ -1,30 +1,27 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import logo from "../Masroor Academy Logo 2.png";
-import { createReplyPost, getReplyPosts, deleteReplyPost } from "../data/repository";
+import { createAnnouncements, getAnnouncements, deleteAnnouncements } from "../data/repository";
 
 
 function Announcements(props) {
 
     const [errorMessage, setErrorMessage] = useState(null);
     const [announcement, setAnnouncement] = useState("");
-    const [post, setPost] = useState("");
     const [announcements, setAnnouncements] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
 
-        // Loads Posts from DB
-        async function loadPosts() {
-            const currentPosts = await getReplyPosts();
+        // Loads Announcements from DB
+        async function loadAnnouncements() {
+            const currentAnnouncements = await getAnnouncements();
 
-            setAnnouncements(currentPosts);
+            setAnnouncements(currentAnnouncements);
             setIsLoading(false);
         }
 
         // Calls the functions above
-        loadPosts();
+        loadAnnouncements();
     }, []);
 
 
@@ -38,30 +35,27 @@ function Announcements(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        // Trim the post text.
-        const trimmedPost = announcement.trim();
+        // Trim the Announcement text.
+        const trimmedAnnouncement = announcement.trim();
 
         // Validation Code
-        if (trimmedPost === "") {
+        if (trimmedAnnouncement === "") {
             setErrorMessage("Annoucement is Empty!");
             return;
         }
 
-        // Create a post.
-        const newAnnoucement = { announcementText: trimmedPost };
+        // Create an Announcement.
+        const newAnnoucement = { announcementText: trimmedAnnouncement };
         console.log(newAnnoucement);
-        await createReplyPost(newAnnoucement);
+        await createAnnouncements(newAnnoucement);
 
         newAnnoucement.user = { username: props.user.username };
 
         // Update Page/Refresh the Data
-        const currentPosts = await getReplyPosts();
-        setAnnouncements(currentPosts);
+        const currentAnnouncements = await getAnnouncements();
+        setAnnouncements(currentAnnouncements);
 
-        // Add post to locally stored posts. Below Commented out code locally stores state and not refreshes data like above code does.
-        // setPosts([...posts, newPost]);
-
-        // Reset post content.
+        // Reset Announcement content.
         setAnnouncement("");
         setErrorMessage("");
     };
@@ -94,16 +88,16 @@ function Announcements(props) {
                             <p>&nbsp;</p>
                         </div>
                         :
-                        announcements.map((userPosts) =>
+                        announcements.map((announcement) =>
                             <div>
-                                <div className="posts card" >
+                                <div className="postedContent card" >
                                     <div className="card-body">
 
                                         <div>
-                                            <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f", fontSize: "20px" }} className="card-text">{userPosts.announcementText}</p>
+                                            <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f", fontSize: "20px" }} className="card-text">{announcement.announcementText}</p>
                                             <div>
                                                 <div>
-                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteReplyPost(userPosts); setAnnouncements(await getReplyPosts()); }} >Delete</button>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>
                                                 </div>
                                             </div>
                                         </div>

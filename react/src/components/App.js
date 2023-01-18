@@ -8,10 +8,7 @@ import Navigation from './Navigation';
 import Header from './Header';
 import Home from './Home';
 import Footer from './Footer';
-import Signup from './Sign-up';
 import Login from './Login';
-import MyProfile from "./MyProfile";
-import EditProfile from './EditProfile';
 import Announcements from './Announcements';
 import MessageContext from "../data/MessageContext";
 import About from "./About";
@@ -68,18 +65,6 @@ function App() {
             {user !== null &&
               <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
             }
-            {/* {user !== null &&
-              <Route path="/Friends" element={<Friends user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-            }
-            {user !== null &&
-              <Route path="/Forum" element={<Forum user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-            } */}
-            {/* {user !== null &&
-              <Route path="/EditProfile" element={props => (<EditProfile {...props} user={user} loginUser={loginUser} logoutUser={logoutUser} />)} />
-            } */}
-            {/* {user !== null &&
-              <Route path="/MyProfile" element={<MyProfile user={user} loginUser={loginUser} logoutUser={logoutUser} /> } />
-            } */}
             {user !== null &&
               <Route path="/Homework" element={<Homework user={user} />} />
             }

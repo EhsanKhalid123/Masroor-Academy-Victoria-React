@@ -1,6 +1,5 @@
 // Importing React classes and functions from node modules
 import React from "react";
-import { Link } from "react-router-dom";
 
 import logo from "../Masroor Academy Logo 2.png";
 

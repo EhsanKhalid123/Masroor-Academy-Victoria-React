@@ -196,7 +196,7 @@ html {
   padding: 0 20px 5% 20px;
 }
 
-.posts{
+.postedContent{
   width: 50%;
   margin: auto;
 }
@@ -255,7 +255,7 @@ html {
     padding: 0 20px 5% 20px;
   }
 
-  .posts{
+  .postedContent{
     width: 90%;
     margin: auto;
   }
@@ -279,7 +279,7 @@ html {
 }
 
 @media screen and (max-width: 280px) {
-  .posts{
+  .postedContent{
     width: 100%;
     margin: auto;
   }

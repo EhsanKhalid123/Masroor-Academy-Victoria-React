@@ -21,5 +21,5 @@ module.exports = (express, app) => {
   router.post("/create", controller.create);
 
   // Add routes to server.
-  app.use("/VCApi/posts", router);
+  app.use("/MAApi/homeworks", router);
 };

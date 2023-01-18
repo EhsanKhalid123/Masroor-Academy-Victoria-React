@@ -7,7 +7,7 @@ function Navigation(props) {
 
   // Returns HTML code from this function which is displayed by importing on other pages
   return (
-    // Navigation bar Code adapted from Official Bootstrap Documents, I made changes to it
+    // Navigation bar Code adapted from Official Bootstrap Documents
     // https://getbootstrap.com/docs/4.0/components/navbar/
 
     // Navbar Code using normal HTML elements
@@ -21,6 +21,7 @@ function Navigation(props) {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
+            {/* If user is not logged in display the following */}
             {props.user === null &&
               <>
                 <li className="nav-item">
@@ -40,19 +41,21 @@ function Navigation(props) {
               </>
             }
 
-<div>
-          {props.user !== null &&
-          <>
-            {(props.user.name === "Teacher" || props.user.name === "Admin") &&
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link2 nav-link" to="/Announcements">Annoucements</Link>
-                </li>
-              </>
-            }
-      </>
-}
-</div>
+            {/* If user is logged in and the user is Teacher or Admin Account then Display announcements tab */}
+            <div>
+              {props.user !== null &&
+                <>
+                  {(props.user.name === "Teacher" || props.user.name === "Admin") &&
+                    <>
+                      <li className="nav-item">
+                        <Link className="nav-link2 nav-link" to="/Announcements">Annoucements</Link>
+                      </li>
+                    </>
+                  }
+                </>
+              }
+            </div>
+
           </ul>
           <ul className="navbar-nav">
             {/* Button Display changes according to if user is logged in or not */}

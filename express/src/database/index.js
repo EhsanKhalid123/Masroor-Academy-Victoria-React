@@ -95,7 +95,7 @@ async function addData() {
     await db.users.create({ id: "M-MW-065", name: "Ata ul Wahab", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-MW-066", name: "Arham Abdullah", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-MW-067", name: "Tafheem Ahmad Hazari", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
-    await db.users.create({ id: "M-MW-080", name: "Danial Ahmad", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
+    await db.users.create({ id: "M-B-080", name: "Danial Ahmad", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-B-081", name: "Rayyan Tariq", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     
     await db.users.create({ id: "M-B-019", name: "Ahmed Mukhtar", hashed_password: "student", group: "9-11 (Group 2)", gender: "Atfal" });
@@ -256,7 +256,7 @@ async function addData() {
     await db.users.create({ id: "FemaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Female" });
     await db.users.create({ id: "MaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Male" });
     await db.users.create({ id: "Admin", name: "Admin", hashed_password: "maadminboard", group: "none", gender: "Admin" });
-    await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
+    // await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
 
 
 }

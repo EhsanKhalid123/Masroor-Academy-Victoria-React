@@ -26,11 +26,11 @@ exports.create = async (req, res) => {
 
 // Remove/Deletes a post from the database.
 exports.delete = async (req, res) => {
-  const forumPosts_id = req.body.homeworkPosts_id;
+  const homeworkPosts_id = req.body.homeworkPosts_id;
 
   let removed = false;
 
-  const post = await db.homeworkPosts.findByPk(forumPosts_id);
+  const post = await db.homeworkPosts.findByPk(homeworkPosts_id);
   if (post !== null) {
     await post.destroy();
     removed = true;
