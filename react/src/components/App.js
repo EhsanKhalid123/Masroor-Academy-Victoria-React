@@ -1,6 +1,6 @@
 // Importing React classes and functions from node modules & from components
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { getUser, removeUser, loggedInUser, removeLoggedInUser, removeSelectedId, removeSelectedId2 } from "../data/repository";
 
 // Importing the components
@@ -25,6 +25,7 @@ function App() {
   // useState Hooks Defined
   const [user, setUser] = useState(getUser());
   const [message, setMessage] = useState(null);
+
 
   // Set message to null automatically after a period of time.
   useEffect(() => {
@@ -62,6 +63,7 @@ function App() {
       <MessageContext.Provider value={{ message, setMessage }}>
         {/* Props being passed to each component and Router is used for Navigating to pages */}
         <Router>
+
           <Header />
           <Navigation user={user} loginUser={loginUser} logoutUser={logoutUser} />
           <Routes>
@@ -75,20 +77,25 @@ function App() {
             <Route path="/Register" element={<Register />} />
             <Route path="/About" element={<About loginUser={loginUser} />} />
             {user !== null &&
-            <>
-              {(user.name === "Teacher" ||  user.name === "Admin") &&
-                <>
-                  <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                  <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                </>
-              }
-            </>
+              <>
+                {(user.name === "Teacher" || user.name === "Admin") &&
+                  <>
+                    <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                    <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                  </>
+                }
+              </>
             }
             {user === null &&
               <Route path="/" element={<Home user={user} />} />
             }
-            {user === null &&
+            {user === null ? 
               <Route path="/Home" element={<Home user={user} />} />
+             : 
+              <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
+            }
+            {user !== null &&
+              <Route path="/" element={<Navigate to="/Dashboard" replace />} />
             }
             <Route path="*" element={<ErrorPage />} />
           </Routes>
