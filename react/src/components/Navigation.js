@@ -42,19 +42,24 @@ function Navigation(props) {
             }
 
             {/* If user is logged in and the user is Teacher or Admin Account then Display announcements tab */}
-            <div>
-              {props.user !== null &&
-                <>
-                  {(props.user.name === "Teacher" || props.user.name === "Admin") &&
-                    <>
-                      <li className="nav-item">
-                        <Link className="nav-link2 nav-link" to="/Announcements">Annoucements</Link>
-                      </li>
-                    </>
-                  }
-                </>
-              }
-            </div>
+            {props.user !== null &&
+              <>
+                {(props.user.name === "Teacher" || props.user.name === "Admin") &&
+                  <>
+
+                    <li className="nav-item">
+                      <Link className="nav-link2 nav-link" to="/Announcements">Annoucements</Link>
+                    </li>
+
+
+                    <li className="nav-item">
+                      <Link className="nav-link2 nav-link" to="/Student">Students</Link>
+                    </li>
+
+                  </>
+                }
+              </>
+            }
 
           </ul>
           <ul className="navbar-nav">
@@ -63,6 +68,9 @@ function Navigation(props) {
               <div className="form-inline my-2 my-lg-0">
                 <Link to="/Sign-in">
                   <button className="btn btn-custom my-2 my-sm-0" type="submit">Sign-in</button>
+                </Link>
+                <Link to="/Register">
+                  <button className="btn btn-warning my-2 my-sm-0" type="submit" style={{ marginLeft: "5px" }}>Register</button>
                 </Link>
               </div>
               :

@@ -25,6 +25,7 @@ db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 
 // Define Models.
 // Importing database tables/models to create and use.
+db.registereds = require("./models/registered.js")(db.sequelize, DataTypes);
 db.users = require("./models/users.js")(db.sequelize, DataTypes);
 db.homeworkPosts = require("./models/homeworkPosts.js")(db.sequelize, DataTypes);
 db.announcements = require("./models/announcements.js")(db.sequelize, DataTypes);
@@ -85,7 +86,7 @@ async function addData() {
     await db.users.create({ id: "M-B-011", name: "Sammar Usman", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-B-012", name: "Azan Ali Massan", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-L-013", name: "Abdullah Bin Shahid", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
-    await db.users.create({ id: "M-MW-014", name: "Mirza Ibrahim Ahmad", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
+    await db.users.create({ id: "M-B-014", name: "Mirza Ibrahim Ahmad", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-ME-015", name: "Mohammad Hami Kaleem", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-C-016", name: "Aaryan Abid", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });
     await db.users.create({ id: "M-L-017", name: "Atyab Danial Ahmad", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal" });

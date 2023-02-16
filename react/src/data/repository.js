@@ -54,6 +54,13 @@ async function createUser(user) {
   return response.data;
 }
 
+// Register User Request For API to DB
+async function registerUser(registered) {
+  const response = await axios.post(API_HOST + "/MAApi/registered", registered);
+
+  return response.data;
+}
+
 // Update User Details Request For API to DB
 async function updateUser(user, email) {
   const response = await axios.post(API_HOST + `/MAApi/users/update/${email}`, user);
@@ -187,5 +194,5 @@ export {
   createAnnouncements, getAnnouncements,
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
-  getSelectedId2, removeSelectedId2, selectedId2
+  getSelectedId2, removeSelectedId2, selectedId2, registerUser
 }

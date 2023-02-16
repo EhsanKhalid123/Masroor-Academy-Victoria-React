@@ -24,6 +24,7 @@ app.use(cors());
 require("./src/routes/usersRoutes.js")(express, app);
 require("./src/routes/homeworkPostsRoutes.js")(express, app);
 require("./src/routes/announcementRoutes.js")(express, app);
+require("./src/routes/registeredRoutes.js")(express, app);
 
 if (process.env.NODE_ENV === "production"){
   app.use(express.static('react/build'))

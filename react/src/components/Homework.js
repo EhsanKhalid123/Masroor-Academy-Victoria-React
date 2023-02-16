@@ -74,8 +74,8 @@ function Homework(props) {
                 )}
                 <button type="submit" style={{ textAlign: "right", margin: "0 0 0 30%", padding: "5px 25px 5px 25px" }} className="text-center btn btn-outline-primary2 mr-sm-2" >Add</button>
                 <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-outline-danger mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}} >Clear</button>
-                <Link to="/Dashboard">
-                    <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-success mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}}  >Go Back to Dashboard</button>    
+                <Link to="/Student">
+                    <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-success mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}}  >Go Back to Students</button>    
                 </Link>
             </form>
             <p>&nbsp;</p>
@@ -92,7 +92,7 @@ function Homework(props) {
                                         <div>
                                             {/* Only Display the following Elements if the email of the post matches the logged in user */}
                                             {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
-                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
+                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts.id); setHomeworks(await getHomeworks()); }} >Delete</button>
                                             {/* } */}
                                                                                     
                                         </div>

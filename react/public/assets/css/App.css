@@ -428,3 +428,14 @@ html {
   border: 1px solid #999;
   font-size: 20px;
 } */
+
+.required-field::after {
+  content: "*";
+  color: red;
+  margin-left:2px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { 
+	-webkit-appearance: none;
+} 

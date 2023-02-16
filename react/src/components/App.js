@@ -15,6 +15,9 @@ import About from "./About";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./Dashboard";
 import Homework from "./Homework";
+import Register from "./Register";
+import Student from "./Student";
+
 
 // Functional Component for App
 function App() {
@@ -69,12 +72,15 @@ function App() {
               <Route path="/Homework" element={<Homework user={user} />} />
             }
             <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
+            <Route path="/Register" element={<Register />} />
             <Route path="/About" element={<About loginUser={loginUser} />} />
-            {/* <Route path="/Sign-up" element={<Signup loginUser={loginUser} />} /> */}
             {user !== null &&
             <>
               {(user.name === "Teacher" ||  user.name === "Admin") &&
-                <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <>
+                  <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                  <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                </>
               }
             </>
             }
