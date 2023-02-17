@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) =>
         announcementText: {
             type: DataTypes.STRING(100),
             allowNull: false
+        },
+        // Defining Table Fields/Data with properties.
+        announcementDate: {
+            type: DataTypes.DATE(),
+            allowNull: false,
+            defaultValue: Sequelize.NOW
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

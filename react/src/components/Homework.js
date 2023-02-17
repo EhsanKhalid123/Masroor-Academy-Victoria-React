@@ -10,8 +10,8 @@ function Homework(props) {
     const [homework, setHomework] = useState("");
     const [homeworks, setHomeworks] = useState([]);
 
-     // Load Homeworks, Announcements and user Details from DB.
-     useEffect(() => {
+    // Load Homeworks, Announcements and user Details from DB.
+    useEffect(() => {
 
         // Loads Homeworks from DB
         async function loadHomeworks() {
@@ -24,13 +24,13 @@ function Homework(props) {
         loadHomeworks();
     }, []);
 
-        // Handler for when textbox value changes
-        const handleInputChange = (event) => {
-            setHomework(event.target.value);
-            setErrorMessage("");
-        };
+    // Handler for when textbox value changes
+    const handleInputChange = (event) => {
+        setHomework(event.target.value);
+        setErrorMessage("");
+    };
 
-            // Generic Form Submission Handler
+    // Generic Form Submission Handler
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -44,10 +44,8 @@ function Homework(props) {
         }
 
         // Create a Homework.
-        const newHomework = { homeworkText: trimmedHomework, id: getSelectedId()};
+        const newHomework = { homeworkText: trimmedHomework, homeworkDate: new Date().toLocaleString, id: props.user.id, student: getSelectedId() };
         await createHomeworks(newHomework);
-
-        newHomework.user = { username: props.user.username };
 
         // Update Page/Refresh the Data
         const currentHomeworks = await getHomeworks();
@@ -58,12 +56,12 @@ function Homework(props) {
         setErrorMessage("");
     };
 
-  // Returns HTML code from this function which is displayed by importing on other pages
-  return (
-    
-    <div>
-        <p>&nbsp;</p>
-        <form onSubmit={handleSubmit} >
+    // Returns HTML code from this function which is displayed by importing on other pages
+    return (
+
+        <div>
+            <p>&nbsp;</p>
+            <form onSubmit={handleSubmit} >
                 <div className="form-group">
                     <h3 className="text-center" style={{ margin: "0 25% 10px 25%", width: "50%", textAlign: "left" }}>Add Homework for Student {getSelectedId2()}</h3>
                     <h5 className="text-center"> Make Sure to Please Delete the Previous Homework Once Done!</h5>
@@ -73,43 +71,43 @@ function Homework(props) {
                     <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errorMessage}</p>
                 )}
                 <button type="submit" style={{ textAlign: "right", margin: "0 0 0 30%", padding: "5px 25px 5px 25px" }} className="text-center btn btn-outline-primary2 mr-sm-2" >Add</button>
-                <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-outline-danger mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}} >Clear</button>
+                <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-outline-danger mr-sm-2" onClick={() => { setHomework(""); setErrorMessage(null); }} >Clear</button>
                 <Link to="/Student">
-                    <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-success mr-sm-2" onClick={() => {setHomework(""); setErrorMessage(null);}}  >Go Back to Students</button>    
+                    <button type="button" style={{ textAlign: "right" }} className="text-center btn btn-success mr-sm-2" onClick={() => { setHomework(""); setErrorMessage(null); }}  >Go Back to Students</button>
                 </Link>
             </form>
             <p>&nbsp;</p>
-            {homeworks.map((homeworkPosts) => 
-                        <div>
-                            {homeworkPosts.id === getSelectedId() &&
-                            <div className="postedContent card" >
-                                <div className="card-body">
-                                    <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.user.name}</h5>
-                                    <p style={{ margin: "0 0 10% 0" }}></p>
-                                    <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f" }} className="card-text">{homeworkPosts.homeworkText}</p>
+            {homeworks.map((homeworkPosts) =>
+                <div>
+                    {homeworkPosts.student === getSelectedId() &&
+                        <div className="postedContent card" >
+                            <div className="card-body">
+                                <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
+                                <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>            
+                                <p style={{ margin: "0 0 10% 0" }}></p>
+                                <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f" }} className="card-text">{homeworkPosts.homeworkText}</p>
 
+                                <div>
                                     <div>
-                                        <div>
-                                            {/* Only Display the following Elements if the email of the post matches the logged in user */}
-                                            {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
-                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts.id); setHomeworks(await getHomeworks()); }} >Delete</button>
-                                            {/* } */}
-                                                                                    
-                                        </div>
+                                        {/* Only Display the following Elements if the email of the post matches the logged in user */}
+                                        {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
+                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts.id); setHomeworks(await getHomeworks()); }} >Delete</button>
+                                        {/* } */}
                                     </div>
-
                                 </div>
+
                             </div>
-}
                         </div>
-                    )}
-                    <p>&nbsp;</p>
-                 
-    </div>
+                    }
+                </div>
+            )}
+            <p>&nbsp;</p>
 
-    
+        </div>
 
-  );
+
+
+    );
 }
 
 // Export the Navigation Function

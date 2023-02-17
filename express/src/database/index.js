@@ -30,19 +30,21 @@ db.users = require("./models/users.js")(db.sequelize, DataTypes);
 db.homeworkPosts = require("./models/homeworkPosts.js")(db.sequelize, DataTypes);
 db.announcements = require("./models/announcements.js")(db.sequelize, DataTypes);
 
-// Relate post and user through foreign key.
-// Relating Posts table to the Users table with a foreign key.
+// Relate homework posts and user through foreign key.
+// Relating homework table to the Users table with a foreign key.
 db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false } });
-// // Relating Reply Posts table to the Forum posts table with a foreign key.
-// db.replyPosts.belongsTo(db.forumPosts, { foreignKey: { name: "forumPosts_id", allowNull: false } });
-// // Relating Reply Posts table to the Users table with a foreign key.
-// db.replyPosts.belongsTo(db.users, { foreignKey: { name: "email", allowNull: false } });
+// Relating announcement Posts table to the users table with a foreign key.
+db.announcements.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false } });
+// Relating homework Posts table to the Users table with a foreign key.
+db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull: false } });
 
 // Include a sync option with seed data logic included.
 db.sync = async () => {
     // Sync schema.
     // Creates the tables defined in Models if not created
     await db.sequelize.sync();
+    // await db.sequelize.sync({force: true});
+
 
     // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
     // await db.sequelize.sync({ force: true }); <-- This will delete all tables and recreate them So if more tables are added then the current command inuse wont do anything because that only works if no tables are created.

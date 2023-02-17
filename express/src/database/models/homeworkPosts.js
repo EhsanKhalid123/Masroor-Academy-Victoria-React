@@ -19,6 +19,12 @@ module.exports = (sequelize, DataTypes) =>
         homeworkText: {
             type: DataTypes.STRING(100),
             allowNull: false
+        },
+        // Defining Table Fields/Data with properties.
+        homeworkDate: {
+            type: DataTypes.DATE(),
+            allowNull: false,
+            defaultValue: Sequelize.NOW
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

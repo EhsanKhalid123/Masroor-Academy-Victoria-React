@@ -1,6 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { createAnnouncements, getAnnouncements, deleteAnnouncements } from "../data/repository";
+import { createAnnouncements, getAnnouncements, deleteAnnouncements, getSelectedId } from "../data/repository";
 
 
 function Announcements(props) {
@@ -45,11 +45,9 @@ function Announcements(props) {
         }
 
         // Create an Announcement.
-        const newAnnoucement = { announcementText: trimmedAnnouncement };
+        const newAnnoucement = { announcementText: trimmedAnnouncement, announcementDate: new Date().toLocaleString(), id: props.user.id };
         console.log(newAnnoucement);
         await createAnnouncements(newAnnoucement);
-
-        newAnnoucement.user = { username: props.user.username };
 
         // Update Page/Refresh the Data
         const currentAnnouncements = await getAnnouncements();
@@ -92,18 +90,20 @@ function Announcements(props) {
                             <div>
                                 <div className="postedContent card" >
                                     <div className="card-body">
+                                        <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name}</h5>
+                                        <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(announcement.announcementDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
+                                        <p style={{ margin: "0 0 10% 0" }}></p>
+                                        <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f", fontSize: "20px" }} className="card-text">{announcement.announcementText}</p>
 
                                         <div>
-                                            <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f", fontSize: "20px" }} className="card-text">{announcement.announcementText}</p>
                                             <div>
-                                                <div>
-                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>
-                                                </div>
+                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
+                                <p>&nbsp;</p>
                             </div>
                         )
                 }

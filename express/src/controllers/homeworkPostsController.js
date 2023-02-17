@@ -18,7 +18,8 @@ exports.all = async (req, res) => {
 exports.create = async (req, res) => {
   const post = await db.homeworkPosts.create({
     homeworkText: req.body.homeworkText,
-    id: req.body.id
+    id: req.body.id,
+    student: req.body.student
   });
 
   res.json(post);

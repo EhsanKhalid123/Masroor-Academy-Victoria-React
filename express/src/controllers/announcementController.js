@@ -5,7 +5,8 @@ const db = require("../database");
 // Endpoint for selecting all announcements from the database.
 exports.all = async (req, res) => {
    
-    const announcement = await db.announcements.findAll({});
+    // Gets all posts from DB and does Eager Loading to display User information related to the user who made posts.
+    const announcement = await db.announcements.findAll({ include: { model: db.users, as: "user" } });
     res.json(announcement);
 };
 
@@ -14,6 +15,7 @@ exports.all = async (req, res) => {
 exports.create = async (req, res) => {
     const announcement = await db.announcements.create({
         announcementText: req.body.announcementText,
+        id: req.body.id
     });
 
     res.json(announcement);

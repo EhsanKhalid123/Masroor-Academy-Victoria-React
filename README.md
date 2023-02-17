@@ -25,7 +25,7 @@ Teacher's can also delete their homeworks.
 
 ### `Students Dashboard`
 
-All Students have their own dashboard displaying their enrolled classes sylabbus based on their age.
+All Students have their own dashboard displaying their enrolled classes syllabus based on their age.
 Students can see their homework added by the teachers/admin.
 
 **Note:**

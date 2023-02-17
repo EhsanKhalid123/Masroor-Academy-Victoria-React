@@ -67,36 +67,34 @@ function App() {
           <Header />
           <Navigation user={user} loginUser={loginUser} logoutUser={logoutUser} />
           <Routes>
-            {user !== null &&
-              <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-            }
-            {user !== null &&
-              <Route path="/Homework" element={<Homework user={user} />} />
-            }
-            <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
-            <Route path="/Register" element={<Register />} />
-            <Route path="/About" element={<About loginUser={loginUser} />} />
+
             {user !== null &&
               <>
-                {(user.name === "Teacher" || user.name === "Admin") &&
-                  <>
-                    <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                    <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                  </>
-                }
+                <Route path="/" element={<Navigate to="/Dashboard" replace />} />
+                <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
+                <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <>
+                  {(user.name === "Teacher" || user.name === "Admin") &&
+                    <>
+                      <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Homework" element={<Homework user={user} />} />
+                    </>
+                  }
+                </>
               </>
             }
+            
             {user === null &&
-              <Route path="/" element={<Home user={user} />} />
+              <>
+                <Route path="/" element={<Home user={user} />} />
+                <Route path="/Home" element={<Home user={user} />} />
+                <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
+                <Route path="/Register" element={<Register />} />
+                <Route path="/About" element={<About loginUser={loginUser} />} />
+              </>
             }
-            {user === null ? 
-              <Route path="/Home" element={<Home user={user} />} />
-             : 
-              <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
-            }
-            {user !== null &&
-              <Route path="/" element={<Navigate to="/Dashboard" replace />} />
-            }
+
             <Route path="*" element={<ErrorPage />} />
           </Routes>
           <Footer />

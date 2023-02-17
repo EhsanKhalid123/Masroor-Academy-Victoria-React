@@ -92,7 +92,7 @@ function Dashboard(props) {
                                                 :
                                                 homeworks.map((homework) =>
                                                     <>
-                                                        {props.user.id === homework.id &&
+                                                        {props.user.id === homework.student &&
                                                             <div className="card-body">{homework.homeworkText}</div>
                                                         }   
                                                         
