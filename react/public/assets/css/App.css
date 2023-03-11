@@ -294,6 +294,26 @@ html {
   }
 }
 
+.postStyle{
+  clear: both;
+  float: left; 
+  text-align: left;
+  color: #112c3f;
+  font-size: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  flex: 1;
+  overflow-y: auto;
+  margin: 0 0 2% 0;
+}
+
+.post-body {
+  clear: both;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+}
+
 
 /* Below Styles are adapted from https://www.cluemediator.com/create-simple-popup-in-reactjs */
 .popup-box {

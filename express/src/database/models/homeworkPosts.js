@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) =>
         },
         // Defining Posts field in the table with properties of SQL.
         homeworkText: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.TEXT,
             allowNull: false
         },
         // Defining Table Fields/Data with properties.

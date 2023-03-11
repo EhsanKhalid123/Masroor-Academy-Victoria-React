@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) =>
             primaryKey: true
         },
         announcementText: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.TEXT,
             allowNull: false
         },
         // Defining Table Fields/Data with properties.

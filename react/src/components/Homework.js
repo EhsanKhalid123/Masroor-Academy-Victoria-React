@@ -56,6 +56,13 @@ function Homework(props) {
         setErrorMessage("");
     };
 
+    function displayText(text) {
+        const lines = text.split("\n");
+        return lines.map((line, i) => {
+          return <p key={i}>{i === 0 ? line.replace(/^\s+/g, '\u00A0') : line}</p>;
+        });
+      }
+
     // Returns HTML code from this function which is displayed by importing on other pages
     return (
 
@@ -83,25 +90,26 @@ function Homework(props) {
                         <div className="postedContent card" >
                             <div className="card-body">
                                 <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
-                                <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>            
+                                <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
                                 <p style={{ margin: "0 0 10% 0" }}></p>
-                                <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f" }} className="card-text">{homeworkPosts.homeworkText}</p>
 
-                                <div>
+                                <div className="post-body">
+                                    
+                                    <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{homeworkPosts.homeworkText}</pre>
+
                                     <div>
                                         {/* Only Display the following Elements if the email of the post matches the logged in user */}
                                         {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
-                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts.id); setHomeworks(await getHomeworks()); }} >Delete</button>
+                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
                                         {/* } */}
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     }
+                    <p>&nbsp;</p>
                 </div>
             )}
-            <p>&nbsp;</p>
 
         </div>
 

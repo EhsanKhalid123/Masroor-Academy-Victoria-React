@@ -93,12 +93,10 @@ function Announcements(props) {
                                         <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name}</h5>
                                         <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(announcement.announcementDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
                                         <p style={{ margin: "0 0 10% 0" }}></p>
-                                        <p style={{ clear: "both", float: "left", textAlign: "left", color: "#112c3f", fontSize: "20px" }} className="card-text">{announcement.announcementText}</p>
+                                        <pre className="postStyle card-text">{announcement.announcementText}</pre>
 
                                         <div>
-                                            <div>
-                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>
-                                            </div>
+                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>
                                         </div>
 
                                     </div>

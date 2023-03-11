@@ -42,8 +42,8 @@ db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull:
 db.sync = async () => {
     // Sync schema.
     // Creates the tables defined in Models if not created
-    await db.sequelize.sync();
-    // await db.sequelize.sync({force: true});
+    // await db.sequelize.sync();
+    await db.sequelize.sync({force: true});
 
 
     // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.

@@ -1,5 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
+import ReactSwitch from 'react-switch';
 import { Link } from "react-router-dom";
 import { selectedId, getHomeworks, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2, getAnnouncements } from "../data/repository";
 import Student from "./Student";
