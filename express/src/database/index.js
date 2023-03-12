@@ -29,6 +29,7 @@ db.registereds = require("./models/registered.js")(db.sequelize, DataTypes);
 db.users = require("./models/users.js")(db.sequelize, DataTypes);
 db.homeworkPosts = require("./models/homeworkPosts.js")(db.sequelize, DataTypes);
 db.announcements = require("./models/announcements.js")(db.sequelize, DataTypes);
+db.formStatus = require("./models/formStatus.js")(db.sequelize, DataTypes);
 
 // Relate homework posts and user through foreign key.
 // Relating homework table to the Users table with a foreign key.
@@ -42,8 +43,8 @@ db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull:
 db.sync = async () => {
     // Sync schema.
     // Creates the tables defined in Models if not created
-    // await db.sequelize.sync();
-    await db.sequelize.sync({force: true});
+    await db.sequelize.sync();
+    // await db.sequelize.sync({force: true});
 
 
     // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
@@ -260,6 +261,8 @@ async function addData() {
     await db.users.create({ id: "MaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Male" });
     await db.users.create({ id: "Admin", name: "Admin", hashed_password: "maadminboard", group: "none", gender: "Admin" });
     // await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
+
+    await db.formStatus.create();
 
 
 }

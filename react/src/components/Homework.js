@@ -56,13 +56,6 @@ function Homework(props) {
         setErrorMessage("");
     };
 
-    function displayText(text) {
-        const lines = text.split("\n");
-        return lines.map((line, i) => {
-          return <p key={i}>{i === 0 ? line.replace(/^\s+/g, '\u00A0') : line}</p>;
-        });
-      }
-
     // Returns HTML code from this function which is displayed by importing on other pages
     return (
 

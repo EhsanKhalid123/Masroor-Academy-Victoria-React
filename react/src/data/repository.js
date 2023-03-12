@@ -131,6 +131,28 @@ async function deleteAnnouncements(announcement) {
   return response.data;
 }
 
+// --- Form Status ---------------------------------------------------------------------------------------
+
+// Get Form Status Request For API from DB
+async function getFormStatus() {
+  const response = await axios.get(API_HOST + "/MAApi/formStatus");
+
+  return response.data;
+}
+
+// Update Form Status Request For API from DB
+async function updateFormStatus(formStatus) {
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormStatus", formStatus);
+
+  return response.data;
+}
+
+// Update Form Text Request For API from DB
+async function updateFormText(formText) {
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormText", formText);
+
+  return response.data;
+}
 
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
@@ -194,5 +216,5 @@ export {
   createAnnouncements, getAnnouncements,
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
-  getSelectedId2, removeSelectedId2, selectedId2, registerUser
+  getSelectedId2, removeSelectedId2, selectedId2, registerUser, updateFormStatus, getFormStatus, updateFormText
 }
