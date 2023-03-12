@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 // Functional Component for Footer Page
 function Footer() {
 
+
+    const currentYear = new Date().getFullYear();
+    
     // Returns HTML content to display on pages
     return (
 
@@ -24,7 +27,7 @@ function Footer() {
             </div>
 
             {/* Bottom Footer - Copyright Section */}
-            <div className="footer-copyright text-center py-3 " style={{ backgroundColor: "#112c3f" }}><b style={{ color: "white" }}>© 2022 Copyright:</b>
+            <div className="footer-copyright text-center py-3 " style={{ backgroundColor: "#112c3f" }}><b style={{ color: "white" }}>© {currentYear} Copyright:</b>
                 <Link to="/" style={{ color: "#dc3545" }}> <b>Masroor Academy - Victoria</b></Link>
             </div>
 

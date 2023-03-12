@@ -37,55 +37,57 @@ function Student(props) {
     }
 
     return (
-        <div>
+        <div className="table-responsive">
             <p>&nbsp;</p>
             {isLoading ?
                 <div className="card-body text-center">
                     <span className="text-muted">Loading Students...</span>
                 </div>
                 :
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>ID</th>
-                            <th style={{ color: "#112c3f" }} scope="col">Name</th>
-                            <th style={{ color: "#112c3f" }} scope="col">Group</th>
-                            <th></th>
+                <div>
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>ID</th>
+                                <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                <th style={{ color: "#112c3f" }} scope="col">Group</th>
+                                <th></th>
 
-                        </tr>
-                    </thead>
-                    {/* Mapping Users state Variable to access its content easily to display in Table */}
-                    {users.map((userDetails) =>
-                        <tbody>
-                            {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
-                                <>
-                                    {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal") || (props.user.id === "Admin")) &&
-                                        <tr key={userDetails.name}>
-                                            <td></td>
-                                            <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
-                                            <td style={{ color: "#112c3f" }} scope="row">{userDetails.name}</td>
-                                            <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                            </tr>
+                        </thead>
+                        {/* Mapping Users state Variable to access its content easily to display in Table */}
+                        {users.map((userDetails) =>
+                            <tbody>
+                                {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
+                                    <>
+                                        {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal") || (props.user.id === "Admin")) &&
+                                            <tr key={userDetails.name}>
+                                                <td></td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
+                                                <td style={{ color: "#112c3f" }} scope="row">{userDetails.name}</td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
-                                            <td>
-                                                <Link to="/Homework">
-                                                    <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
-                                                </Link>
-                                                {props.user.name === "Admin" &&
-                                                    <Link to="/Student">
-                                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
+                                                <td>
+                                                    <Link to="/Homework">
+                                                        <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                     </Link>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </>
-                            }
+                                                    {props.user.name === "Admin" &&
+                                                        <Link to="/Student">
+                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
+                                                        </Link>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </>
+                                }
 
 
-                        </tbody>
-                    )}
-                </table>
+                            </tbody>
+                        )}
+                    </table>
+                </div>
             }
         </div>
     )

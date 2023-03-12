@@ -41,7 +41,7 @@ exports.updateFormStatus = async (req, res) => {
 exports.updateFormText = async (req, res) => {
     try {
         // Get the form status and text values from the request body.
-        const text = req.body;
+        const text = req.body.text;
 
         // Find the form status record in the database.
         const formText = await db.formStatus.findByPk("formStatus");

@@ -86,7 +86,7 @@ function App() {
               </>
             }
             
-            {user === null &&
+            {(user === null || user.name === "Admin") &&
               <>
                 <Route path="/" element={<Home user={user} />} />
                 <Route path="/Home" element={<Home user={user} />} />

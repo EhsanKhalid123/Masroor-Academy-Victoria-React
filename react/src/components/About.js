@@ -16,7 +16,7 @@ function About() {
                 <hr style={{ width: "90%", borderWidth: "1px", backgroundColor: "#aa0001" }} />
                 <div style={{ padding: "0 10% 5% 10%" }}>
                   <p>&nbsp;</p>
-              <h5 style={{margin: "0 100px 0 10px"}}>Masroor Academy is a private school for the Ahmadiyya Muslim Community Organisation. 
+              <h5 style={{margin: "0 10px 0 10px"}}>Masroor Academy is a private school for the Ahmadiyya Muslim Community Organisation. 
                 This website is a school management website, where students will be able to see their final results/grades, 
                 their attendance and total classes that were run. Students will be able to see their homeworks and their syllabus 
                 as well as see their progress and all the work they have completed. Teachers will be able to record attendance 

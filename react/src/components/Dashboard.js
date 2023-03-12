@@ -6,9 +6,9 @@ import StudentDashboard from "./StudentDashboard";
 
 function Dashboard(props) {
 
-    const [formStatus, setFormStatus] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [checked, setChecked] = useState(true);
+    const [formText, setFormText] = useState("");
 
     // Load Form Status from DB
     useEffect(() => {
@@ -18,8 +18,8 @@ function Dashboard(props) {
         async function loadFormStatus() {
             const currentFormStatus = await getFormStatus();
 
-            setFormStatus(currentFormStatus);
-            setChecked(currentFormStatus.status)
+            setChecked(currentFormStatus.status);
+            setFormText(currentFormStatus.text);
 
             setIsLoading(false);
         }
@@ -31,7 +31,14 @@ function Dashboard(props) {
     const handleToggleChange = async (event) => {
         setChecked(event);
         const status = event ? true : false;
-        const response = await updateFormStatus({status: status});
+        const response = await updateFormStatus({ status: status });
+    }
+
+    const handleTextChange = async (event) => {
+        const text = event.target.value || "This form is no longer accepting responses";
+        setFormText(text);
+        const response = await updateFormText({ text: text });
+
     }
 
     return (
@@ -46,26 +53,30 @@ function Dashboard(props) {
             {props.user.name !== "Admin" && props.user.name !== "Teacher" ?
                 <StudentDashboard user={props.user} />
                 :
+                <>
+                    {props.user.name === "Admin" &&
+                        <div style={{ textAlign: "center" }}>
+                            {/* Below commented out code is to only render switch once it's value from database has been recieved */}
+                            {/* {checked !== undefined && <ReactSwitch checked={checked} onChange={handleToggleChange} />} */}
 
-                <div style={{ textAlign: "center" }}>
-                    {/* Below commented out code is to only render switch once it's value from database has been recieved */}
-                    {/* {checked !== undefined && <ReactSwitch checked={checked} onChange={handleToggleChange} />} */}
-                    
-                    <ReactSwitch checked={checked} onChange={handleToggleChange} />
-                    {/* {checked ?
-                        <p>Accepting Responses</p>
-                        :
-                        <>
-                            <div className="form-group">
-                                <h3 className="text-center" style={{ margin: "0 25% 10px 25%", width: "50%", textAlign: "left" }}>Message for respondents:</h3>
-                                <textarea style={{ margin: "auto", width: "40%", height: "50px", border: "solid 2px #2d6d99" }} className="form-control" id="text" name="text" value={formStatusText} />
-                            </div>
-                            <p>&nbsp;</p>
-                        </>
-                    } */}
+                            <h4>Registration Form Status Setting:</h4>
+                            <ReactSwitch checked={checked} onChange={handleToggleChange} />
+                            {checked ?
+                                <p>Accepting Responses</p>
+                                :
+                                <>
+                                    <p>Not Accepting Responses</p>
+                                    <div className="form-group">
+                                        <h4 className="text-center" style={{ margin: "0 25% 10px 25%", width: "50%", textAlign: "left" }}>Message for respondents:</h4>
+                                        <textarea style={{ margin: "auto", width: "40%", height: "50px", border: "solid 2px #2d6d99" }} className="form-control" id="text" name="text" value={formText === "This form is no longer accepting responses" ? "" : formText} placeholder="This form is no longer accepting responses" onChange={handleTextChange} />
+                                    </div>
+                                    <p>&nbsp;</p>
+                                </>
 
-                </div>
-
+                            }
+                        </div>
+                    }
+                </>
             }
         </div>
     );
