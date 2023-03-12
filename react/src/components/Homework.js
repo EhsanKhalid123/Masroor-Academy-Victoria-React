@@ -78,7 +78,7 @@ function Homework(props) {
             </form>
             <p>&nbsp;</p>
             {homeworks.map((homeworkPosts) =>
-                <div>
+                <div key={homeworkPosts.homeworkPosts_id}>
                     {homeworkPosts.student === getSelectedId() &&
                         <div className="postedContent card" >
                             <div className="card-body">

@@ -86,7 +86,7 @@ function Announcements(props) {
                         </div>
                         :
                         announcements.map((announcement) =>
-                            <div>
+                            <div key={announcement.announcement_id}>
                                 <div className="postedContent card" >
                                     <div className="card-body">
                                         <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name}</h5>

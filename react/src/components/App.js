@@ -17,7 +17,6 @@ import Dashboard from "./Dashboard";
 import Homework from "./Homework";
 import Register from "./Register";
 import Student from "./Student";
-import StudentDashboard from "./StudentDashboard";
 
 
 // Functional Component for App

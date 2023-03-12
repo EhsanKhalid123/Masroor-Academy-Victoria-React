@@ -53,12 +53,12 @@ function Login(props) {
                 {/* Email Field */}
                 <div className="form-group">
                     <label htmlFor="id">ID:</label>
-                    <input type="text" className="form-control" id="id" name="id" placeholder="Please enter your ID" value={fields.id} onChange={handleInputChange} />
+                    <input type="text" className="form-control" id="id" name="id" placeholder="Please enter your ID" autoComplete="id" value={fields.id} onChange={handleInputChange} />
                 </div>
                 {/* Password Field */}
                 <div className="form-group">
                     <label htmlFor="password">Password:</label>
-                    <input type="password" className="form-control" id="password" name="password" placeholder="Please enter your Password" value={fields.password} onChange={handleInputChange} />
+                    <input type="password" className="form-control" id="password" name="password" placeholder="Please enter your Password" autoComplete="current-password" value={fields.password} onChange={handleInputChange} />
                 </div>
                 <button type="submit" className="btn btn-custom">Submit</button>
 

@@ -6,7 +6,6 @@ import StudentDashboard from "./StudentDashboard";
 
 function Dashboard(props) {
 
-    const [isLoading, setIsLoading] = useState(true);
     const [checked, setChecked] = useState(true);
     const [formText, setFormText] = useState("");
 
@@ -20,8 +19,6 @@ function Dashboard(props) {
 
             setChecked(currentFormStatus.status);
             setFormText(currentFormStatus.text);
-
-            setIsLoading(false);
         }
 
         // Calls the functions above

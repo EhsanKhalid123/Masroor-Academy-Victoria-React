@@ -58,11 +58,11 @@ function Student(props) {
                         </thead>
                         {/* Mapping Users state Variable to access its content easily to display in Table */}
                         {users.map((userDetails) =>
-                            <tbody>
+                            <tbody key={userDetails.id}>
                                 {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                     <>
                                         {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal") || (props.user.id === "Admin")) &&
-                                            <tr key={userDetails.name}>
+                                            <tr>
                                                 <td></td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                 <td style={{ color: "#112c3f" }} scope="row">{userDetails.name}</td>
