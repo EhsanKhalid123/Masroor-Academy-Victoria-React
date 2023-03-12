@@ -9,6 +9,7 @@ function Homework(props) {
     const [errorMessage, setErrorMessage] = useState(null);
     const [homework, setHomework] = useState("");
     const [homeworks, setHomeworks] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     // Load Homeworks, Announcements and user Details from DB.
     useEffect(() => {
@@ -18,6 +19,7 @@ function Homework(props) {
             const currentHomeworks = await getHomeworks();
 
             setHomeworks(currentHomeworks);
+            setIsLoading(false);
         }
 
         // Calls the functions above
@@ -77,37 +79,55 @@ function Homework(props) {
                 </Link>
             </form>
             <p>&nbsp;</p>
-            {homeworks.map((homeworkPosts) =>
-                <div key={homeworkPosts.homeworkPosts_id}>
-                    {homeworkPosts.student === getSelectedId() &&
-                        <div className="postedContent card" >
-                            <div className="card-body">
-                                <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
-                                <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
-                                <p style={{ margin: "0 0 10% 0" }}></p>
 
-                                <div className="post-body">
-                                    
-                                    <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{homeworkPosts.homeworkText}</pre>
-
-                                    <div>
-                                        {/* Only Display the following Elements if the email of the post matches the logged in user */}
-                                        {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
-                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
-                                        {/* } */}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    <p>&nbsp;</p>
+            {isLoading ?
+                <div className="card-body text-center">
+                    <span className="text-muted">Loading Homework...</span>
                 </div>
-            )}
+                :
+                <>
+                    {homeworks.length === 0 ?
+                        <div className="text-center">
+                            <span className="text-muted">No Homework have been Posted!</span>
+                            <p>&nbsp;</p>
+                        </div>
+                        :
+                        <>
+                            {homeworks.map((homeworkPosts) =>
+                                <div key={homeworkPosts.homeworkPosts_id}>
+                                    {homeworkPosts.student === getSelectedId() ?
+                                        <div className="postedContent card" >
+                                            <div className="card-body">
+                                                <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
+                                                <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
+                                                <p style={{ margin: "0 0 10% 0" }}></p>
 
+                                                <div className="post-body">
+                                                    <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{homeworkPosts.homeworkText}</pre>
+
+                                                    <div>
+                                                        {/* Only Display the following Elements if the email of the post matches the logged in user */}
+                                                        {/* {props.user.name === "Admin" && (props.user.name === "Teacher") && */}
+                                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
+                                                        {/* } */}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        :
+                                        <div className="text-center text-muted">
+                                            <div className="card-body">No Homework have been Posted!</div>
+                                        </div>
+                                    }
+                                    <p>&nbsp;</p>
+                                </div>
+                            )}
+                        </>
+                    }
+                </>
+            }
+            <p>&nbsp;</p>
         </div>
-
-
-
     );
 }
 

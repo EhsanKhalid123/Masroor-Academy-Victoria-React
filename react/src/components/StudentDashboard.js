@@ -79,14 +79,29 @@ function StudentDashboard(props) {
                                                 <span className="text-muted">Loading Homework...</span>
                                             </div>
                                             :
-                                            homeworks.map((homework) =>
-                                                <>
-                                                    {props.user.id === homework.student &&
-                                                        <div className="card-body">{homework.homeworkText}</div>
-                                                    }
+                                            <>
+                                                {homeworks.length === 0 &&
+                                                    <div className="text-center text-muted">
+                                                        <div className="card-body">No Homework Posted!</div>
+                                                    </div>
+                                                }
 
-                                                </>
-                                            )}
+                                                {homeworks.map((homework) =>
+                                                    <>
+                                                        {props.user.id !== homework.student &&
+                                                            <div className="text-center text-muted">
+                                                                <div className="card-body">No Homework Posted!</div>
+                                                            </div>
+                                                        }
+                                                        {props.user.id === homework.student &&
+                                                            <div className="card-body">{homework.homeworkText}</div>
+
+                                                        }
+
+                                                    </>
+                                                )}
+                                            </>
+                                        }
                                     </div>
 
                                 </div>
