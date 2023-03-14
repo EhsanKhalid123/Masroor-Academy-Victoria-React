@@ -475,3 +475,13 @@ input[type=number]::-webkit-outer-spin-button {
     font-size: 1.5rem;
   }
 }
+
+
+/* Text Editor Styles */
+
+.richTextEditor {
+  margin: auto;
+  width: 80% !important;
+  /* height: 50px; */
+  border: solid 2px #2d6d99;
+}
