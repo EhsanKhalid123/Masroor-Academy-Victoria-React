@@ -109,8 +109,6 @@ function Homework(props) {
                                             <div className="card-body">
                                                 <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
                                                 <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
-                                                <p style={{ margin: "0 0 10% 0" }}></p>
-
                                                 <div className="post-body">
                                                     <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(homeworkPosts.homeworkText)}</pre>
 

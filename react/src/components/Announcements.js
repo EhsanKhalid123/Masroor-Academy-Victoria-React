@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { createAnnouncements, getAnnouncements, deleteAnnouncements } from "../data/repository";
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import parse from 'html-react-parser';
 
 function Announcements(props) {
@@ -102,10 +101,8 @@ function Announcements(props) {
                                         <div className="card-body">
                                             <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name}</h5>
                                             <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(announcement.announcementDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
-                                            <p style={{ margin: "0 0 10% 0" }}></p>
-
                                             <div className="post-body">
-                                                <pre className="postStyle card-text">{parse(announcement.announcementText)}</pre>
+                                                <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(announcement.announcementText)}</pre>
 
                                                 <div>
                                                     <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>

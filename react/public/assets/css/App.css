@@ -198,7 +198,16 @@ html {
 
 .postedContent{
   width: 50%;
+  width: fit-content;
+  max-width: 80%;
   margin: auto;
+  overflow-x: auto;
+}
+
+
+.card {
+  overflow-x: auto;
+  min-width: 50% !important;
 }
 
 @media screen and (max-width: 1024px) {
