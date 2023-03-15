@@ -65,7 +65,7 @@ function Student(props) {
                                             <tr>
                                                 <td></td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
-                                                <td style={{ color: "#112c3f" }} scope="row">{userDetails.name}</td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
                                                 <td>

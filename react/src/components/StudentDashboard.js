@@ -1,6 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { getHomeworks, getAnnouncements } from "../data/repository";
+import parse from 'html-react-parser';
 
 function StudentDashboard(props) {
 
@@ -36,33 +37,43 @@ function StudentDashboard(props) {
     return (
         <div>
             <p>&nbsp;</p>
-            <div className="container">
 
-                <div className="profile-card" style={{ padding: "0 20px 2% 20px" }}>
                     <div className="text-center">
-                        <div className="card">
-                            <h5 className="card-header card text-white bg-custom">Announcements:</h5>
+                        <div className="card min-width30" style={{ whiteSpace: 'pre-wrap' }}>
+                            <h5 className="card-header text-white bg-custom">Announcements:</h5>
                             {isLoading ?
-                                <div className="card-body text-center">
+                                <div className="card-body">
                                     <span className="text-muted">Loading Annoucements...</span>
                                 </div>
                                 :
                                 announcements.length === 0 ?
-                                    <div className="text-center text-muted">
+                                    <div className="text-muted">
                                         <div className="card-body">No Annoucements Posted!</div>
                                     </div>
                                     :
-                                    announcements.map((announcement) =>
-                                        <div>
-                                            <div className="card-body" style={{ padding: "5px" }}>{announcement.announcementText}</div>
-                                        </div>
-                                    )
+                                    <>
+                                        {announcements.map((announcement) =>
+                                            <div key={announcement.announcement_id}>
+                                                {/* <div className="card-body" style={{ padding: "10px", whiteSpace: "pre-wrap"}}> */}
+                                                {/* {parse(`${announcement.announcementText.replace(/<\/?p>/g, '')}<span><strong> - ${announcement.user.name}</strong></span>`)} */}
+                                                {/* {parse(`${announcement.announcementText}<p> - ${announcement.user.name}</p>`)} */}
+                                                {/* </div> */}
+
+                                                <div style={{ padding: "10px", display: "flex", flexDirection: "row", alignItems: "baseline", justifyContent: "center" }}>
+                                                    <div style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>{parse(announcement.announcementText)}</div>
+                                                    <div>{" - " + announcement.user.name}</div>
+                                                </div>
+
+                                            </div>
+                                        )}
+                                    </>
                             }
                         </div>
-
                     </div>
-                </div>
 
+            <br />
+
+            <div className="container">
 
                 <div className="row">
                     <div className="col-lg-6 mb-4">
@@ -87,18 +98,18 @@ function StudentDashboard(props) {
                                                 }
 
                                                 {homeworks.map((homework) =>
-                                                    <>
+                                                    <div key={homework.homeworkPosts_id}>
                                                         {props.user.id !== homework.student &&
                                                             <div className="text-center text-muted">
                                                                 <div className="card-body">No Homework Posted!</div>
                                                             </div>
                                                         }
                                                         {props.user.id === homework.student &&
-                                                            <div className="card-body">{homework.homeworkText}</div>
+                                                            <div className="card-body">{parse(homework.homeworkText)}</div>
 
                                                         }
 
-                                                    </>
+                                                    </div>
                                                 )}
                                             </>
                                         }

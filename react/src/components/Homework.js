@@ -105,7 +105,7 @@ function Homework(props) {
                             {homeworks.map((homeworkPosts) =>
                                 <div key={homeworkPosts.homeworkPosts_id}>
                                     {homeworkPosts.student === getSelectedId() ?
-                                        <div className="postedContent card" >
+                                        <div className="postedContent card" style={{minWidth: "50%", overflowX: "auto"}}>
                                             <div className="card-body">
                                                 <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
                                                 <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>

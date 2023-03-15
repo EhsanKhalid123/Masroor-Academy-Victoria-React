@@ -61,7 +61,7 @@ function Register(props) {
 
         try {
             // Create user.
-            const registered = await registerUser(trimmedValues);
+            await registerUser(trimmedValues);
             // Clear all errors and fields
             setValues({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", pname: "", pemail: "", contact: "" });
             setErrors("");

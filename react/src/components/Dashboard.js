@@ -28,13 +28,13 @@ function Dashboard(props) {
     const handleToggleChange = async (event) => {
         setChecked(event);
         const status = event ? true : false;
-        const response = await updateFormStatus({ status: status });
+        await updateFormStatus({ status: status });
     }
 
     const handleTextChange = async (event) => {
         const text = event.target.value || "This form is no longer accepting responses";
         setFormText(text);
-        const response = await updateFormText({ text: text });
+        await updateFormText({ text: text });
 
     }
 

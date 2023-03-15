@@ -204,11 +204,23 @@ html {
   overflow-x: auto;
 }
 
+.min-width30{
+  min-width: 30% !important;
+  width: fit-content;
+  max-width: 80%;
+  margin: auto;
+  overflow-x: auto;
+}
 
-.card {
+p {
+  margin-top: 1rem !important;
+}
+
+/* .card {
   overflow-x: auto;
   min-width: 50% !important;
-}
+} */
+
 
 @media screen and (max-width: 1024px) {
   .sign-up-form {
