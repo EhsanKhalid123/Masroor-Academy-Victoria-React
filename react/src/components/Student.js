@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2 } from "../data/repository";
-import { MDBCol, MDBIcon } from "mdbreact";
 
 function Student(props) {
 
@@ -65,7 +64,7 @@ function Student(props) {
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>ID</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                     <th></th>
@@ -77,8 +76,10 @@ function Student(props) {
                                 return search.toLowerCase() === '' ? userDetails : userDetails.name.toLowerCase().includes(search) || userDetails.group.toLowerCase().includes(search) || userDetails.id.toLowerCase().includes(search) || userDetails.gender.toLowerCase().includes(search);
                             }).map((userDetails) =>
                                 <tbody key={userDetails.id}>
+                                    {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
                                     {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                         <>
+                                        {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
                                             {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal") || (props.user.id === "Admin")) &&
                                                 <tr>
                                                     <td></td>

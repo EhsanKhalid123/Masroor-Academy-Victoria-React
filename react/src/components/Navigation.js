@@ -1,9 +1,11 @@
 // Importing React classes and functions from node modules
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 // Functional Component for Navigation Bar
 function Navigation(props) {
+
+  const currentPath = window.location.pathname;
 
   // Returns HTML code from this function which is displayed by importing on other pages
   return (
@@ -13,9 +15,9 @@ function Navigation(props) {
     // Navbar Code using normal HTML elements
     <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: "#f0f0f0" }}>
       <div className="container">
-        <Link className="navbar-brand" to="/">
+        <NavLink className="navbar-brand" to="/">
           <img className="navbar-brand" src={process.env.PUBLIC_URL + 'assets/images/Masroor Academy Logo.png'} width="50px" alt="Logo for Masroor Academy" />
-        </Link>
+        </NavLink>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -25,10 +27,14 @@ function Navigation(props) {
             {props.user === null &&
               <>
                 <li className="nav-item">
-                  <Link className="nav-link2 nav-link" to="/Home">Home</Link>
+                  {currentPath === "/" || currentPath === "/Home" ?
+                    <NavLink className="nav-link2 nav-link" to="/Home">Home</NavLink>
+                    :
+                    <Link className="nav-link2 nav-link" to="/Home">Home</Link>
+                  }
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link2 nav-link" to="/About">About Us</Link>
+                  <NavLink className="nav-link2 nav-link" to="/About">About Us</NavLink>
                 </li>
               </>
             }
@@ -36,7 +42,7 @@ function Navigation(props) {
             {props.user !== null &&
               <>
                 <li className="nav-item">
-                  <Link className="nav-link2 nav-link" to="/Dashboard">Dashboard</Link>
+                  <NavLink className="nav-link2 nav-link" to="/Dashboard">Dashboard</NavLink>
                 </li>
               </>
             }
@@ -48,12 +54,12 @@ function Navigation(props) {
                   <>
 
                     <li className="nav-item">
-                      <Link className="nav-link2 nav-link" to="/Announcements">Annoucements</Link>
+                      <NavLink className="nav-link2 nav-link" to="/Announcements">Annoucements</NavLink>
                     </li>
 
 
                     <li className="nav-item">
-                      <Link className="nav-link2 nav-link" to="/Student">Students</Link>
+                      <NavLink className="nav-link2 nav-link" to="/Student">Students</NavLink>
                     </li>
 
                   </>
@@ -66,12 +72,12 @@ function Navigation(props) {
             {/* Button Display changes according to if user is logged in or not */}
             {props.user === null ?
               <div className="form-inline my-2 my-lg-0">
-                <Link to="/Sign-in">
+                <NavLink to="/Sign-in">
                   <button className="btn btn-custom my-2 my-sm-0" type="submit">Sign-in</button>
-                </Link>
-                <Link to="/Register">
+                </NavLink>
+                <NavLink to="/Register">
                   <button className="btn btn-warning my-2 my-sm-0" type="submit" style={{ marginLeft: "5px" }}>Register</button>
-                </Link>
+                </NavLink>
               </div>
               :
               <>
@@ -79,9 +85,9 @@ function Navigation(props) {
                   <span className="nav-link" style={{ color: "#112c3f" }}>Welcome, {props.user.name}</span>
                 </li>
                 <div className="form-inline my-2 my-lg-0">
-                  <Link to="/Sign-in" onClick={props.logoutUser}>
+                  <NavLink to="/Sign-in" onClick={props.logoutUser}>
                     <button className="btn btn-custom my-2 my-sm-0" type="submit">Logout</button>
-                  </Link>
+                  </NavLink>
                 </div>
               </>
             }
