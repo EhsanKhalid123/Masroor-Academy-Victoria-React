@@ -20,22 +20,26 @@ function Login(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        //  Get user details from DB
-        const user = await verifyUser(fields.id, fields.password);
+        try {
+            //  Get user details from DB
+            const user = await verifyUser(fields.id, fields.password);
 
-        //  If user email does not exit
-        if (user === null) {
-            // Login failed, reset password field to blank and set error message.
-            setFields({ ...fields, password: "" });
-            setErrorMessage("ID and / or password invalid, please try again.");
-            return;
+            //  If user email does not exit
+            if (user === null) {
+                // Login failed, reset password field to blank and set error message.
+                setFields({ ...fields, password: "" });
+                setErrorMessage("ID and / or password invalid, please try again.");
+                return;
+            }
+
+            // Set user state.
+            props.loginUser(user);
+
+            // Navigate to the home page.
+            history("/Dashboard");
+        } catch (error) {
+            setErrorMessage("Failed to connect to server. Please try again later. If the error persists please contact masrooracademyvic1@gmail.com");
         }
-
-        // Set user state.
-        props.loginUser(user);
-
-        // Navigate to the home page.
-        history("/Dashboard");
     }
 
     // Returns HTML elements and content to display on the pages
@@ -64,8 +68,8 @@ function Login(props) {
 
                 {/* Error Message */}
                 {errorMessage !== null &&
-                    <div className="form-group" style={{ textAlign: "center", margin: "50px 10px 10px 10px" }} onChange={handleInputChange}>
-                        <span className="text-danger" style={{ textAlign: "center", fontSize: "20px" }}>{errorMessage}</span>
+                    <div className="form-group" style={{textAlign: "center", margin: "50px 10px 10px 10px" }} onChange={handleInputChange}>
+                        <span className="text-danger" style={{ textAlign: "center", fontSize: "20px", wordWrap: "break-word" }}>{errorMessage}</span>
                     </div>
                 }
             </form>
