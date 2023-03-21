@@ -1,14 +1,14 @@
 // Importing React classes and functions from node modules
 import React from "react";
-import { NavLink, Link} from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 
 // Functional Component for Navigation Bar
 function Navigation(props) {
 
-  const currentPath = window.location.pathname;
+  const location = useLocation();
 
   const HomeLink = () => {
-    if (currentPath === "/" || currentPath === "/Home") {
+    if (location.pathname === "/" || location.pathname === "/Home") {
       return (
         <Link className="nav-link2 nav-link active" to="/Home">
           Home
@@ -42,8 +42,8 @@ function Navigation(props) {
             {/* If user is not logged in display the following */}
             {props.user === null &&
               <>
-                <li className="nav-item">
-                  <HomeLink />
+                <li className="nav-item">        
+                    <HomeLink />
                 </li>
                 <li className="nav-item">
                   <NavLink className="nav-link2 nav-link" to="/About">About Us</NavLink>

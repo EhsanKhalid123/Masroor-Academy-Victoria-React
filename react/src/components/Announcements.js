@@ -11,6 +11,7 @@ function Announcements(props) {
     const [announcement, setAnnouncement] = useState("");
     const [announcements, setAnnouncements] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [image, setImage] = useState([]);
 
     useEffect(() => {
 
@@ -26,11 +27,24 @@ function Announcements(props) {
         loadAnnouncements();
     }, []);
 
+    const editorConfig = {
+        simpleUpload: {
+            uploadUrl: 'http://localhost:4000/MAApi/image/upload',
+            headers: {
+                'X-CSRF-TOKEN': 'your-csrf-token'
+            },
+            // Callback function that sets the image state variable
+            uploadSuccess: (response) => {
+              setImage(response.url);
+            }
+        }
+    }
 
     // Handler for when textbox value changes
     const handleInputChange = (event, editor) => {
         const data = editor.getData();
         setAnnouncement(data);
+        console.log(data);
         // setAnnouncement(event.target.value);
         setErrorMessage("");
     };
@@ -49,7 +63,7 @@ function Announcements(props) {
         }
 
         // Create an Announcement.
-        const newAnnoucement = { announcementText: trimmedAnnouncement, announcementDate: new Date().toLocaleString(), id: props.user.id };
+        const newAnnoucement = { announcementText: trimmedAnnouncement, announcementImage: image, announcementDate: new Date().toLocaleString(), id: props.user.id };
         await createAnnouncements(newAnnoucement);
 
         // Update Page/Refresh the Data
@@ -69,7 +83,7 @@ function Announcements(props) {
                     <h3 className="text-center">Add Announcements:</h3>
                     <h5 className="text-center"> Make Sure to Please Delete the Previous Announcements when adding new ones!</h5>
                     <div className="richTextEditor">
-                        <CKEditor editor={Editor} data={announcement} onChange={handleInputChange} />
+                        <CKEditor editor={Editor} data={announcement} onChange={handleInputChange} config={editorConfig} />
                     </div>
                 </div>
                 {errorMessage && (
@@ -97,7 +111,7 @@ function Announcements(props) {
                         <>
                             {announcements.map((announcement) =>
                                 <div key={announcement.announcement_id}>
-                                    <div className="postedContent card" style={{minWidth: "50%", overflowX: "auto"}}>
+                                    <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }}>
                                         <div className="card-body">
                                             <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name}</h5>
                                             <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(announcement.announcementDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>

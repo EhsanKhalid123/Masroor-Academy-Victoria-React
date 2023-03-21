@@ -152,6 +152,13 @@ Editor.builtinPlugins = [
 
 // Editor configuration.
 Editor.defaultConfig = {
+	// Below Commented out lines are not added by default, either I can add it here and then npm run build or edit the configuration where it is being used
+	// simpleUpload: {
+	// 	uploadUrl: '/your-image-upload-api',
+	// 	headers: {
+	// 		'X-CSRF-TOKEN': 'your-csrf-token' // if needed
+	// 	}
+	// },
 	toolbar: {
 		items: [
 			'fontFamily',

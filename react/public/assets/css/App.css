@@ -150,20 +150,22 @@ html {
 }
 
 .home-logo-image{
-  width: 10%;
-  height: auto;
+  width: 13%; /* Set initial width to 13% */
+  max-width: 100%; /* Set maximum width to 100% */
+  height: auto; /* Maintain aspect ratio */
   padding: 10px;
 }
 
 @media screen and (max-width: 1400px) {
   .home-logo-image {
-    width: 15%;
+    width: 20%;
   }
 }
 
-@media screen and (max-width: 700px) {
+@media (max-width: 700px) {
   .home-logo-image {
-    width: 25%;
+    width: 45%; /* Set width to 50% when screen size is smaller than 768px */
+    max-width: none; /* Remove the maximum width constraint */
   }
 }
 

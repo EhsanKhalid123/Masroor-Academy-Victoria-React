@@ -13,7 +13,7 @@ function Home() {
                 {/* Message being shown here which was passed through App. */}
                 <p>&nbsp;</p>
                 <h3 className="home-welcome display-5">Welcome to Masroor Academy Victoria</h3>
-                <img src={logo} className="home-logo-image" alt="logo" style={{width: "13%"}} />
+                <img src={logo} className="home-logo-image" alt="logo"/>
                 <hr style={{ width: "90%", borderWidth: "1px", backgroundColor: "#aa0001" }} />
                 <div style={{ padding: "0 10% 5% 10%" }}>
                 <Link to="/Sign-in">
