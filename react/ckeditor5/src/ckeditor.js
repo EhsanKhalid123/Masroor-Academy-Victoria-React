@@ -159,6 +159,9 @@ Editor.defaultConfig = {
 	// 		'X-CSRF-TOKEN': 'your-csrf-token' // if needed
 	// 	}
 	// },
+	mediaEmbed: {
+		toolbar: [ 'mediaEmbed' ]
+	},
 	toolbar: {
 		items: [
 			'fontFamily',

@@ -20,7 +20,6 @@ exports.create = async (req, res) => {
     try {
         const announcement = await db.announcements.create({
             announcementText: req.body.announcementText,
-            announcementImage: req.body.announcementImage,
             id: req.body.id
         });
 

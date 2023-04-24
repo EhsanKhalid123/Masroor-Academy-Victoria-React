@@ -14,6 +14,9 @@ function Homework(props) {
     const [homeworks, setHomeworks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    var IFRAME_SRC = '//cdn.iframe.ly/api/iframe';
+    var API_KEY = 'ec1627000e306b7c55174b';
+
     // Load Homeworks, Announcements and user Details from DB.
     useEffect(() => {
 
@@ -33,9 +36,48 @@ function Homework(props) {
     const handleInputChange = (event, editor) => {
         const data = editor.getData();
         setHomework(data);
-        // setHomework(event.target.value);
         setErrorMessage("");
     };
+
+    const editorConfig = {
+        simpleUpload: {
+            uploadUrl: 'http://localhost:4000/MAApi/image/upload',
+            headers: {
+                'X-CSRF-TOKEN': 'your-csrf-token'
+            }
+        },
+        mediaEmbed: {
+            previewsInData: true,
+            providers: [
+                {
+                    // hint: this is just for previews. Get actual HTML codes by making API calls from your CMS
+                    name: 'iframely previews',
+
+                    // Match all URLs or just the ones you need:
+                    url: /.+/,
+
+                    html: match => {
+                        const url = match[0];
+
+                        var iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+                        // alternatively, use &key= instead of &api_key with the MD5 hash of your api_key
+                        // more about it: https://iframely.com/docs/allow-origins
+
+                        return (
+                            // If you need, set maxwidth and other styles for 'iframely-embed' class - it's yours to customize
+                            '<div class="iframely-embed" style="width: 100%">' +
+                            '<div class="iframely-responsive">' +
+                            `<iframe src="${iframeUrl}" ` +
+                            'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                            '</iframe>' +
+                            '</div>' +
+                            '</div>'
+                        );
+                    }
+                }
+            ]
+        }
+    }
 
     // Generic Form Submission Handler
     const handleSubmit = async (event) => {
@@ -73,7 +115,7 @@ function Homework(props) {
                     <h3 className="text-center">Add Homework for Student {getSelectedId2()}</h3>
                     <h5 className="text-center"> Make Sure to Please Delete the Previous Homework Once Done!</h5>
                     <div className="richTextEditor">
-                        <CKEditor editor={Editor} data={homework} onChange={handleInputChange} />
+                        <CKEditor editor={Editor} data={homework} onChange={handleInputChange} config={editorConfig} />
                     </div>
                 </div>
                 {errorMessage && (

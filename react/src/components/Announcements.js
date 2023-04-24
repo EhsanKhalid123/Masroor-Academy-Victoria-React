@@ -11,7 +11,9 @@ function Announcements(props) {
     const [announcement, setAnnouncement] = useState("");
     const [announcements, setAnnouncements] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [image, setImage] = useState([]);
+
+    var IFRAME_SRC = '//cdn.iframe.ly/api/iframe';
+    var API_KEY = 'ec1627000e306b7c55174b';
 
     useEffect(() => {
 
@@ -32,11 +34,38 @@ function Announcements(props) {
             uploadUrl: 'http://localhost:4000/MAApi/image/upload',
             headers: {
                 'X-CSRF-TOKEN': 'your-csrf-token'
-            },
-            // Callback function that sets the image state variable
-            uploadSuccess: (response) => {
-              setImage(response.url);
             }
+        },
+        mediaEmbed: {
+            previewsInData: true,
+            providers: [
+                {
+                    // hint: this is just for previews. Get actual HTML codes by making API calls from your CMS
+                    name: 'iframely previews',
+
+                    // Match all URLs or just the ones you need:
+                    url: /.+/,
+
+                    html: match => {
+                        const url = match[0];
+
+                        var iframeUrl = IFRAME_SRC + '?app=1&api_key=' + API_KEY + '&url=' + encodeURIComponent(url);
+                        // alternatively, use &key= instead of &api_key with the MD5 hash of your api_key
+                        // more about it: https://iframely.com/docs/allow-origins
+
+                        return (
+                            // If you need, set maxwidth and other styles for 'iframely-embed' class - it's yours to customize
+                            '<div class="iframely-embed" style="width: 100%">' +
+                            '<div class="iframely-responsive">' +
+                            `<iframe src="${iframeUrl}" ` +
+                            'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
+                            '</iframe>' +
+                            '</div>' +
+                            '</div>'
+                        );
+                    }
+                }
+            ]
         }
     }
 
@@ -44,8 +73,6 @@ function Announcements(props) {
     const handleInputChange = (event, editor) => {
         const data = editor.getData();
         setAnnouncement(data);
-        console.log(data);
-        // setAnnouncement(event.target.value);
         setErrorMessage("");
     };
 
@@ -63,7 +90,7 @@ function Announcements(props) {
         }
 
         // Create an Announcement.
-        const newAnnoucement = { announcementText: trimmedAnnouncement, announcementImage: image, announcementDate: new Date().toLocaleString(), id: props.user.id };
+        const newAnnoucement = { announcementText: trimmedAnnouncement, announcementDate: new Date().toLocaleString(), id: props.user.id };
         await createAnnouncements(newAnnoucement);
 
         // Update Page/Refresh the Data

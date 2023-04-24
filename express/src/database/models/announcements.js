@@ -24,10 +24,6 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.DATE(),
             allowNull: false,
             defaultValue: Sequelize.NOW
-        },
-        announcementImage: {
-            type: DataTypes.BLOB('long'),
-            allowNull: true
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).
