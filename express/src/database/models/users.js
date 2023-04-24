@@ -30,6 +30,15 @@ module.exports = (sequelize, DataTypes) =>
         gender: {
             type: DataTypes.STRING(15),
             allowNull: false
+        },
+        class: {
+            type: Sequelize.ENUM('Islam', 'Ahmadiyyat', 'Namaz', 'Holy Quran', 'None'),
+            allowNull: true
+        },
+        archived: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).

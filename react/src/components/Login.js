@@ -33,10 +33,19 @@ function Login(props) {
             }
 
             // Set user state.
-            props.loginUser(user);
+            if (user.archived === false) {
+             
+                // Set user as logged in, loginUser function is called from App.js
+                props.loginUser(user);
+                
+                // Navigate to the home page.
+                history("/Dashboard");
+                // User is no longer a member or graduated or dropped out then disabled the account
+            } else if (user.archived === true) {
+                setErrorMessage("ID and / or password invalid. If your account has existed in the past please contact masrooracademyvic1@gmail.com");
+                return;
+            }
 
-            // Navigate to the home page.
-            history("/Dashboard");
         } catch (error) {
             setErrorMessage("Failed to connect to server. Please try again later. If the error persists please contact masrooracademyvic1@gmail.com");
         }
@@ -68,7 +77,7 @@ function Login(props) {
 
                 {/* Error Message */}
                 {errorMessage !== null &&
-                    <div className="form-group" style={{textAlign: "center", margin: "50px 10px 10px 10px" }} onChange={handleInputChange}>
+                    <div className="form-group" style={{ textAlign: "center", margin: "50px 10px 10px 10px" }} onChange={handleInputChange}>
                         <span className="text-danger" style={{ textAlign: "center", fontSize: "20px", wordWrap: "break-word" }}>{errorMessage}</span>
                     </div>
                 }

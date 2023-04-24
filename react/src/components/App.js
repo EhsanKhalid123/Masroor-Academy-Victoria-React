@@ -74,7 +74,7 @@ function App() {
                 <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <>
-                  {(user.name === "Teacher" || user.name === "Admin") &&
+                  {(user.group === "Male Teacher" || user.group === "Female Teacher" || user.name === "Admin") &&
                     <>
                       <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />

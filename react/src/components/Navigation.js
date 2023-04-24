@@ -62,7 +62,7 @@ function Navigation(props) {
             {/* If user is logged in and the user is Teacher or Admin Account then Display announcements tab */}
             {props.user !== null &&
               <>
-                {(props.user.name === "Teacher" || props.user.name === "Admin") &&
+                {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
                   <>
 
                     <li className="nav-item">

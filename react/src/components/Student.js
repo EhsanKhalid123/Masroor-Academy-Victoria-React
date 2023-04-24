@@ -80,7 +80,7 @@ function Student(props) {
                                     {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                         <>
                                         {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                            {((props.user.id === "FemaleTeachers" && userDetails.gender === "Nasirat") || (props.user.id === "MaleTeachers" && userDetails.gender === "Atfal") || (props.user.id === "Admin")) &&
+                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat") || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal") || (props.user.group === "Admin")) &&
                                                 <tr>
                                                     <td></td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>

@@ -47,11 +47,11 @@ function Dashboard(props) {
                 Enrolled ID: <b>{props.user.id}</b>
             </h4>
             <p>&nbsp;</p>
-            {props.user.name !== "Admin" && props.user.name !== "Teacher" ?
+            {props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" ?
                 <StudentDashboard user={props.user} />
                 :
                 <>
-                    {props.user.name === "Admin" &&
+                    {props.user.group === "Admin" &&
                         <div style={{ textAlign: "center" }}>
                             {/* Below commented out code is to only render switch once it's value from database has been recieved */}
                             {/* {checked !== undefined && <ReactSwitch checked={checked} onChange={handleToggleChange} />} */}
