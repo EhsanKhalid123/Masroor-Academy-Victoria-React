@@ -42,26 +42,35 @@ function Navigation(props) {
             {/* If user is not logged in display the following */}
             {props.user === null &&
               <>
-                <li className="nav-item">        
-                    <HomeLink />
+                <li className="nav-item">
+                  <HomeLink />
                 </li>
                 <li className="nav-item">
                   <NavLink className="nav-link2 nav-link" to="/About">About Us</NavLink>
                 </li>
               </>
             }
-            {/* The following links only appear if user is logged in */}
+            {/* The following links only appear if user is logged in
             {props.user !== null &&
               <>
                 <li className="nav-item">
                   <NavLink className="nav-link2 nav-link" to="/Dashboard">Dashboard</NavLink>
                 </li>
+
+                <li className="nav-item">
+                  <NavLink className="nav-link2 nav-link" to="/Resources">Resources</NavLink>
+                </li>
               </>
-            }
+            } */}
 
             {/* If user is logged in and the user is Teacher or Admin Account then Display announcements tab */}
             {props.user !== null &&
               <>
+
+                <li className="nav-item">
+                  <NavLink className="nav-link2 nav-link" to="/Dashboard">Dashboard</NavLink>
+                </li>
+
                 {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
                   <>
 
@@ -76,6 +85,11 @@ function Navigation(props) {
 
                   </>
                 }
+
+                <li className="nav-item">
+                  <NavLink className="nav-link2 nav-link" to="/Resources">Resources</NavLink>
+                </li>
+
               </>
             }
 

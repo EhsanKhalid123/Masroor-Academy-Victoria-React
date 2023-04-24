@@ -17,6 +17,7 @@ import Dashboard from "./Dashboard";
 import Homework from "./Homework";
 import Register from "./Register";
 import Student from "./Student";
+import Resources from "./Resources";
 
 
 // Functional Component for App
@@ -73,6 +74,7 @@ function App() {
                 <Route path="/" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <Route path="/Resources" element={<Resources user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <>
                   {(user.group === "Male Teacher" || user.group === "Female Teacher" || user.name === "Admin") &&
                     <>
