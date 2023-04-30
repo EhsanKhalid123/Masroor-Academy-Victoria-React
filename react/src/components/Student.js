@@ -91,7 +91,7 @@ function Student(props) {
                                                         <Link to="/Homework">
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
-                                                        {props.user.name === "Admin" &&
+                                                        {props.user.group === "Admin" &&
                                                             <Link to="/Student">
                                                                 <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
                                                             </Link>

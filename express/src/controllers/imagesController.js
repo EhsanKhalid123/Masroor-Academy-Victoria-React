@@ -27,6 +27,7 @@ exports.upload = async (req, res) => {
   }
 };
 
+// Endpoint for retrieving stored image
 exports.getImage = async (req, res) => {
   try {
     const imageId = req.params.id;

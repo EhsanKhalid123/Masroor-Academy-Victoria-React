@@ -27,6 +27,7 @@ require("./src/routes/announcementRoutes.js")(express, app);
 require("./src/routes/registeredRoutes.js")(express, app);
 require("./src/routes/formStatus.js")(express, app);
 require("./src/routes/imageRoutes.js")(express, app);
+require("./src/routes/resourcesRoutes.js")(express, app);
 
 if (process.env.NODE_ENV === "production"){
   app.use(express.static('react/build'))

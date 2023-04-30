@@ -154,6 +154,35 @@ async function updateFormText(formText) {
   return response.data;
 }
 
+// ---------- Resources --------------------------------------------
+// Sets Current User In Local Storage
+async function uploadResource(formData) {
+  const response = await axios.post(API_HOST + "/MAApi/resources/upload", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+}
+
+async function fetchResources() {
+  const response = await axios.get(API_HOST + "/MAApi/resources");
+  return response.data;
+}
+
+async function fetchResourcesByID(resourcesID) {
+  const response = API_HOST + `/MAApi/resources/${resourcesID}`;
+  return response;
+}
+
+// Delete resources Request For API from DB
+async function deleteResources(resource) {
+  const response = await axios.post(API_HOST + "/MAApi/resources/delete", resource);
+
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
 function setUser(user) {
@@ -207,6 +236,7 @@ function removeSelectedId2() {
   localStorage.removeItem(SELECT_KEY2);
 }
 
+
 // Exports all these functions to be used by other componenets
 export {
   verifyUser, findUser, createUser,
@@ -216,5 +246,6 @@ export {
   createAnnouncements, getAnnouncements,
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
-  getSelectedId2, removeSelectedId2, selectedId2, registerUser, updateFormStatus, getFormStatus, updateFormText
+  getSelectedId2, removeSelectedId2, selectedId2, registerUser, updateFormStatus, getFormStatus, updateFormText,
+  uploadResource, fetchResources, deleteResources, fetchResourcesByID
 }
