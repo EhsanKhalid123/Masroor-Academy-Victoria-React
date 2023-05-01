@@ -1,12 +1,9 @@
-
-/* REFERENCE:
-   Some of the Code below is taken & adapted from Lab Examples of Week 8 and 9. 
-*/
-
 // Old fashioned Import statements for libraries and files
 const db = require("../database");
 const argon2 = require("argon2");
 const Sequelize = require("sequelize");
+const { sign } = require('jsonwebtoken');
+require('dotenv').config();
 
 // Endpoint for Select all users from the database.
 exports.all = async (req, res) => {
@@ -47,13 +44,17 @@ exports.one2 = async (req, res) => {
 // Select one user from the database if email and password are a match.
 exports.login = async (req, res) => {
   try {
-    const user = await db.users.findByPk(req.query.id);
+    const user = await db.users.findByPk(req.body.id);
 
-    if (user === null || user.hashed_password !== req.query.password)
+    if (user === null || user.hashed_password !== req.body.password) {
       // Login failed.
       res.json(null);
-    else
-      res.json(user);
+    } else {
+      const accessToken = sign({id: user.id, name: user.name, group: user.group, archived: user.archived}, process.env.jwtkey, {
+        expiresIn: 7200,
+      })
+      res.json(accessToken);
+    }
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Logging In" });
@@ -63,13 +64,12 @@ exports.login = async (req, res) => {
 // Create a user in the database.
 exports.create = async (req, res) => {
   try {
-    // const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
+    const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
 
     // Following properties are required for user to be created in DB
     const user = await db.users.create({
       email: req.body.email,
-      // username: req.body.username,
-      hashed_password: req.body.password,
+      hashed_password: hash,
       name: req.body.name
     });
 

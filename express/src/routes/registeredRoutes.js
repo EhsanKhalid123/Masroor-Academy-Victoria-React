@@ -3,6 +3,7 @@ module.exports = (express, app) => {
   // Importing libraries and files
   const controller = require("../controllers/registeredController.js");
   const router = express.Router();
+  const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
   // Select all users.
   router.get("/", controller.all);

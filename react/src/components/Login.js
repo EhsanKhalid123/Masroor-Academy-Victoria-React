@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { verifyUser } from "../data/repository";
+import jwtDecode from 'jwt-decode'
 
 // Functional Component for Login Page
 function Login(props) {
@@ -22,21 +23,23 @@ function Login(props) {
 
         try {
             //  Get user details from DB
-            const user = await verifyUser(fields.id, fields.password);
-
+            const token = await verifyUser(fields.id, fields.password);
+            
             //  If user email does not exit
-            if (user === null) {
+            if (token === null) {
                 // Login failed, reset password field to blank and set error message.
                 setFields({ ...fields, password: "" });
                 setErrorMessage("ID and / or password invalid, please try again.");
                 return;
             }
 
+            const user = jwtDecode(token);
+
             // Set user state.
             if (user.archived === false) {
              
                 // Set user as logged in, loginUser function is called from App.js
-                props.loginUser(user);
+                props.loginUser(token);
                 
                 // Navigate to the home page.
                 history("/Dashboard");

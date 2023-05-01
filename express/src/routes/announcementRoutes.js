@@ -7,6 +7,7 @@ module.exports = (express, app) => {
     // Importing libraries and files
     const controller = require("../controllers/announcementController.js");
     const router = express.Router();
+    const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
     // Select all posts.
     router.get("/", controller.all);

@@ -1,10 +1,7 @@
 
-/* REFERENCE:
-   Some of the Code below is taken & adapted from Lab Examples of Week 8 and 9. 
-*/
-
 // Importing Libraries
 import axios from "axios";
+import jwtDecode from 'jwt-decode'
 
 // --- Constants ----------------------------------------------------------------------------------
 const API_HOST = "http://localhost:4000";
@@ -13,17 +10,29 @@ const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
 const SELECT_KEY2 = "SelectedID2";
 
+// // Set authorization token as default header
+// const accessToken = sessionStorage.getItem('user');
+// if (accessToken) {
+//   axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
+// }
+
 // --- User ---------------------------------------------------------------------------------------
 // Verify User Request For API from DB
 async function verifyUser(id, password) {
-  const response = await axios.get(API_HOST + "/MAApi/users/Sign-in", { params: { id, password } });
-  const user = response.data;
+  const response = await axios.post(API_HOST + "/MAApi/users/Sign-in", { id, password });
+  const token = response.data;
 
-  // NOTE: In this example the login is also persistent as it is stored in local storage.
-  if (user !== null && user.archived !== true)
-    setUser(user);
+  // Decode the access token to retrieve the user object.
+  if (token !== null) {
+    const user = jwtDecode(token);
 
-  return user;
+
+    // NOTE: In this example the login is also persistent as it is stored in local storage.
+    if (user !== null && user.archived !== true) {
+      setUser(token);
+    }
+  }
+  return token;
 }
 
 // Get User Details Request For API from DB
@@ -162,7 +171,7 @@ async function uploadResource(formData) {
       "Content-Type": "multipart/form-data",
     },
   });
-  
+
   return response.data;
 }
 
@@ -186,17 +195,17 @@ async function deleteResources(resource) {
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
 function setUser(user) {
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  sessionStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 
 // Get User Details from Local Storage
 function getUser() {
-  return JSON.parse(localStorage.getItem(USER_KEY));
+  return JSON.parse(sessionStorage.getItem(USER_KEY));
 }
 
 // Removes user from Local Storage
 function removeUser() {
-  localStorage.removeItem(USER_KEY);
+  sessionStorage.removeItem(USER_KEY);
 }
 
 function selectedId(id) {

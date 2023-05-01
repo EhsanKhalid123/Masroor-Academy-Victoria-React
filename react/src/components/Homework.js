@@ -4,7 +4,7 @@ import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import parse from 'html-react-parser';
 import { Link } from "react-router-dom";
-import { deleteHomeworks, getSelectedId, createHomeworks, getHomeworks, getSelectedId2 } from "../data/repository";
+import { deleteHomeworks, getSelectedId, createHomeworks, getHomeworks, getSelectedId2, removeSelectedId, removeSelectedId2 } from "../data/repository";
 
 // Functional Component for Navigation Bar
 function Homework(props) {
@@ -125,7 +125,7 @@ function Homework(props) {
                     <button type="submit" style={{ margin: "5px", padding: "5px 25px 5px 25px" }} className="text-center btn btn-outline-primary2" >Add</button>
                     <button type="button" style={{ margin: "5px " }} className="text-center btn btn-outline-danger" onClick={() => { setHomework(""); setErrorMessage(null); }} >Clear</button>
                     <Link to="/Student">
-                        <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success" onClick={() => { setHomework(""); setErrorMessage(null); }}  >Go Back to Students</button>
+                        <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success" onClick={() => { setHomework(""); setErrorMessage(null); removeSelectedId2(); removeSelectedId(); }}  >Go Back to Students</button>
                     </Link>
                 </div>
             </form>

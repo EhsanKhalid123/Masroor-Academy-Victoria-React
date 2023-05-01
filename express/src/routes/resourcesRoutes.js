@@ -6,7 +6,9 @@ const upload = multer({ storage: storage });
 module.exports = (express, app) => {
   const controller = require('../controllers/resourcesController.js');
   const router = express.Router();
+  const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
+  // Supposed to remove API Link from Console
   router.use((req, res, next) => {
     res.set('Referrer-Policy', 'no-referrer');
     next();

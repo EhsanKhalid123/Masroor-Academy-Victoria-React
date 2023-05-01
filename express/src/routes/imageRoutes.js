@@ -6,6 +6,7 @@ module.exports = (express, app) => {
   const controller = require('../controllers/imagesController.js');
   const uploadImageRouter = express.Router();
   const getImageRouter = express.Router();
+  const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
   // Get an Image
   getImageRouter.get('/:id', controller.getImage);

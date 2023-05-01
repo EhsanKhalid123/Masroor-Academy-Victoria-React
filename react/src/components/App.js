@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { getUser, removeUser, loggedInUser, removeLoggedInUser, removeSelectedId, removeSelectedId2 } from "../data/repository";
+import jwtDecode from 'jwt-decode'
 
 // Importing the components
 import Navigation from './Navigation';
@@ -25,11 +26,17 @@ function App() {
 
   // useState Hooks Defined
   const [user, setUser] = useState(getUser());
+  const [decodedUser, setDecodedUser] = useState(null);
   const [message, setMessage] = useState(null);
-
 
   // Set message to null automatically after a period of time.
   useEffect(() => {
+
+    if (user !== null) {
+      const decoded = jwtDecode(user);
+      setDecodedUser(decoded);
+    }
+
     if (message === null)
       return;
 
@@ -38,12 +45,13 @@ function App() {
 
     // When message changes clear the queued timeout function.
     return () => clearTimeout(id);
-  }, [message]);
+  }, [message, user]);
 
   // Const Function for storing in state Variables and for sending to child elements
   const loginUser = (user) => {
     setUser(user);
-    loggedInUser(user.name);
+    const userDecoded = jwtDecode(user);
+    loggedInUser(userDecoded.name);
 
   };
 
@@ -51,6 +59,7 @@ function App() {
   const logoutUser = () => {
     removeUser();
     setUser(null);
+    setDecodedUser(null);
     removeLoggedInUser();
     removeSelectedId();
     removeSelectedId2();
@@ -66,31 +75,31 @@ function App() {
         <Router>
 
           <Header />
-          <Navigation user={user} loginUser={loginUser} logoutUser={logoutUser} />
+          <Navigation user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />
           <Routes>
 
-            {user !== null &&
+            {decodedUser !== null &&
               <>
                 <Route path="/" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
-                <Route path="/Dashboard" element={<Dashboard user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                <Route path="/Resources" element={<Resources user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <Route path="/Dashboard" element={<Dashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <Route path="/Resources" element={<Resources user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <>
-                  {(user.group === "Male Teacher" || user.group === "Female Teacher" || user.name === "Admin") &&
+                  {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
                     <>
-                      <Route path="/Announcements" element={<Announcements user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                      <Route path="/Student" element={<Student user={user} loginUser={loginUser} logoutUser={logoutUser} />} />
-                      <Route path="/Homework" element={<Homework user={user} />} />
+                      <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Student" element={<Student user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Homework" element={<Homework user={decodedUser} />} />
                     </>
                   }
                 </>
               </>
             }
             
-            {(user === null || user.name === "Admin") &&
+            {(decodedUser === null || decodedUser.name === "Admin") &&
               <>
-                <Route path="/" element={<Home user={user} />} />
-                <Route path="/Home" element={<Home user={user} />} />
+                <Route path="/" element={<Home user={decodedUser} />} />
+                <Route path="/Home" element={<Home user={decodedUser} />} />
                 <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
                 <Route path="/Register" element={<Register />} />
                 <Route path="/About" element={<About loginUser={loginUser} />} />

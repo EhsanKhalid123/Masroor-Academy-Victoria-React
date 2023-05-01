@@ -11,6 +11,7 @@ function Register(props) {
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [formStatus, setFormStatus] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
     const current = new Date().toISOString().split("T")[0];
 
     // Set message to null automatically after a period of time.
@@ -21,6 +22,7 @@ function Register(props) {
             const currentFormStatus = await getFormStatus();
 
             setFormStatus(currentFormStatus);
+            setIsLoading(false);
         }
 
         // Calls the functions above
@@ -162,101 +164,110 @@ function Register(props) {
             <img className="img-fluid d-block mx-auto" style={{ textAlign: "center", margin: "auto", display: "block", maxWidth: "100%" }} src={"/assets/images/Registration Form Banner.png"} alt="Registration Banner" />
             <h1 className="text-center mb-3" style={{ padding: "50px 20px 0 20px" }}>Masroor Academy Registration</h1>
             <hr style={{ width: "50%", marginBottom: "20px", borderWidth: "1px", backgroundColor: "#5dc7d8" }} />
-            {formStatus.status ?
-                <div>
-                    <p style={{ fontSize: "17px", padding: "0 18%" }} className="text-center mb-3">Please fill in the form below in order to enroll for Masroor Academy. By filling in this form you accept all the rules and guidelines. <br />
-                        𝗡𝗢𝗧𝗘: The classes for Berwick, Langwarrin, Cranbourne East and Melbourne East will be held in Masjid Bait-ul-Salam. However, Jama'at West classes will be held in Melbourne West.</p>
-                    <p>&nbsp;</p>
-                    <form className="sign-up-form" onSubmit={handleSubmit} noValidate>
-                        {/* Name Field */}
-                        <div className="form-group">
-                            <label htmlFor="name"><b className="required-field" style={{ fontSize: "20px" }}>Student's Full Name:</b></label>
-                            <input type="text" className="form-control" id="name" name="name" placeholder="Please enter student's full name" value={values.name} onChange={handleInputChange} required />
-                            <small id="studentNameHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's full name to avoid confusion with other students with the same name!</small>
-                            {errors.name && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
-                            )}
-                        </div>
-                        {/* Email Field */}
-                        <div className="form-group">
-                            <label htmlFor="email"><b style={{ fontSize: "20px" }}>Student's Email:</b></label>
-                            <input type="email" className="form-control" id="email" name="email" placeholder="Please enter student's email" value={values.email} onChange={handleInputChange} />
-                            <small id="studentEmailHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's Email if they have any otherwise leave blank</small>
-                            {errors.email && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.email}</p>
-                            )}
-                        </div>
-                        {/* DOB Field */}
-                        <div className="form-group">
-                            <label htmlFor="date"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
-                            <input type="date" className="form-control" id="dob" name="dob" placeholder="Please enter your Date of Birth" value={values.dob} onChange={handleInputChange} max={current} required />
-                            {errors.dob && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.dob}</p>
-                            )}
-                        </div>
-                        {/* Auxilary Field */}
-                        <div className="form-group">
-                            <label htmlFor="Auxilary"><b className="required-field" style={{ fontSize: "20px" }}>Auxiliary Organisation:</b></label>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} name="auxiliary" value="Atfal-ul-Ahmadiyya" checked={values.auxiliary === "Atfal-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Atfal-ul-Ahmadiyya</span>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} name="auxiliary" value="Nasirat-ul-Ahmadiyya" checked={values.auxiliary === "Nasirat-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Nasirat-ul-Ahmadiyya</span>
-                            {errors.auxiliary && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.auxiliary}</p>
-                            )}
-                        </div>
-                        {/* Jama'at Field */}
-                        <div className="form-group">
-                            <label htmlFor="Auxilary"><b className="required-field" style={{ fontSize: "20px" }}>Jama'at:</b></label>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Berwick" checked={values.jamaat === "Berwick"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Berwick</span>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Langwarrin" checked={values.jamaat === "Langwarrin"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Langwarrin</span>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Clyde" checked={values.jamaat === "Clyde"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Clyde</span>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne East" checked={values.jamaat === "Melbourne East"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne East</span>
-                            <br />
-                            <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne West" checked={values.jamaat === "Melbourne West"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne West</span>
-                            {errors.jamaat && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
-                            )}
-                        </div>
-                        {/* Parents Name Field */}
-                        <div className="form-group">
-                            <label htmlFor="pname"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Full Name:</b></label>
-                            <input type="text" className="form-control" id="pname" name="pname" placeholder="Please enter parent's full name" value={values.pname} onChange={handleInputChange} required />
-                            {errors.pname && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.pname}</p>
-                            )}
-                        </div>
-                        {/* Parents Email Field */}
-                        <div className="form-group">
-                            <label htmlFor="email"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Email:</b></label>
-                            <input type="email" className="form-control" id="pemail" name="pemail" placeholder="Please enter parent's email" value={values.pemail} onChange={handleInputChange} required />
-                            {errors.pemail && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.pemail}</p>
-                            )}
-                        </div>
-                        {/* Parent's Contact Number Field */}
-                        <div className="form-group">
-                            <label htmlFor="contact"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Contact Number:</b></label>
-                            <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="contact" name="contact" placeholder="Please enter parent's contact number" value={values.contact} onChange={handleInputChange} required />
-                            <small id="contact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
-                            {errors.contact && (
-                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.contact}</p>
-                            )}
-                        </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
 
-                        {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
-                        {errors.message && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{errors.message}</div>}
-                    </form>
+            {isLoading ?
+                <div className="card-body text-center">
+                    <span className="text-muted">There has been an issue with our servers, Please contact us at masrooracademyvic1@gmail.com</span>
                 </div>
                 :
                 <>
-                    <pre className="formTextStyle text-center">{formStatus.text}</pre>
-                <p>&nbsp;</p>
+                    {formStatus.status ?
+                        <div>
+                            <p style={{ fontSize: "17px", padding: "0 18%" }} className="text-center mb-3">Please fill in the form below in order to enroll for Masroor Academy. By filling in this form you accept all the rules and guidelines. <br />
+                                𝗡𝗢𝗧𝗘: The classes for Berwick, Langwarrin, Cranbourne East and Melbourne East will be held in Masjid Bait-ul-Salam. However, Jama'at West classes will be held in Melbourne West.</p>
+                            <p>&nbsp;</p>
+                            <form className="sign-up-form" onSubmit={handleSubmit} noValidate>
+                                {/* Name Field */}
+                                <div className="form-group">
+                                    <label htmlFor="name"><b className="required-field" style={{ fontSize: "20px" }}>Student's Full Name:</b></label>
+                                    <input type="text" className="form-control" id="name" name="name" placeholder="Please enter student's full name" value={values.name} onChange={handleInputChange} required />
+                                    <small id="studentNameHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's full name to avoid confusion with other students with the same name!</small>
+                                    {errors.name && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
+                                    )}
+                                </div>
+                                {/* Email Field */}
+                                <div className="form-group">
+                                    <label htmlFor="email"><b style={{ fontSize: "20px" }}>Student's Email:</b></label>
+                                    <input type="email" className="form-control" id="email" name="email" placeholder="Please enter student's email" value={values.email} onChange={handleInputChange} />
+                                    <small id="studentEmailHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's Email if they have any otherwise leave blank</small>
+                                    {errors.email && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.email}</p>
+                                    )}
+                                </div>
+                                {/* DOB Field */}
+                                <div className="form-group">
+                                    <label htmlFor="date"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
+                                    <input type="date" className="form-control" id="dob" name="dob" placeholder="Please enter your Date of Birth" value={values.dob} onChange={handleInputChange} max={current} required />
+                                    {errors.dob && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.dob}</p>
+                                    )}
+                                </div>
+                                {/* Auxilary Field */}
+                                <div className="form-group">
+                                    <label htmlFor="Auxilary"><b className="required-field" style={{ fontSize: "20px" }}>Auxiliary Organisation:</b></label>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="auxiliary" value="Atfal-ul-Ahmadiyya" checked={values.auxiliary === "Atfal-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Atfal-ul-Ahmadiyya</span>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="auxiliary" value="Nasirat-ul-Ahmadiyya" checked={values.auxiliary === "Nasirat-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Nasirat-ul-Ahmadiyya</span>
+                                    {errors.auxiliary && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.auxiliary}</p>
+                                    )}
+                                </div>
+                                {/* Jama'at Field */}
+                                <div className="form-group">
+                                    <label htmlFor="Auxilary"><b className="required-field" style={{ fontSize: "20px" }}>Jama'at:</b></label>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Berwick" checked={values.jamaat === "Berwick"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Berwick</span>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Langwarrin" checked={values.jamaat === "Langwarrin"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Langwarrin</span>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Clyde" checked={values.jamaat === "Clyde"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Clyde</span>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne East" checked={values.jamaat === "Melbourne East"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne East</span>
+                                    <br />
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne West" checked={values.jamaat === "Melbourne West"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne West</span>
+                                    {errors.jamaat && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
+                                    )}
+                                </div>
+                                {/* Parents Name Field */}
+                                <div className="form-group">
+                                    <label htmlFor="pname"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Full Name:</b></label>
+                                    <input type="text" className="form-control" id="pname" name="pname" placeholder="Please enter parent's full name" value={values.pname} onChange={handleInputChange} required />
+                                    {errors.pname && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.pname}</p>
+                                    )}
+                                </div>
+                                {/* Parents Email Field */}
+                                <div className="form-group">
+                                    <label htmlFor="email"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Email:</b></label>
+                                    <input type="email" className="form-control" id="pemail" name="pemail" placeholder="Please enter parent's email" value={values.pemail} onChange={handleInputChange} required />
+                                    {errors.pemail && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.pemail}</p>
+                                    )}
+                                </div>
+                                {/* Parent's Contact Number Field */}
+                                <div className="form-group">
+                                    <label htmlFor="contact"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Contact Number:</b></label>
+                                    <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="contact" name="contact" placeholder="Please enter parent's contact number" value={values.contact} onChange={handleInputChange} required />
+                                    <small id="contact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
+                                    {errors.contact && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.contact}</p>
+                                    )}
+                                </div>
+                                <button type="submit" className="btn btn-primary">Submit</button>
+
+                                {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
+                                {errors.message && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{errors.message}</div>}
+                            </form>
+                        </div>
+                        :
+                        <>
+                            <pre className="formTextStyle text-center">{formStatus.text}</pre>
+                            <p>&nbsp;</p>
+                        </>
+                    }
                 </>
             }
         </>

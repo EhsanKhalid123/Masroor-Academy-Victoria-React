@@ -7,6 +7,7 @@ module.exports = (express, app) => {
   // Importing libraries and files
   const controller = require("../controllers/usersController.js");
   const router = express.Router();
+  const {validateToken} = require("../middlewares/AuthMiddleware.js");
 
   // Select all users.
   router.get("/", controller.all);
@@ -18,7 +19,7 @@ module.exports = (express, app) => {
   router.get("/get/:id", controller.one2);
 
   // Select one user from the database if username and password are a match.
-  router.get("/Sign-in", controller.login);
+  router.post("/Sign-in", controller.login);
 
   // Deletes a user from the DB.
   router.post("/delete", controller.delete);
