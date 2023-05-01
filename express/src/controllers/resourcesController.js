@@ -9,7 +9,7 @@ exports.upload = async (req, res) => {
         const resource = req.file;
 
         if (!resource) {
-            return res.status(400).json({ error: 'No file provided.' });
+            return res.status(400).json({ error: 'No file provided!' });
         }
 
         // Save the resource file to the database.
@@ -26,8 +26,7 @@ exports.upload = async (req, res) => {
         // Return the filename of the resource as a response.
         res.json({ filename: filename });
     } catch (err) {
-        // console.error(err);
-        res.status(500).json({ error: 'Failed to upload resource.' });
+        res.status(500).json({ error: 'Failed to upload resource!' });
     }
 };
 
@@ -43,11 +42,9 @@ exports.getResource = async (req, res) => {
             return res.status(404).json({ error: 'Resource not found.' });
         }
 
-        // const resourceUrl = `${req.protocol}://${req.get('host')}/MAApi/resources/${resource.filename}`;
-
         // Set the Content-Disposition header to attachment and send the file data in the response body
-        // res.set('Content-Disposition', `attachment; filename=${resource.filename}`);
-        // res.set('Content-Type', resource.mimetype);
+        res.set('Content-Disposition', `attachment; filename=${resource.filename}`);
+        res.set('Content-Type', resource.mimetype);
         res.send(resource.data);
     } catch (err) {
         console.error(err);

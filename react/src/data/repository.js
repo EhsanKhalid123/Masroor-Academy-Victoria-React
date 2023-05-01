@@ -162,7 +162,7 @@ async function uploadResource(formData) {
       "Content-Type": "multipart/form-data",
     },
   });
-
+  
   return response.data;
 }
 

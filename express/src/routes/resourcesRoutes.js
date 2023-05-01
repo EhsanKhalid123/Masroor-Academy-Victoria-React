@@ -7,6 +7,10 @@ module.exports = (express, app) => {
   const controller = require('../controllers/resourcesController.js');
   const router = express.Router();
 
+  router.use((req, res, next) => {
+    res.set('Referrer-Policy', 'no-referrer');
+    next();
+  });
 
   // Get the uploaded resource by ID
   router.get('/:id', controller.getResource);
