@@ -10,6 +10,9 @@ const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
 const SELECT_KEY2 = "SelectedID2";
 
+// const accessToken = sessionStorage.getItem("user");
+// const headers = { accessToken: `${accessToken}` };
+
 // // Set authorization token as default header
 // const accessToken = sessionStorage.getItem('user');
 // if (accessToken) {
@@ -144,21 +147,33 @@ async function deleteAnnouncements(announcement) {
 
 // Get Form Status Request For API from DB
 async function getFormStatus() {
-  const response = await axios.get(API_HOST + "/MAApi/formStatus");
+  const response = await axios.get(API_HOST + "/MAApi/formStatus", {
+    headers: {
+      accessToken: sessionStorage.getItem("user"),
+    },
+  });
 
   return response.data;
 }
 
 // Update Form Status Request For API from DB
 async function updateFormStatus(formStatus) {
-  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormStatus", formStatus);
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormStatus", formStatus, {
+    headers: {
+      accessToken: sessionStorage.getItem("user"),
+    },
+  });
 
   return response.data;
 }
 
 // Update Form Text Request For API from DB
 async function updateFormText(formText) {
-  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormText", formText);
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormText", formText, {
+    headers: {
+      accessToken: sessionStorage.getItem("user"),
+    },
+  });
 
   return response.data;
 }

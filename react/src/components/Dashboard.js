@@ -53,8 +53,6 @@ function Dashboard(props) {
                 <>
                     {props.user.group === "Admin" &&
                         <div style={{ textAlign: "center" }}>
-                            {/* Below commented out code is to only render switch once it's value from database has been recieved */}
-                            {/* {checked !== undefined && <ReactSwitch checked={checked} onChange={handleToggleChange} />} */}
 
                             <h4>Registration Form Status Setting:</h4>
                             <ReactSwitch checked={checked} onChange={handleToggleChange} />
