@@ -44,7 +44,7 @@ exports.one2 = async (req, res) => {
 // Select one user from the database if email and password are a match.
 exports.login = async (req, res) => {
   try {
-    const user = await db.users.findByPk(req.body.id);
+    const user = await db.users.findByPk(req.body.id.toUpperCase().trim());
 
     if (user === null || user.hashed_password !== req.body.password) {
       // Login failed.
