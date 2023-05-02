@@ -20,7 +20,6 @@ import Register from "./Register";
 import Student from "./Student";
 import Resources from "./Resources";
 
-
 // Functional Component for App
 function App() {
 
@@ -28,6 +27,7 @@ function App() {
   const [user, setUser] = useState(getUser());
   const [decodedUser, setDecodedUser] = useState(null);
   const [message, setMessage] = useState(null);
+  const [logoutTimer, setLogoutTimer] = useState(null); // new state variable to hold the logout timer
 
   // Set message to null automatically after a period of time.
   useEffect(() => {
@@ -35,6 +35,14 @@ function App() {
     if (user !== null) {
       const decoded = jwtDecode(user);
       setDecodedUser(decoded);
+
+      // set a timer to log out the user when the token expires
+      const expiresIn = decoded.exp - Math.floor(Date.now() / 1000);
+      if (expiresIn > 0) {
+        const timer = setTimeout(logoutUser, expiresIn * 1000);
+        setLogoutTimer(timer);
+      }
+
     }
 
     if (message === null)
@@ -53,6 +61,20 @@ function App() {
     const userDecoded = jwtDecode(user);
     loggedInUser(userDecoded.name);
 
+    // clear the logout timer and set a new one when the user logs in
+    if (logoutTimer !== null) {
+      clearTimeout(logoutTimer);
+    }
+    const expiresIn = userDecoded.exp - Math.floor(Date.now() / 1000);
+    if (expiresIn > 0) {
+      const timer = setTimeout(logoutUser2, expiresIn * 1000);
+      // const timer = setTimeout(() => {
+      //   navigate('/Sign-in'); // redirect to the logout page when the token expires
+      //   logoutUser2();
+      // }, expiresIn * 1000);
+      setLogoutTimer(timer);
+    }
+
   };
 
   // Const Function for removing state for user and sending it to child elements
@@ -64,6 +86,12 @@ function App() {
     removeSelectedId();
     removeSelectedId2();
   };
+
+  const logoutUser2 = () => {
+    logoutUser()    
+    localStorage.setItem("inactiveMessage", "Your session has expired. Please login again to continue!");
+    window.location.href = '/Sign-in';
+  }
 
   // Returns below elements to from the function App.
   return (
@@ -95,7 +123,7 @@ function App() {
                 </>
               </>
             }
-            
+
             {(decodedUser === null || decodedUser.name === "Admin") &&
               <>
                 <Route path="/" element={<Home user={decodedUser} />} />

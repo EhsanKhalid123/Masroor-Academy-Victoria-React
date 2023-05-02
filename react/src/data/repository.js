@@ -10,14 +10,13 @@ const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
 const SELECT_KEY2 = "SelectedID2";
 
-// const accessToken = sessionStorage.getItem("user");
-// const headers = { accessToken: `${accessToken}` };
-
-// // Set authorization token as default header
-// const accessToken = sessionStorage.getItem('user');
-// if (accessToken) {
-//   axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
-// }
+function getHeaders() {
+  return {
+    headers: {
+      accessToken: sessionStorage.getItem("user"),
+    },
+  };
+}
 
 // --- User ---------------------------------------------------------------------------------------
 // Verify User Request For API from DB
@@ -40,42 +39,42 @@ async function verifyUser(id, password) {
 
 // Get User Details Request For API from DB
 async function getProfile(id) {
-  const response = await axios.get(API_HOST + `/MAApi/users/get/${id}`);
+  const response = await axios.get(API_HOST + `/MAApi/users/get/${id}`, getHeaders());
 
   return response.data;
 }
 
 // Get User Details Request For API from DB
 async function getProfileUsers() {
-  const response = await axios.get(API_HOST + `/MAApi/users`);
+  const response = await axios.get(API_HOST + `/MAApi/users`, getHeaders());
 
   return response.data;
 }
 
 // Find User Details Request For API from DB
 async function findUser(email) {
-  const response = await axios.get(API_HOST + `/MAApi/users/select/${email}`);
+  const response = await axios.get(API_HOST + `/MAApi/users/select/${email}`, getHeaders());
 
   return response.data;
 }
 
 // Create User Request For API to DB
 async function createUser(user) {
-  const response = await axios.post(API_HOST + "/MAApi/users", user);
+  const response = await axios.post(API_HOST + "/MAApi/users", user, getHeaders());
 
   return response.data;
 }
 
 // Register User Request For API to DB
 async function registerUser(registered) {
-  const response = await axios.post(API_HOST + "/MAApi/registered", registered);
+  const response = await axios.post(API_HOST + "/MAApi/registered", registered, getHeaders());
 
   return response.data;
 }
 
 // Update User Details Request For API to DB
 async function updateUser(user, email) {
-  const response = await axios.post(API_HOST + `/MAApi/users/update/${email}`, user);
+  const response = await axios.post(API_HOST + `/MAApi/users/update/${email}`, user, getHeaders());
 
   const updatedUser = response.data;
 
@@ -87,7 +86,7 @@ async function updateUser(user, email) {
 
 // Delete User Request For API from DB
 async function deleteUserDB(user) {
-  const response = await axios.post(API_HOST + "/MAApi/users/delete", user);
+  const response = await axios.post(API_HOST + "/MAApi/users/delete", user, getHeaders());
 
   return response.data;
 }
@@ -95,28 +94,28 @@ async function deleteUserDB(user) {
 // --- Post ---------------------------------------------------------------------------------------
 // Get Post Details Request For API from DB
 async function getHomeworks() {
-  const response = await axios.get(API_HOST + "/MAApi/homeworks");
+  const response = await axios.get(API_HOST + "/MAApi/homeworks", getHeaders());
 
   return response.data;
 }
 
 // Create Homework Request For API from DB
 async function createHomeworks(homework) {
-  const response = await axios.post(API_HOST + "/MAApi/homeworks/create", homework);
+  const response = await axios.post(API_HOST + "/MAApi/homeworks/create", homework, getHeaders());
 
   return response.data;
 }
 
 // Delete Homework Request For API from DB
 async function deleteHomeworks(homeworkID) {
-  const response = await axios.post(API_HOST + "/MAApi/homeworks/delete", homeworkID);
+  const response = await axios.post(API_HOST + "/MAApi/homeworks/delete", homeworkID, getHeaders());
 
   return response.data;
 }
 
 // Delete All Homework associated with User Request For API from DB
 async function deleteHomeworks2(id) {
-  const response = await axios.post(API_HOST + "/MAApi/homeworks/delete2", id);
+  const response = await axios.post(API_HOST + "/MAApi/homeworks/delete2", id, getHeaders());
 
   return response.data;
 }
@@ -124,21 +123,21 @@ async function deleteHomeworks2(id) {
 // --- Announcements ---------------------------------------------------------------------------------------
 // Create Announcements Request For API from DB
 async function createAnnouncements(announcement) {
-  const response = await axios.post(API_HOST + "/MAApi/announcements/create", announcement);
+  const response = await axios.post(API_HOST + "/MAApi/announcements/create", announcement, getHeaders());
 
   return response.data;
 }
 
 // Get Announcements Request For API from DB
 async function getAnnouncements() {
-  const response = await axios.get(API_HOST + "/MAApi/announcements");
+  const response = await axios.get(API_HOST + "/MAApi/announcements", getHeaders());
 
   return response.data;
 }
 
 // Delete Announcements Request For API from DB
 async function deleteAnnouncements(announcement) {
-  const response = await axios.post(API_HOST + "/MAApi/announcements/delete", announcement);
+  const response = await axios.post(API_HOST + "/MAApi/announcements/delete", announcement, getHeaders());
 
   return response.data;
 }
@@ -147,33 +146,21 @@ async function deleteAnnouncements(announcement) {
 
 // Get Form Status Request For API from DB
 async function getFormStatus() {
-  const response = await axios.get(API_HOST + "/MAApi/formStatus", {
-    headers: {
-      accessToken: sessionStorage.getItem("user"),
-    },
-  });
+  const response = await axios.get(API_HOST + "/MAApi/formStatus", getHeaders());
 
   return response.data;
 }
 
 // Update Form Status Request For API from DB
 async function updateFormStatus(formStatus) {
-  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormStatus", formStatus, {
-    headers: {
-      accessToken: sessionStorage.getItem("user"),
-    },
-  });
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormStatus", formStatus, getHeaders());
 
   return response.data;
 }
 
 // Update Form Text Request For API from DB
 async function updateFormText(formText) {
-  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormText", formText, {
-    headers: {
-      accessToken: sessionStorage.getItem("user"),
-    },
-  });
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateFormText", formText, getHeaders());
 
   return response.data;
 }
@@ -184,6 +171,7 @@ async function uploadResource(formData) {
   const response = await axios.post(API_HOST + "/MAApi/resources/upload", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
+      accessToken: sessionStorage.getItem("user"),
     },
   });
 
@@ -191,7 +179,7 @@ async function uploadResource(formData) {
 }
 
 async function fetchResources() {
-  const response = await axios.get(API_HOST + "/MAApi/resources");
+  const response = await axios.get(API_HOST + "/MAApi/resources", getHeaders());
   return response.data;
 }
 
@@ -202,7 +190,7 @@ async function fetchResourcesByID(resourcesID) {
 
 // Delete resources Request For API from DB
 async function deleteResources(resource) {
-  const response = await axios.post(API_HOST + "/MAApi/resources/delete", resource);
+  const response = await axios.post(API_HOST + "/MAApi/resources/delete", resource, getHeaders());
 
   return response.data;
 }

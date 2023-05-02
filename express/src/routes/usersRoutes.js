@@ -10,25 +10,25 @@ module.exports = (express, app) => {
   const {validateToken} = require("../middlewares/AuthMiddleware.js");
 
   // Select all users.
-  router.get("/", controller.all);
+  router.get("/", validateToken, controller.all);
 
   // Select a single user with id.
-  router.get("/select/:email", controller.one);
+  router.get("/select/:email", validateToken, controller.one);
 
   // Select a single user with id.
-  router.get("/get/:id", controller.one2);
+  router.get("/get/:id", validateToken, controller.one2);
 
   // Select one user from the database if username and password are a match.
   router.post("/Sign-in", controller.login);
 
   // Deletes a user from the DB.
-  router.post("/delete", controller.delete);
+  router.post("/delete", validateToken, controller.delete);
 
   // Create a updates user details.
-  router.post("/update/:email", controller.update);
+  router.post("/update/:email", validateToken, controller.update);
 
   // Create a new user.
-  router.post("/", controller.create);
+  router.post("/", validateToken, controller.create);
 
   // Add routes to server.
   app.use("/MAApi/users", router);

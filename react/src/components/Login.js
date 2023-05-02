@@ -1,6 +1,6 @@
 
 // Importing React classes and functions from node modules
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { verifyUser } from "../data/repository";
 import jwtDecode from 'jwt-decode'
@@ -11,6 +11,26 @@ function Login(props) {
     const history = useNavigate();
     const [fields, setFields] = useState({ id: "", password: "" });
     const [errorMessage, setErrorMessage] = useState(null);
+    const [message, setMessage] = useState(null);
+
+    useEffect(() => {
+        // get message from local storage
+        const storedMessage = localStorage.getItem("inactiveMessage");
+        if (storedMessage) {
+            setMessage(storedMessage);
+
+            // set timer to remove message after 5 seconds
+            const timer = setTimeout(() => {
+                setMessage(null);
+                // remove message from local storage
+                localStorage.removeItem("inactiveMessage");
+            }, 3000);
+
+            // clean up timer on unmount
+            return () => clearTimeout(timer);
+        }
+    }, []);
+
 
     // Generic change handler.
     const handleInputChange = (event) => {
@@ -24,7 +44,7 @@ function Login(props) {
         try {
             //  Get user details from DB
             const token = await verifyUser(fields.id, fields.password);
-            
+
             //  If user email does not exit
             if (token === null) {
                 // Login failed, reset password field to blank and set error message.
@@ -37,10 +57,10 @@ function Login(props) {
 
             // Set user state.
             if (user.archived === false) {
-             
+
                 // Set user as logged in, loginUser function is called from App.js
                 props.loginUser(token);
-                
+
                 // Navigate to the home page.
                 history("/Dashboard");
                 // User is no longer a member or graduated or dropped out then disabled the account
@@ -62,6 +82,7 @@ function Login(props) {
 
         // Login Form Code
         <div>
+            {message && <div className="alert alert-danger text-center" style={{ margin: "20px" }} role="alert">{message}</div>}
             <h1 className="text-center mb-3" style={{ padding: "50px 20px 0 20px", color: "#112c3f" }}>Sign In</h1>
             <hr style={{ width: "50%", marginBottom: "20px", borderWidth: "1px", backgroundColor: "#aa0001" }} />
             <p>&nbsp;</p>

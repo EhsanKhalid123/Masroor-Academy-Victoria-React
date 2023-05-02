@@ -9,10 +9,10 @@ module.exports = (express, app) => {
   const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
   // Get an Image
-  getImageRouter.get('/:id', controller.getImage);
+  getImageRouter.get('/:id', validateToken, controller.getImage);
     
   // Upload an Image.
-  uploadImageRouter.post('/upload', upload.single('upload'), controller.upload);
+  uploadImageRouter.post('/upload', validateToken, upload.single('upload'), controller.upload);
 
   // Add routes to server.
   app.use('/MAApi/image', uploadImageRouter);

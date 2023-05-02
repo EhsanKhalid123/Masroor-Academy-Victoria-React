@@ -10,13 +10,13 @@ module.exports = (express, app) => {
     const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
     // Select all posts.
-    router.get("/", controller.all);
+    router.get("/", validateToken, controller.all);
 
     // Deletes a Replied post from the DB.
-    router.post("/delete", controller.delete);
+    router.post("/delete", validateToken, controller.delete);
 
     // Create a Reply to a post.
-    router.post("/create", controller.create);
+    router.post("/create", validateToken, controller.create);
 
     // Add routes to server.
     app.use("/MAApi/announcements", router);

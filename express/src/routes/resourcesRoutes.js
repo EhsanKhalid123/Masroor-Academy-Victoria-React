@@ -15,15 +15,15 @@ module.exports = (express, app) => {
   });
 
   // Get the uploaded resource by ID
-  router.get('/:id', controller.getResource);
+  router.get('/:id', validateToken, controller.getResource);
 
   // Get the uploaded resource
-  router.get('/', controller.all);
+  router.get('/', validateToken, controller.all);
 
-  router.post('/upload', upload.single('file'), controller.upload);
+  router.post('/upload', validateToken, upload.single('file'), controller.upload);
 
   // Deletes a resource from the DB.
-  router.post("/delete", controller.delete);
+  router.post("/delete", validateToken, controller.delete);
 
   // Add routes to server.
   app.use('/MAApi/resources', router);
