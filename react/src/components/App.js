@@ -15,10 +15,13 @@ import MessageContext from "../data/MessageContext";
 import About from "./About";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./Dashboard";
+import AddHomework from "./AddHomework";
 import Homework from "./Homework";
 import Register from "./Register";
 import Student from "./Student";
 import Resources from "./Resources";
+import SelectGroup from './SelectGroup';
+import Group from './Group';
 
 // Functional Component for App
 function App() {
@@ -68,10 +71,6 @@ function App() {
     const expiresIn = userDecoded.exp - Math.floor(Date.now() / 1000);
     if (expiresIn > 0) {
       const timer = setTimeout(logoutUser2, expiresIn * 1000);
-      // const timer = setTimeout(() => {
-      //   navigate('/Sign-in'); // redirect to the logout page when the token expires
-      //   logoutUser2();
-      // }, expiresIn * 1000);
       setLogoutTimer(timer);
     }
 
@@ -117,7 +116,10 @@ function App() {
                     <>
                       <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Student" element={<Student user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/AddHomework" element={<AddHomework user={decodedUser} />} />
                       <Route path="/Homework" element={<Homework user={decodedUser} />} />
+                      <Route path="/SelectGroup" element={<SelectGroup user={decodedUser} />} />
+                      <Route path="/Group/:groupNumber" element={<Group user={decodedUser} />} />
                     </>
                   }
                 </>

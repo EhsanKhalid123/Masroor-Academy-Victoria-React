@@ -537,3 +537,26 @@ input[type=number]::-webkit-outer-spin-button {
   pointer-events: none;
   color: #aaa;
 }
+
+
+/* Search Groups Links */
+
+.selectGroupLinks {
+  color: #ffffff;
+}
+
+.selectGroupLinks:hover{
+  color: white;
+}
+
+.selectGroupLinks > .card{
+  /* background-color: #112c3f !important; */
+  background: linear-gradient(#112c3f, #204760);
+  
+}
+
+.selectGroupLinks > .card:hover {
+  cursor: pointer;
+  box-shadow: 0 0 2px #112c3f;
+  background: linear-gradient(#1b425e, #2b6289); 
+}

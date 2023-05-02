@@ -1,13 +1,14 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2 } from "../data/repository";
 
-function Homework(props) {
+function Group1(props) {
 
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const { groupNumber } = useParams();
 
     // Load users from DB.
     useEffect(() => {
@@ -41,15 +42,38 @@ function Homework(props) {
         setSearch(event.target.value.toLowerCase());
     }
 
+    let groupDetails;
+
+    switch (groupNumber) {
+        case "1":
+            groupDetails = "7-8 (Group 1)";
+            break;
+        case "2":
+            groupDetails = "9-11 (Group 2)";
+            break;
+        case "3":
+            groupDetails = "12-13 (Group 3)";
+            break;
+        case "4":
+            groupDetails = "14-15 (Group 4)";
+            break;
+        default:
+            groupDetails = "Invalid group number";
+    }
 
     return (
         <>
-            <br/>
+            <br />
             <div className="searchCenter">
                 <div className="form-group has-search">
                     <span className="fa fa-search form-control-feedback"></span>
-                    <input type="text" style={{border: "1px solid #112c3f", borderRadius: "10rem"}} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
+                    <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <Link to="/SelectGroup">
+                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
+                </Link>
             </div>
 
             <div className="table-responsive">
@@ -60,7 +84,7 @@ function Homework(props) {
                     </div>
                     :
                     <div>
-                        <table className="table table-striped" style={{margin: "0"}}>
+                        <table className="table table-striped" style={{ margin: "0" }}>
                             <thead>
                                 <tr>
                                     <th></th>
@@ -79,8 +103,8 @@ function Homework(props) {
                                     {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
                                     {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                         <>
-                                        {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat") || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal") || (props.user.group === "Admin")) &&
+                                            {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
+                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.group === groupDetails) || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.group === groupDetails) || (props.user.group === "Admin" && userDetails.group === groupDetails)) &&
                                                 <tr>
                                                     <td></td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
@@ -88,7 +112,7 @@ function Homework(props) {
                                                     <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
                                                     <td>
-                                                        <Link to="/Homework">
+                                                        <Link to="/AddHomework" state={{ groupNumber }}>
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
                                                         {props.user.group === "Admin" &&
@@ -114,4 +138,4 @@ function Homework(props) {
 }
 
 // Export the Student Function
-export default Homework;
+export default Group1;

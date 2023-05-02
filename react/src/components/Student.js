@@ -88,7 +88,7 @@ function Student(props) {
                                                     <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
                                                     <td>
-                                                        <Link to="/Homework">
+                                                        <Link to="/Profile">
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
                                                         {props.user.group === "Admin" &&

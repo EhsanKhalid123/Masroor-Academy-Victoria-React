@@ -25,8 +25,6 @@ function Navigation(props) {
 
   // Returns HTML code from this function which is displayed by importing on other pages
   return (
-    // Navigation bar Code adapted from Official Bootstrap Documents
-    // https://getbootstrap.com/docs/4.0/components/navbar/
 
     // Navbar Code using normal HTML elements
     <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: "#f0f0f0" }}>
@@ -69,6 +67,10 @@ function Navigation(props) {
 
                     <li className="nav-item">
                       <NavLink className="nav-link2 nav-link" to="/Student">Students</NavLink>
+                    </li>
+
+                    <li className="nav-item">
+                      <NavLink className="nav-link2 nav-link" to="/SelectGroup">Homework</NavLink>
                     </li>
 
                   </>
