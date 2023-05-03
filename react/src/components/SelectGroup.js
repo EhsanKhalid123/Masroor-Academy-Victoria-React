@@ -49,6 +49,15 @@ function SelectGroup(props) {
                                 </div>
                             </Link>
                         </div>
+                        <div style={{ margin: "5px" }}>
+                            <Link to="/Group/5" className="selectGroupLinks" style={{ textDecoration: "none" }}>
+                                <div className="card">
+                                    <div className="card-body" style={{ padding: "15px" }}>
+                                        <h5 className="text-center" style={{ marginBottom: "0px" }}>All Students</h5>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 </div>
 

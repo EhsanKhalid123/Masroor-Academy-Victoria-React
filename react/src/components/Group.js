@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2 } from "../data/repository";
 
-function Group1(props) {
+function Group(props) {
 
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -104,7 +104,7 @@ function Group1(props) {
                                     {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
                                         <>
                                             {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.group === groupDetails) || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.group === groupDetails) || (props.user.group === "Admin" && userDetails.group === groupDetails)) &&
+                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails))) &&
                                                 <tr>
                                                     <td></td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
@@ -138,4 +138,4 @@ function Group1(props) {
 }
 
 // Export the Student Function
-export default Group1;
+export default Group;
