@@ -16,9 +16,7 @@ import About from "./About";
 import ErrorPage from "./ErrorPage";
 import Dashboard from "./Dashboard";
 import AddHomework from "./AddHomework";
-import Homework from "./Homework";
 import Register from "./Register";
-import Student from "./Student";
 import Resources from "./Resources";
 import SelectGroup from './SelectGroup';
 import Group from './Group';
@@ -87,7 +85,7 @@ function App() {
   };
 
   const logoutUser2 = () => {
-    logoutUser()    
+    logoutUser()
     localStorage.setItem("inactiveMessage", "Your session has expired. Please login again to continue!");
     window.location.href = '/Sign-in';
   }
@@ -115,18 +113,18 @@ function App() {
                   {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
                     <>
                       <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
-                      <Route path="/Student" element={<Student user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/AddHomework" element={<AddHomework user={decodedUser} />} />
-                      <Route path="/Homework" element={<Homework user={decodedUser} />} />
-                      <Route path="/SelectGroup" element={<SelectGroup user={decodedUser} />} />
-                      <Route path="/Group/:groupNumber" element={<Group user={decodedUser} />} />
+                      <Route path="/SelectGroupHomework" element={<SelectGroup user={decodedUser} selectGroup={"homework"} />} />
+                      <Route path="/SelectGroupStudent" element={<SelectGroup user={decodedUser} selectGroup={"student"} />} />
+                      <Route path="/HomeworkGroup/:groupNumber" element={<Group user={decodedUser} group={"homework"} />} />
+                      <Route path="/StudentGroup/:groupNumber" element={<Group user={decodedUser} group={"student"} />} />
                     </>
                   }
                 </>
               </>
             }
 
-            {(decodedUser === null || decodedUser.name === "Admin") &&
+            {(decodedUser === null || decodedUser.group === "Admin") && (
               <>
                 <Route path="/" element={<Home user={decodedUser} />} />
                 <Route path="/Home" element={<Home user={decodedUser} />} />
@@ -134,6 +132,10 @@ function App() {
                 <Route path="/Register" element={<Register />} />
                 <Route path="/About" element={<About loginUser={loginUser} />} />
               </>
+            )}
+
+            {decodedUser === null &&
+              <Route path="/Dashboard" element={<Navigate to="/Home" replace />} />
             }
 
             <Route path="*" element={<ErrorPage />} />

@@ -32,6 +32,9 @@ function AddHomework(props) {
         case "4":
             groupDetails = "14-15 (Group 4)";
             break;
+        case "5":
+            groupDetails = "All Students";
+            break;
         default:
             groupDetails = "Invalid group number";
     }
@@ -146,7 +149,7 @@ function AddHomework(props) {
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <button type="submit" style={{ margin: "5px", padding: "5px 25px 5px 25px" }} className="text-center btn btn-outline-primary2" >Add</button>
                     <button type="button" style={{ margin: "5px " }} className="text-center btn btn-outline-danger" onClick={() => { setHomework(""); setErrorMessage(null); }} >Clear</button>
-                    <Link to={`/Group/${groupNumber}`}>
+                    <Link to={`/HomeworkGroup/${groupNumber}`}>
                         <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success" onClick={() => { setHomework(""); setErrorMessage(null); removeSelectedId2(); removeSelectedId(); }} >Go Back to {groupDetails}</button>
                     </Link>
                 </div>

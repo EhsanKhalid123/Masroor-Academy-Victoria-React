@@ -61,6 +61,17 @@ function Group(props) {
             groupDetails = "Invalid group number";
     }
 
+    let linkTo;
+    let selectLink;
+
+    if (props.group === "homework") {
+        linkTo = "/SelectGroupHomework";
+        selectLink = "/AddHomework";
+    } else if (props.group === "student") {
+        linkTo = "/SelectGroupStudent";
+        selectLink = "/Profile";
+    }
+
     return (
         <>
             <br />
@@ -71,7 +82,7 @@ function Group(props) {
                 </div>
             </div>
             <div style={{ display: "flex", justifyContent: "center" }}>
-                <Link to="/SelectGroup">
+                <Link to={linkTo}>
                     <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
                 </Link>
             </div>
@@ -112,13 +123,11 @@ function Group(props) {
                                                     <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
                                                     <td>
-                                                        <Link to="/AddHomework" state={{ groupNumber }}>
+                                                        <Link to={selectLink} state={{ groupNumber }}>
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
                                                         {props.user.group === "Admin" &&
-                                                            <Link to="/Student">
-                                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
-                                                            </Link>
+                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
                                                         }
                                                     </td>
                                                 </tr>

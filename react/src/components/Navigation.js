@@ -64,15 +64,15 @@ function Navigation(props) {
                       <NavLink className="nav-link2 nav-link" to="/Announcements">Annoucements</NavLink>
                     </li>
 
-
                     <li className="nav-item">
-                      <NavLink className="nav-link2 nav-link" to="/Student">Students</NavLink>
+                      <NavLink className="nav-link2 nav-link" to="/SelectGroupHomework">Homework</NavLink>
                     </li>
 
                     <li className="nav-item">
-                      <NavLink className="nav-link2 nav-link" to="/SelectGroup">Homework</NavLink>
+                      <NavLink className="nav-link2 nav-link" to="/SelectGroupStudent">Students</NavLink>
                     </li>
 
+                    
                   </>
                 }
 
