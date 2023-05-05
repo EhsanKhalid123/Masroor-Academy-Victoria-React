@@ -48,11 +48,6 @@ db.sync = async () => {
     await db.sequelize.sync();
     // await db.sequelize.sync({force: true});
 
-
-    // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
-    // await db.sequelize.sync({ force: true }); <-- This will delete all tables and recreate them So if more tables are added then the current command inuse wont do anything because that only works if no tables are created.
-    // So if tables are created and more tables are added then have to use force: true so it can add the new tables, as it will first drop all tables and then create them. Only required when model is updated and things in the table is changed.
-
     // Runs this function asyncornous to the above one, so this only runs once above one is completed.
     await addData();
 };

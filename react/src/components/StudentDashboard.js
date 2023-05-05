@@ -38,38 +38,38 @@ function StudentDashboard(props) {
         <div>
             <p>&nbsp;</p>
 
-                    <div className="text-center">
-                        <div className="card min-width30" style={{ whiteSpace: 'pre-wrap' }}>
-                            <h5 className="card-header text-white bg-custom">Announcements:</h5>
-                            {isLoading ?
-                                <div className="card-body">
-                                    <span className="text-muted">Loading Annoucements...</span>
-                                </div>
-                                :
-                                announcements.length === 0 ?
-                                    <div className="text-muted">
-                                        <div className="card-body">No Annoucements Posted!</div>
-                                    </div>
-                                    :
-                                    <>
-                                        {announcements.map((announcement) =>
-                                            <div key={announcement.announcement_id}>
-                                                {/* <div className="card-body" style={{ padding: "10px", whiteSpace: "pre-wrap"}}> */}
-                                                {/* {parse(`${announcement.announcementText.replace(/<\/?p>/g, '')}<span><strong> - ${announcement.user.name}</strong></span>`)} */}
-                                                {/* {parse(`${announcement.announcementText}<p> - ${announcement.user.name}</p>`)} */}
-                                                {/* </div> */}
-
-                                                <div style={{ padding: "10px", display: "flex", flexDirection: "row", alignItems: "baseline", justifyContent: "center" }}>
-                                                    <div style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>{parse(announcement.announcementText)}</div>
-                                                    <div>{" - " + announcement.user.name}</div>
-                                                </div>
-
-                                            </div>
-                                        )}
-                                    </>
-                            }
+            <div className="text-center">
+                <div className="card min-width30" style={{ whiteSpace: 'pre-wrap' }}>
+                    <h5 className="card-header text-white bg-custom">Announcements:</h5>
+                    {isLoading ?
+                        <div className="card-body">
+                            <span className="text-muted">Loading Annoucements...</span>
                         </div>
-                    </div>
+                        :
+                        announcements.length === 0 ?
+                            <div className="text-muted">
+                                <div className="card-body">No Annoucements Posted!</div>
+                            </div>
+                            :
+                            <>
+                                {announcements.map((announcement) =>
+                                    <div key={announcement.announcement_id}>
+                                        {/* <div className="card-body" style={{ padding: "10px", whiteSpace: "pre-wrap"}}> */}
+                                        {/* {parse(`${announcement.announcementText.replace(/<\/?p>/g, '')}<span><strong> - ${announcement.user.name}</strong></span>`)} */}
+                                        {/* {parse(`${announcement.announcementText}<p> - ${announcement.user.name}</p>`)} */}
+                                        {/* </div> */}
+
+                                        <div style={{ padding: "10px", display: "flex", flexDirection: "row", alignItems: "baseline", justifyContent: "center" }}>
+                                            <div style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }}>{parse(announcement.announcementText)}</div>
+                                            <div>{" - " + announcement.user.name}</div>
+                                        </div>
+
+                                    </div>
+                                )}
+                            </>
+                    }
+                </div>
+            </div>
 
             <br />
 
@@ -91,26 +91,19 @@ function StudentDashboard(props) {
                                             </div>
                                             :
                                             <>
-                                                {homeworks.length === 0 &&
+                                                {homeworks.filter(homework => homework.student === props.user.id).length === 0 ?
                                                     <div className="text-center text-muted">
                                                         <div className="card-body">No Homework Posted!</div>
                                                     </div>
-                                                }
-
-                                                {homeworks.map((homework) =>
-                                                    <div key={homework.homeworkPosts_id}>
-                                                        {props.user.id !== homework.student &&
-                                                            <div className="text-center text-muted">
-                                                                <div className="card-body">No Homework Posted!</div>
+                                                    :
+                                                    <>
+                                                        {homeworks.filter(homework => homework.student === props.user.id).map((homework) =>
+                                                            <div key={homework.homeworkPosts_id}>
+                                                                <div className="card-body">{parse(homework.homeworkText)}</div>
                                                             </div>
-                                                        }
-                                                        {props.user.id === homework.student &&
-                                                            <div className="card-body">{parse(homework.homeworkText)}</div>
-
-                                                        }
-
-                                                    </div>
-                                                )}
+                                                        )}
+                                                    </>
+                                                }
                                             </>
                                         }
                                     </div>

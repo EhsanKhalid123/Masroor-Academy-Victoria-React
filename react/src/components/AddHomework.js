@@ -162,34 +162,28 @@ function AddHomework(props) {
                 </div>
                 :
                 <>
-                    {homeworks.length === 0 ?
+                    {homeworks.filter(homeworkPosts => homeworkPosts.student === getSelectedId()).length === 0 ?
                         <div className="text-center">
                             <span className="text-muted">No Homework have been Posted!</span>
                             <p>&nbsp;</p>
                         </div>
                         :
                         <>
-                            {homeworks.map((homeworkPosts) =>
+                            {homeworks.filter(homeworkPosts => homeworkPosts.student === getSelectedId()).map((homeworkPosts) =>
                                 <div key={homeworkPosts.homeworkPosts_id}>
-                                    {homeworkPosts.student === getSelectedId() ?
-                                        <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }}>
-                                            <div className="card-body">
-                                                <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
-                                                <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
-                                                <div className="post-body">
-                                                    <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(homeworkPosts.homeworkText)}</pre>
+                                    <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }}>
+                                        <div className="card-body">
+                                            <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
+                                            <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
+                                            <div className="post-body">
+                                                <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(homeworkPosts.homeworkText)}</pre>
 
-                                                    <div>
-                                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
-                                                    </div>
+                                                <div>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        :
-                                        <div className="text-center text-muted">
-                                            <div className="card-body">No Homework have been Posted!</div>
-                                        </div>
-                                    }
+                                    </div>
                                     <p>&nbsp;</p>
                                 </div>
                             )}
