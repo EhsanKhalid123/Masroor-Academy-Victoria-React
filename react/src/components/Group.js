@@ -8,6 +8,7 @@ function Group(props) {
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [confirmPopup, setconfirmPopup] = useState(false);
     const { groupNumber } = useParams();
 
     // Load users from DB.
@@ -25,6 +26,12 @@ function Group(props) {
 
     }, []);
 
+    
+    // Popup Toggle Switch Function
+    const togglePopup = () => {
+        setconfirmPopup(!confirmPopup); 
+    }
+
     const deleteSelectedUser = async (event) => {
         const currentDetails = await getProfile(getSelectedId());
 
@@ -35,6 +42,8 @@ function Group(props) {
         // Update Page/Refresh the Data
         const updatedDetails = await getProfileUsers();
         setUsersData(updatedDetails);
+
+        togglePopup();
 
     }
 
@@ -127,7 +136,7 @@ function Group(props) {
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
                                                         {(props.user.group === "Admin" && props.group === "student") &&
-                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await deleteSelectedUser() }} >Delete</button>
+                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await togglePopup()}} >Delete</button>
                                                         }
                                                     </td>
                                                 </tr>
@@ -142,6 +151,23 @@ function Group(props) {
                     </div>
                 }
             </div>
+
+            <div>
+                {/* Popup box only opens if state variable is set to true for deleting account */}
+                {confirmPopup &&
+                    <div className="popup-box">
+                        <div className="box">
+                            <h5 className="card-header bg-warning text-center" style={{ color: "white" }}><b>Confirm!</b></h5>
+                            <div style={{ margin: "0 auto", textAlign: "center" }}>
+                                <p style={{ padding: "15px", textAlign: "center", color: "red" }}>Are you sure you want delete this users account <br /> This action cannot be undone!</p>
+                                <button onClick={togglePopup} className="btn btn-info" style={{ margin: "10px" }}>Cancel</button>
+                                <button onClick={async () => { await deleteSelectedUser() }} className="btn btn-danger" style={{ margin: "10px" }}>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
         </>
     )
 }
