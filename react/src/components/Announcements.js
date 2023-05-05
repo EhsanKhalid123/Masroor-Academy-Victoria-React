@@ -55,8 +55,8 @@ function Announcements(props) {
 
                         return (
                             // If you need, set maxwidth and other styles for 'iframely-embed' class - it's yours to customize
-                            '<div class="iframely-embed" style="width: 100%">' +
-                            '<div class="iframely-responsive">' +
+                            '<div className="iframely-embed" style="width: 100%">' +
+                            '<div className="iframely-responsive">' +
                             `<iframe src="${iframeUrl}" ` +
                             'frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>' +
                             '</iframe>' +

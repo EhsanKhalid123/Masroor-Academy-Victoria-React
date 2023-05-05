@@ -35,11 +35,11 @@ db.resources = require("./models/resources.js")(db.sequelize, DataTypes);
 
 // Relate homework posts and user through foreign key.
 // Relating homework table to the Users table with a foreign key.
-db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false } });
+db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false }, as: "poster" });
 // Relating announcement Posts table to the users table with a foreign key.
 db.announcements.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false } });
 // Relating homework Posts table to the Users table with a foreign key.
-db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull: false } });
+db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull: false }, as: "user" });
 
 // Include a sync option with seed data logic included.
 db.sync = async () => {

@@ -65,6 +65,10 @@ function Navigation(props) {
                     </li>
 
                     <li className="nav-item">
+                      <NavLink className="nav-link2 nav-link" to="/SelectGroupAttendance">Attendance</NavLink>
+                    </li>
+
+                    <li className="nav-item">
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupHomework">Homework</NavLink>
                     </li>
 
@@ -72,8 +76,14 @@ function Navigation(props) {
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupStudent">Students</NavLink>
                     </li>
 
-                    
+
                   </>
+                }
+
+                {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin") &&
+                  <li className="nav-item">
+                    <NavLink className="nav-link2 nav-link" to="/Syllabus">Syllabus</NavLink>
+                  </li>
                 }
 
                 <li className="nav-item">

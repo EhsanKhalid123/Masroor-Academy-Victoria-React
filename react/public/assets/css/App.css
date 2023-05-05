@@ -560,3 +560,14 @@ input[type=number]::-webkit-outer-spin-button {
   box-shadow: 0 0 2px #112c3f;
   background: linear-gradient(#1b425e, #2b6289); 
 }
+
+/* Student Dashboard Remove p element bottom margin from rich text */
+
+.noBottomMargin p {
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+
+.noBottomMargin .postStyle {
+  float: none;
+}

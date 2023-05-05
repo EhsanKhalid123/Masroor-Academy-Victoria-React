@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import ReactSwitch from 'react-switch';
 import { getFormStatus, updateFormStatus, updateFormText } from "../data/repository";
-import StudentDashboard from "./StudentDashboard";
 
 function Dashboard(props) {
 
@@ -47,9 +46,6 @@ function Dashboard(props) {
                 Enrolled ID: <b>{props.user.id}</b>
             </h4>
             <p>&nbsp;</p>
-            {props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" ?
-                <StudentDashboard user={props.user} />
-                :
                 <>
                     {props.user.group === "Admin" &&
                         <div style={{ textAlign: "center" }}>
@@ -72,7 +68,6 @@ function Dashboard(props) {
                         </div>
                     }
                 </>
-            }
         </div>
     );
 }

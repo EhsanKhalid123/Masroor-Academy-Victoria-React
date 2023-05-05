@@ -10,7 +10,12 @@ const db = require("../database");
 exports.all = async (req, res) => {
   try {
     // Gets all posts from DB and does Eager Loading to display User information related to the user who made posts.
-    const homeworks = await db.homeworkPosts.findAll({ include: { model: db.users, as: "user" } });
+    const homeworks = await db.homeworkPosts.findAll({
+      include: [
+        { model: db.users, as: "poster" },
+        { model: db.users, as: "user" }
+      ]
+    });
     res.json(homeworks);
   } catch (error) {
     // Send an error response.

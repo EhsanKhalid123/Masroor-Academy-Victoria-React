@@ -20,6 +20,8 @@ import Register from "./Register";
 import Resources from "./Resources";
 import SelectGroup from './SelectGroup';
 import Group from './Group';
+import Syllabus from './Syllabus';
+import StudentDashboard from './StudentDashboard';
 
 // Functional Component for App
 function App() {
@@ -107,11 +109,12 @@ function App() {
               <>
                 <Route path="/" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
-                <Route path="/Dashboard" element={<Dashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                {/* <Route path="/Dashboard" element={<Dashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} /> */}
                 <Route path="/Resources" element={<Resources user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <>
                   {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
                     <>
+                      <Route path="/Dashboard" element={<Dashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/AddHomework" element={<AddHomework user={decodedUser} />} />
                       <Route path="/SelectGroupHomework" element={<SelectGroup user={decodedUser} selectGroup={"homework"} />} />
@@ -120,6 +123,14 @@ function App() {
                       <Route path="/StudentGroup/:groupNumber" element={<Group user={decodedUser} group={"student"} />} />
                     </>
                   }
+
+                  {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin") &&
+                    <>
+                      <Route path="/Dashboard" element={<StudentDashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Syllabus" element={<Syllabus user={decodedUser} />} />
+                    </>
+                  }
+
                 </>
               </>
             }
