@@ -32,14 +32,31 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
+/* Navigation Bar */
+
+.dropdown-item:active {
+  color: #fff !important;
+  text-decoration: none;
+  background-color: #112c3f !important;
+}
+
+.nav-item.dropdown>.nav-link:hover {
+  color: #2b6289 !important;
+  transition: all 0.3s ease;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
 
 .navbar-dark .nav-item .nav-link {
-  color: #fff ;
+  color: #fff;
 }
 
 .nav-item .active {
@@ -88,7 +105,7 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 
 .btn-outline-primary2 {
@@ -122,16 +139,16 @@
 
   /* Set a specific height */
   min-height: 250px;
-  max-height: 200px; 
+  max-height: 200px;
 
   /* Create the parallax scrolling effect */
   background-attachment: fixed;
   background-position: center;
-  background-size:cover;
+  background-size: cover;
 
 }
 
-.footer-parralax-text{
+.footer-parralax-text {
   color: white;
   font-size: 35px;
   margin: 17% 20px 10px 20px;
@@ -149,10 +166,13 @@ html {
   }
 }
 
-.home-logo-image{
-  width: 13%; /* Set initial width to 13% */
-  max-width: 100%; /* Set maximum width to 100% */
-  height: auto; /* Maintain aspect ratio */
+.home-logo-image {
+  width: 13%;
+  /* Set initial width to 13% */
+  max-width: 100%;
+  /* Set maximum width to 100% */
+  height: auto;
+  /* Maintain aspect ratio */
   padding: 10px;
 }
 
@@ -164,45 +184,60 @@ html {
 
 @media (max-width: 700px) {
   .home-logo-image {
-    width: 45%; /* Set width to 50% when screen size is smaller than 768px */
-    max-width: none; /* Remove the maximum width constraint */
+    width: 45%;
+    /* Set width to 50% when screen size is smaller than 768px */
+    max-width: none;
+    /* Remove the maximum width constraint */
   }
 }
 
-.home-welcome{
+.home-welcome {
   font-size: 2.5rem !important;
   color: #112c3f !important;
   margin: 0 10px 20px 10px;
 }
 
-.footer-parralax-text{
+.footer-parralax-text {
   color: white;
   font-size: 35px;
   margin: 17% 20px 10px 20px;
 }
 
-.sign-up-form{
+.sign-up-form {
   text-align: center;
   margin: auto;
   width: 40%;
   padding: 0 20px 5% 20px;
 }
 
-.login-form{
+.login-form {
   text-align: center;
   margin: auto;
   width: 40%;
   padding: 0 20px 5% 20px;
 }
 
-.profile-card{
+.profile-card {
   text-align: center;
   margin: auto;
   width: 30%;
   padding: 0 20px 5% 20px;
 }
 
-.postedContent{
+.profileImage {
+  width: 40%;
+  display: block;
+  margin: auto;
+}
+
+@media (min-width: 768px) {
+  .profileImage {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.postedContent {
   width: 50%;
   width: fit-content;
   max-width: 80%;
@@ -210,7 +245,7 @@ html {
   overflow-x: auto;
 }
 
-.min-width30{
+.min-width30 {
   min-width: 30% !important;
   width: fit-content;
   max-width: 80%;
@@ -243,7 +278,7 @@ p {
     padding: 0 20px 5% 20px;
   }
 
-  .profile-card{
+  .profile-card {
     text-align: center;
     margin: auto;
     width: 40%;
@@ -252,7 +287,7 @@ p {
 }
 
 @media screen and (max-width: 768px) {
-  .profile-card{
+  .profile-card {
     text-align: center;
     margin: auto;
     width: 60%;
@@ -281,14 +316,14 @@ p {
     padding: 0 20px 10% 20px;
   }
 
-  .profile-card{
+  .profile-card {
     text-align: center;
     margin: auto;
     width: 100%;
     padding: 0 20px 5% 20px;
   }
 
-  .postedContent{
+  .postedContent {
     width: 90%;
     margin: auto;
   }
@@ -303,7 +338,7 @@ p {
     padding: 0 20px 10% 20px;
   }
 
-  .profile-card{
+  .profile-card {
     text-align: center;
     margin: auto;
     width: 100%;
@@ -312,7 +347,7 @@ p {
 }
 
 @media screen and (max-width: 280px) {
-  .postedContent{
+  .postedContent {
     width: 100%;
     margin: auto;
   }
@@ -322,14 +357,15 @@ p {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-.postStyle{
+.postStyle {
   clear: both;
-  float: left; 
+  float: left;
   text-align: left;
   color: #112c3f;
   font-size: 18px;
@@ -347,7 +383,7 @@ p {
   margin: 0;
 }
 
-.formTextStyle{
+.formTextStyle {
   clear: both;
   text-align: center;
   font-size: 18px;
@@ -368,7 +404,7 @@ p {
   top: 0;
   left: 0;
 }
- 
+
 .box {
   position: relative;
   width: 23%;
@@ -446,17 +482,17 @@ p {
     overflow: auto;
   }
 }
- 
+
 .required-field::after {
   content: "*";
   color: red;
-  margin-left:2px;
+  margin-left: 2px;
 }
 
 input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button { 
-	-webkit-appearance: none;
-} 
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
 
 
 /* Below is code for Error 404 Page to make it responsive */
@@ -486,7 +522,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .far {
-  position: unset !important; 
+  position: unset !important;
   font-size: 7rem !important;
   left: 39%;
   top: 2%;
@@ -545,20 +581,20 @@ input[type=number]::-webkit-outer-spin-button {
   color: #ffffff;
 }
 
-.selectGroupLinks:hover{
+.selectGroupLinks:hover {
   color: white;
 }
 
-.selectGroupLinks > .card{
+.selectGroupLinks>.card {
   /* background-color: #112c3f !important; */
   background: linear-gradient(#112c3f, #204760);
-  
+
 }
 
-.selectGroupLinks > .card:hover {
+.selectGroupLinks>.card:hover {
   cursor: pointer;
   box-shadow: 0 0 2px #112c3f;
-  background: linear-gradient(#1b425e, #2b6289); 
+  background: linear-gradient(#1b425e, #2b6289);
 }
 
 /* Student Dashboard Remove p element bottom margin from rich text */
@@ -659,4 +695,11 @@ input[type=number]::-webkit-outer-spin-button {
     border: 1px solid #999;
     overflow: auto;
   }
+}
+
+
+@media (max-width: 768px){
+.mt-custom {
+    margin-top: 20px;
+}
 }

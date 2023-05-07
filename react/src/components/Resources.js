@@ -84,7 +84,7 @@ function Resources(props) {
     return (
         <div>
             <br />
-            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.name === "Admin") &&
+            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
                 <div className="text-center">
                     <input type="file" name="file" ref={fileInputRef} onChange={handleFileChange} />
                     <button className="btn btn-info" style={{ marginLeft: "5px" }} onClick={handleUpload}>Upload</button>

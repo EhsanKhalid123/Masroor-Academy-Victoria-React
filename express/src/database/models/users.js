@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) =>
             allowNull: false
         },
         class: {
-            type: Sequelize.ENUM('Islam', 'Ahmadiyyat', 'Namaz', 'Holy Quran', 'None'),
+            type: DataTypes.STRING(15),
             allowNull: true
         },
         archived: {

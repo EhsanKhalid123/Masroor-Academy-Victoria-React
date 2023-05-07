@@ -6,6 +6,8 @@ import { NavLink, Link, useLocation } from "react-router-dom";
 function Navigation(props) {
 
   const location = useLocation();
+  let userProfilePage = "allUserProfile";
+  let userProfileId = props.user?.id;
 
   const HomeLink = () => {
     if (location.pathname === "/" || location.pathname === "/Home") {
@@ -107,9 +109,19 @@ function Navigation(props) {
               </div>
               :
               <>
-                <li className="nav-item">
-                  <span className="nav-link" style={{ color: "#112c3f" }}>Welcome, {props.user.name}</span>
-                </li>
+                <div className="navbar-nav">
+                  <li className="nav-item dropdown">
+                    <div className="nav-link dropdown-toggle" style={{ color: "#112c3f" }} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Welcome, {props.user.name}
+                    </div>
+                    <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                      <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Profile" state={{ userProfilePage, userProfileId }}>Profile</Link>
+                      {/* <a className="dropdown-item" style={{ color: "#112c3f" }} href="#">Settings</a> */}
+                      <div className="dropdown-divider"></div>
+                      <NavLink to="/Sign-in" className="dropdown-item" style={{ color: "#112c3f" }} onClick={props.logoutUser}>Logout</NavLink>
+                    </div>
+                  </li>
+                </div>
                 <div className="form-inline my-2 my-lg-0">
                   <NavLink to="/Sign-in" onClick={props.logoutUser}>
                     <button className="btn btn-custom my-2 my-sm-0" type="submit">Logout</button>

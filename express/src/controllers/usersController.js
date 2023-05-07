@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
       // Login failed.
       res.json(null);
     } else {
-      const accessToken = sign({id: user.id, name: user.name, group: user.group, archived: user.archived}, process.env.jwtkey, {
+      const accessToken = sign({id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender}, process.env.jwtkey, {
         expiresIn: 7200,
       })
       res.json(accessToken);
@@ -83,15 +83,24 @@ exports.create = async (req, res) => {
 // Update user Details in the database.
 exports.update = async (req, res) => {
   try {
-    const name = req.params.name;
+    const id = req.params.id;
 
-    const user = await db.users.findByPk(name);
+    const user = await db.users.findByPk(id);
 
     user.name = req.body.name;
+    user.group = req.body.group;
+    user.gender = req.body.gender;
+    user.archived = req.body.archived;
+    user.hashed_password = req.body.hashed_password;
+    user.class = req.body.class;
 
     await user.save();
 
-    return res.json(user);
+    const accessToken = sign({id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender}, process.env.jwtkey, {
+      expiresIn: 7200,
+    })
+
+    return res.json(accessToken);
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Updating Data" });

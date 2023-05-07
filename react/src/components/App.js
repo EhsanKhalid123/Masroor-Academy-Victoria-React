@@ -22,6 +22,7 @@ import SelectGroup from './SelectGroup';
 import Group from './Group';
 import Syllabus from './Syllabus';
 import StudentDashboard from './StudentDashboard';
+import Profile from './Profile';
 
 // Functional Component for App
 function App() {
@@ -109,8 +110,8 @@ function App() {
               <>
                 <Route path="/" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
-                {/* <Route path="/Dashboard" element={<Dashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} /> */}
                 <Route path="/Resources" element={<Resources user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <Route path="/Profile" element={<Profile user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <>
                   {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
                     <>

@@ -10,6 +10,7 @@ function Group(props) {
     const [search, setSearch] = useState('');
     const [confirmPopup, setconfirmPopup] = useState(false);
     const { groupNumber } = useParams();
+    let userProfilePage;
 
     // Load users from DB.
     useEffect(() => {
@@ -79,6 +80,7 @@ function Group(props) {
     } else if (props.group === "student") {
         linkTo = "/SelectGroupStudent";
         selectLink = "/Profile";
+        userProfilePage = "userProfile";
     }
 
     return (
@@ -121,10 +123,10 @@ function Group(props) {
                             }).map((userDetails) =>
                                 <tbody key={userDetails.id}>
                                     {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
-                                    {userDetails.name !== props.user.name && (userDetails.name !== "Admin") &&
+                                    {(userDetails.name !== props.user.name && userDetails.id !== "Admin") &&
                                         <>
                                             {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails))) &&
+                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails))) &&
                                                 <tr>
                                                     <td></td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
@@ -132,10 +134,10 @@ function Group(props) {
                                                     <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
                                                     <td>
-                                                        <Link to={selectLink} state={{ groupNumber }}>
+                                                        <Link to={selectLink} state={{ groupNumber, userProfilePage }}>
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
-                                                        {(props.user.group === "Admin" && props.group === "student") &&
+                                                        {(props.user.group === "Admin" && props.group === "student" && props.user.id === "Admin") &&
                                                             <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await togglePopup()}} >Delete</button>
                                                         }
                                                     </td>

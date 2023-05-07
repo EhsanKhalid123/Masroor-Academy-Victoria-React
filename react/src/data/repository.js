@@ -73,12 +73,13 @@ async function registerUser(registered) {
 }
 
 // Update User Details Request For API to DB
-async function updateUser(user, email) {
-  const response = await axios.post(API_HOST + `/MAApi/users/update/${email}`, user, getHeaders());
+async function updateUser(user, id, loggedInUser) {
+  const response = await axios.post(API_HOST + `/MAApi/users/update/${id}`, user, getHeaders());
 
   const updatedUser = response.data;
 
-  setUser(updatedUser);
+  if (loggedInUser === id)
+    setUser(updatedUser);
 
   return updatedUser;
 

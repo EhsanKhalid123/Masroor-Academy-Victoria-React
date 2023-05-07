@@ -25,7 +25,7 @@ module.exports = (express, app) => {
   router.post("/delete", validateToken, controller.delete);
 
   // Create a updates user details.
-  router.post("/update/:email", validateToken, controller.update);
+  router.post("/update/:id", validateToken, controller.update);
 
   // Create a new user.
   router.post("/", validateToken, controller.create);
