@@ -24,6 +24,7 @@ import Syllabus from './Syllabus';
 import StudentDashboard from './StudentDashboard';
 import Profile from './Profile';
 import Staff from './Staff';
+import Settings from './Settings';
 
 // Functional Component for App
 function App() {
@@ -127,7 +128,10 @@ function App() {
                   }
 
                   {decodedUser.group === "Admin" &&
-                    <Route path="/Staff" element={<Staff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                    <>
+                      <Route path="/Staff" element={<Staff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Settings" element={<Settings user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                    </>
                   }
 
                   {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin") &&
