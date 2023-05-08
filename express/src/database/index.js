@@ -35,11 +35,11 @@ db.resources = require("./models/resources.js")(db.sequelize, DataTypes);
 
 // Relate homework posts and user through foreign key.
 // Relating homework table to the Users table with a foreign key.
-db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false }, as: "poster" });
+db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false, onDelete: 'CASCADE', hooks: true }, as: "poster" });
 // Relating announcement Posts table to the users table with a foreign key.
-db.announcements.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false } });
+db.announcements.belongsTo(db.users, { foreignKey: { name: "id", allowNull: false, onDelete: 'CASCADE', hooks: true } });
 // Relating homework Posts table to the Users table with a foreign key.
-db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull: false }, as: "user" });
+db.homeworkPosts.belongsTo(db.users, { foreignKey: { name: "student", allowNull: false, onDelete: 'CASCADE', hooks: true }, as: "user"});
 
 // Include a sync option with seed data logic included.
 db.sync = async () => {
@@ -98,7 +98,7 @@ async function addData() {
     await db.users.create({ id: "M-MW-067", name: "Tafheem Ahmad Hazari", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal", archived: false });
     await db.users.create({ id: "M-B-080", name: "Danial Ahmad", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal", archived: false });
     await db.users.create({ id: "M-B-081", name: "Rayyan Tariq", hashed_password: "student", group: "12-13 (Group 3)", gender: "Atfal", archived: false });
-    
+
     await db.users.create({ id: "M-B-019", name: "Ahmed Mukhtar", hashed_password: "student", group: "9-11 (Group 2)", gender: "Atfal", archived: false });
     await db.users.create({ id: "M-B-020", name: "Salman Butt", hashed_password: "student", group: "9-11 (Group 2)", gender: "Atfal", archived: false });
     await db.users.create({ id: "M-B-021", name: "Ch. Fouzan Ahmad Zahid", hashed_password: "student", group: "9-11 (Group 2)", gender: "Atfal", archived: false });
@@ -159,7 +159,7 @@ async function addData() {
     await db.users.create({ id: "M-B-087", name: "Wajahat Ahmed", hashed_password: "student", group: "7-8 (Group 1)", gender: "Atfal", archived: false });
     await db.users.create({ id: "M-MW-088", name: "Aarkaan Bashir", hashed_password: "student", group: "7-8 (Group 1)", gender: "Atfal", archived: false });
     await db.users.create({ id: "M-C-089", name: "Tamseel Ahmad Ghumman", hashed_password: "student", group: "7-8 (Group 1)", gender: "Atfal", archived: false });
-    
+
     // Age Unknown For This Student so added them to 7-8
     await db.users.create({ id: "M-B-060", name: "Asaad S Khan", hashed_password: "student", group: "7-8 (Group 1)", gender: "Atfal", archived: false });
 
@@ -249,7 +249,7 @@ async function addData() {
     await db.users.create({ id: "F-L-078", name: "Abraj Shahzeb", hashed_password: "student", group: "7-8 (Group 1)", gender: "Nasirat", archived: false });
     await db.users.create({ id: "F-B-080", name: "Rabiyya Ahmad", hashed_password: "student", group: "7-8 (Group 1)", gender: "Nasirat", archived: false });
 
-     // Age Unknown For This Student so added them to 7-8
+    // Age Unknown For This Student so added them to 7-8
     await db.users.create({ id: "F-C-079", name: "Adawiyah Parisa", hashed_password: "student", group: "7-8 (Group 1)", gender: "Nasirat", archived: false });
 
     // await db.users.create({ id: "", name: "", hashed_password: "student", group: "7-8 (Group 1)", gender: "Nasirat",  class: "", archived: false });

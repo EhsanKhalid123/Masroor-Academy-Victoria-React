@@ -173,7 +173,7 @@ function AddHomework(props) {
                                 <div key={homeworkPosts.homeworkPosts_id}>
                                     <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }}>
                                         <div className="card-body">
-                                            <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.id}</h5>
+                                            <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.poster.name}</h5>
                                             <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
                                             <div className="post-body">
                                                 <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(homeworkPosts.homeworkText)}</pre>

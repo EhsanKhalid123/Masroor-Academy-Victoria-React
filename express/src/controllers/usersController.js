@@ -1,7 +1,6 @@
 // Old fashioned Import statements for libraries and files
 const db = require("../database");
 const argon2 = require("argon2");
-const Sequelize = require("sequelize");
 const { sign } = require('jsonwebtoken');
 require('dotenv').config();
 
@@ -114,6 +113,24 @@ exports.delete = async (req, res) => {
 
     let removed = false;
 
+    const homeworkGetStudent = await db.homeworkPosts.findAll({where: {student: id}});
+    if (homeworkGetStudent !== null) {
+      await db.homeworkPosts.destroy({ where: { student: id } });
+      console.log("Deleted all homework Student asscoiated with " + id );
+    }
+
+    const homeworkGetPoster = await db.homeworkPosts.findAll({where: {id: id}});
+    if (homeworkGetPoster !== null) {
+      await db.homeworkPosts.destroy({ where: { id: id } });
+      console.log("Deleted all homework Poster asscoiated with " + id );
+    }
+
+    const announcementGet = await db.announcements.findAll({where: {id: id}});
+    if (announcementGet !== null) {
+      await db.announcements.destroy({ where: { id: id } });
+      console.log("Deleted all Announcements asscoiated with " + id );
+    }
+
     const user = await db.users.findByPk(id);
     if (user !== null) {
       await user.destroy();
@@ -123,6 +140,7 @@ exports.delete = async (req, res) => {
     return res.json(removed);
   } catch (error) {
     // Send an error response.
+    console.log(error);
     res.status(500).json({ message: "Error Deleting Data" });
   }
 };
