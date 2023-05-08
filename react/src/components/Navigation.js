@@ -29,8 +29,8 @@ function Navigation(props) {
   return (
 
     // Navbar Code using normal HTML elements
-    <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: "#f0f0f0" }}>
-      <div className="container">
+    <nav className="navbar navbar-expand-xl navbar-light" style={{ backgroundColor: "#f0f0f0" }}>
+      <div className="container-fluid">
         <NavLink className="navbar-brand" to="/">
           <img className="navbar-brand" src={process.env.PUBLIC_URL + 'assets/images/Masroor Academy Logo.png'} width="50px" alt="Logo for Masroor Academy" />
         </NavLink>
