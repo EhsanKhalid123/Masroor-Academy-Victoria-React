@@ -128,6 +128,7 @@ function Navigation(props) {
                       {props.user.group === "Admin" &&
                         <>
                           <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Staff">Staff</Link>
+                          <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/CreateStaffUser">Create Staff User</Link>
                           <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Settings">Settings</Link>
                         </>
                       }

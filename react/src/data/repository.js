@@ -52,9 +52,8 @@ async function getProfileUsers() {
 }
 
 // Find User Details Request For API from DB
-async function findUser(email) {
-  const response = await axios.get(API_HOST + `/MAApi/users/select/${email}`, getHeaders());
-
+async function findUser(id) {
+  const response = await axios.get(API_HOST + `/MAApi/users/select/${id}`, getHeaders());
   return response.data;
 }
 

@@ -13,7 +13,7 @@ module.exports = (express, app) => {
   router.get("/", validateToken, controller.all);
 
   // Select a single user with id.
-  router.get("/select/:email", validateToken, controller.one);
+  router.get("/select/:id", validateToken, controller.one);
 
   // Select a single user with id.
   router.get("/get/:id", validateToken, controller.one2);

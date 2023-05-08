@@ -25,6 +25,7 @@ import StudentDashboard from './StudentDashboard';
 import Profile from './Profile';
 import Staff from './Staff';
 import Settings from './Settings';
+import CreateStaffUser from './CreateStaffUser';
 
 // Functional Component for App
 function App() {
@@ -131,6 +132,7 @@ function App() {
                     <>
                       <Route path="/Staff" element={<Staff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Settings" element={<Settings user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/CreateStaffUser" element={<CreateStaffUser user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                     </>
                   }
 
