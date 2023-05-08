@@ -74,10 +74,19 @@ function Navigation(props) {
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupHomework">Homework</NavLink>
                     </li>
 
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupStudent">Students</NavLink>
-                    </li>
+                    </li> */}
 
+                      <li className="nav-item dropdown">
+                        <div className="nav-link nav-link2 dropdown-toggle exclude" style={{ color: "#112c3f" }} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Students
+                        </div>
+                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <Link className="dropdown-item" to="/SelectGroupStudent">Individual Student Profile & Results</Link>
+                        <Link className="dropdown-item" to="/">All Student Results</Link>
+                        </div>
+                      </li>
 
                   </>
                 }
@@ -115,7 +124,10 @@ function Navigation(props) {
                       Welcome, {props.user.name}
                     </div>
                     <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                      <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Profile" state={{ userProfilePage, userProfileId }}>Profile</Link>
+                      <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Profile" state={{ userProfilePage, userProfileId }}>My Profile</Link>
+                     {props.user.group === "Admin" &&
+                        <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Staff">Staff</Link>
+                      }
                       {/* <a className="dropdown-item" style={{ color: "#112c3f" }} href="#">Settings</a> */}
                       <div className="dropdown-divider"></div>
                       <NavLink to="/Sign-in" className="dropdown-item" style={{ color: "#112c3f" }} onClick={props.logoutUser}>Logout</NavLink>

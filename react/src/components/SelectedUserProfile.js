@@ -54,8 +54,11 @@ function AdminProfile(props) {
         await deleteUserDB(currentDetails);
 
         togglePopup();
-
-        navigate(`/StudentGroup/${groupNumber}`);
+        if (groupNumber === 6) {
+            navigate("/Staff");
+        } else {
+            navigate(`/StudentGroup/${groupNumber}`);
+        }
     }
 
     const handleToggleChange = async (event) => {
@@ -220,11 +223,21 @@ function AdminProfile(props) {
                                 </div>
                                 <div className="text-center">
                                     {userProfilePage === "userProfile" &&
-                                        <Link to={`/StudentGroup/${groupNumber}`}>
-                                            <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">
-                                                Go Back to Students Page
-                                            </button>
-                                        </Link>
+                                        <>
+                                            {groupNumber === 6 ?
+                                                <Link to={"/Staff"}>
+                                                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">
+                                                        Go Back to Staff Page
+                                                    </button>
+                                                </Link>
+                                                :
+                                                <Link to={`/StudentGroup/${groupNumber}`}>
+                                                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">
+                                                        Go Back to Students Page
+                                                    </button>
+                                                </Link>
+                                            }
+                                        </>
                                     }
                                 </div>
                             </div>

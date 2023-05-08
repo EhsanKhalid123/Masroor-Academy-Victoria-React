@@ -46,7 +46,7 @@
   background-color: #112c3f !important;
 }
 
-.nav-item.dropdown>.nav-link:hover {
+.nav-item.dropdown>.nav-link:not(.exclude):hover {
   color: #2b6289 !important;
   transition: all 0.3s ease;
 }
@@ -698,8 +698,8 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 
-@media (max-width: 768px){
-.mt-custom {
+@media (max-width: 768px) {
+  .mt-custom {
     margin-top: 20px;
-}
+  }
 }

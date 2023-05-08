@@ -1,16 +1,17 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2 } from "../data/repository";
+import { Link } from "react-router-dom";
+import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile } from "../data/repository";
 
-function Group(props) {
+function Staff(props) {
 
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [confirmPopup, setconfirmPopup] = useState(false);
-    const { groupNumber } = useParams();
-    let userProfilePage;
+
+    let userProfilePage = "userProfile";
+    let groupNumber = 6;
 
     // Load users from DB.
     useEffect(() => {
@@ -27,17 +28,15 @@ function Group(props) {
 
     }, []);
 
-    
+
     // Popup Toggle Switch Function
     const togglePopup = () => {
-        setconfirmPopup(!confirmPopup); 
+        setconfirmPopup(!confirmPopup);
     }
 
     const deleteSelectedUser = async (event) => {
         const currentDetails = await getProfile(getSelectedId());
 
-        const id = { id: await getSelectedId() };
-        await deleteHomeworks2(id);
         await deleteUserDB(currentDetails);
 
         // Update Page/Refresh the Data
@@ -52,36 +51,6 @@ function Group(props) {
         setSearch(event.target.value.toLowerCase());
     }
 
-    let groupDetails;
-
-    switch (groupNumber) {
-        case "1":
-            groupDetails = "7-8 (Group 1)";
-            break;
-        case "2":
-            groupDetails = "9-11 (Group 2)";
-            break;
-        case "3":
-            groupDetails = "12-13 (Group 3)";
-            break;
-        case "4":
-            groupDetails = "14-15 (Group 4)";
-            break;
-        default:
-            groupDetails = "Invalid group number";
-    }
-
-    let linkTo;
-    let selectLink;
-
-    if (props.group === "homework") {
-        linkTo = "/SelectGroupHomework";
-        selectLink = "/AddHomework";
-    } else if (props.group === "student") {
-        linkTo = "/SelectGroupStudent";
-        selectLink = "/Profile";
-        userProfilePage = "userProfile";
-    }
 
     return (
         <>
@@ -92,17 +61,12 @@ function Group(props) {
                     <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
             </div>
-            <div style={{ display: "flex", justifyContent: "center" }}>
-                <Link to={linkTo}>
-                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
-                </Link>
-            </div>
 
             <div className="table-responsive">
 
                 {isLoading ?
                     <div className="card-body text-center">
-                        <span className="text-muted">Loading Students...</span>
+                        <span className="text-muted">Loading Staff...</span>
                     </div>
                     :
                     <div>
@@ -122,27 +86,26 @@ function Group(props) {
                                 return search.toLowerCase() === '' ? userDetails : userDetails.name.toLowerCase().includes(search) || userDetails.group.toLowerCase().includes(search) || userDetails.id.toLowerCase().includes(search) || userDetails.gender.toLowerCase().includes(search);
                             }).map((userDetails) =>
                                 <tbody key={userDetails.id}>
-                                    {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
-                                    {(userDetails.name !== props.user.name && userDetails.group !== "Admin" && userDetails.group !== "Male Teacher" && userDetails.group !== "Female Teacher") &&
+                                    {/* Dont display the name of the logged in user and the System Admin but the rest of the staff */}
+                                    {(userDetails.name !== props.user.name && userDetails.id !== "Admin" && (userDetails.group === "Admin" || userDetails.group === "Male Teacher" || userDetails.group === "Female Teacher")) &&
                                         <>
-                                            {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails))) &&
-                                                <tr>
-                                                    <td></td>
-                                                    <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
-                                                    <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
-                                                    <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                
+                                            <tr>
+                                                <td></td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
 
-                                                    <td>
-                                                        <Link to={selectLink} state={{ groupNumber, userProfilePage }}>
-                                                            <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
-                                                        </Link>
-                                                        {(props.user.group === "Admin" && props.group === "student" && props.user.id === "Admin") &&
-                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await togglePopup()}} >Delete</button>
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            }
+                                                <td>
+                                                    <Link to="/Profile" state={{ groupNumber, userProfilePage }}>
+                                                        <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
+                                                    </Link>
+                                                    {(props.user.id === "Admin") &&
+                                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await togglePopup() }} >Delete</button>
+                                                    }
+                                                </td>
+                                            </tr>
+
                                         </>
                                     }
 
@@ -175,4 +138,4 @@ function Group(props) {
 }
 
 // Export the Student Function
-export default Group;
+export default Staff;

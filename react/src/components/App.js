@@ -23,6 +23,7 @@ import Group from './Group';
 import Syllabus from './Syllabus';
 import StudentDashboard from './StudentDashboard';
 import Profile from './Profile';
+import Staff from './Staff';
 
 // Functional Component for App
 function App() {
@@ -123,6 +124,10 @@ function App() {
                       <Route path="/HomeworkGroup/:groupNumber" element={<Group user={decodedUser} group={"homework"} />} />
                       <Route path="/StudentGroup/:groupNumber" element={<Group user={decodedUser} group={"student"} />} />
                     </>
+                  }
+
+                  {decodedUser.group === "Admin" &&
+                    <Route path="/Staff" element={<Staff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                   }
 
                   {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin") &&
