@@ -24,7 +24,7 @@ function Login(props) {
                 setMessage(null);
                 // remove message from local storage
                 localStorage.removeItem("inactiveMessage");
-            }, 3000);
+            }, 5000);
 
             // clean up timer on unmount
             return () => clearTimeout(timer);
