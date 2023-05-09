@@ -265,8 +265,8 @@ function AdminProfile(props) {
                                         </div>
                                         {/* Password Field */}
                                         <div className="form-group">
-                                            <label htmlFor="name"><b>Password:</b></label>
-                                            <input type="text" className="form-control" id="password" name="password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} disabled />
+                                            <label htmlFor="hashed_password"><b>Password:</b></label>
+                                            <input type="text" className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} required />
                                             {errors.hashed_password && (
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
                                             )}

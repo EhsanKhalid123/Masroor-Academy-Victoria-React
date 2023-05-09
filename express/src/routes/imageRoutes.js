@@ -9,6 +9,9 @@ module.exports = (express, app) => {
 
   // Get an Image
   getImageRouter.get('/:id', controller.getImage);
+
+  // Get an Image
+  getImageRouter.get('/', controller.all);
     
   // Upload an Image.
   uploadImageRouter.post('/upload', upload.single('upload'), controller.upload);

@@ -2,6 +2,18 @@
 // Import all database files
 const db = require("../database");
 
+// Endpoint for getting all images from the database.
+exports.all = async (req, res) => {
+  try {
+    const images = await db.images.findAll();
+
+    res.json(images);
+  } catch (error) {
+    // Send an error response.
+    res.status(500).json({ message: "Error Retrieving Data" });
+  }
+};
+
 // Endpoint for uploading an image and saving it in the database.
 exports.upload = async (req, res) => {
   try {
