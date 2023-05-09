@@ -70,8 +70,18 @@ function Navigation(props) {
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupAttendance">Attendance</NavLink>
                     </li>
 
-                    <li className="nav-item">
+                    {/* <li className="nav-item">
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupHomework">Homework</NavLink>
+                    </li> */}
+                    
+                    <li className="nav-item dropdown">
+                      <div className="nav-link nav-link2 dropdown-toggle exclude" style={{ color: "#112c3f" }} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Homework
+                      </div>
+                      <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <Link className="dropdown-item" to="/SelectGroupHomework">Post Homework</Link>
+                        <Link className="dropdown-item" to="/">{props.user.class}</Link>
+                      </div>
                     </li>
 
                     {/* <li className="nav-item">
