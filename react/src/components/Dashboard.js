@@ -96,17 +96,31 @@ function Dashboard(props) {
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="col-sm-4 mt-custom" style={{ display: "block", margin: "auto", marginTop: "20px" }}>
-                                <div className="card text-center">
-                                    <div className="card-header" style={{ backgroundColor: "rgb(238 183 49 / 52%)" }}>
-                                        <h5>Total Nasirat:</h5>
-                                    </div>
-                                    <div className="card-body">
-                                        <h2 className="card-title font-weight-bold">{nasirat}</h2>
+                            {props.user.group === "Female Teacher" &&
+                                <div className="col-sm-4 mt-custom" style={{ display: "block", margin: "auto", marginTop: "20px" }}>
+                                    <div className="card text-center">
+                                        <div className="card-header" style={{ backgroundColor: "rgb(238 183 49 / 52%)" }}>
+                                            <h5>Total Nasirat:</h5>
+                                        </div>
+                                        <div className="card-body">
+                                            <h2 className="card-title font-weight-bold">{nasirat}</h2>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+
+                            {props.user.group === "Male Teacher" &&
+                                <div className="col-sm-4 mt-custom" style={{ display: "block", margin: "auto", marginTop: "20px" }}>
+                                    <div className="card text-center">
+                                        <div className="card-header" style={{ backgroundColor: "rgb(238 183 49 / 52%)" }}>
+                                            <h5>Total Atfal:</h5>
+                                        </div>
+                                        <div className="card-body">
+                                            <h2 className="card-title font-weight-bold">{atfal}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </>
