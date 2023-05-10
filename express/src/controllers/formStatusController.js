@@ -60,3 +60,38 @@ exports.updateFormText = async (req, res) => {
     }
 };
 
+// Endpoint for updating form text in the database.
+exports.updateRegFormMessage = async (req, res) => {
+    try {
+        // Get the form status and text values from the request body.
+        const text = req.body.text;
+
+        // Find the form status record in the database.
+        const formText = await db.formStatus.findByPk("regFormMessage");
+
+        // Update the form text values.
+        formText.text = text;
+
+        // Save the changes to the database.
+        await formText.save();
+
+        // Send a success response.
+        res.status(200).json({ message: "Registration Form Message updated successfully" });
+    } catch (error) {
+        // Send an error response.
+        res.status(500).json({ message: "Error updating Registration Form Message" });
+    }
+};
+
+// Endpoint for selecting all announcements from the database.
+exports.getRegFormMessage = async (req, res) => {
+   
+    // Gets the current form Registration Message from DB.
+    const formStatus = await db.formStatus.findByPk("regFormMessage");
+
+    // Extract the text fields from the form status object.
+    const { text } = formStatus;
+  
+    res.json({ text });
+};
+

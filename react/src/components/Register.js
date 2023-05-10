@@ -1,7 +1,8 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { registerUser, getFormStatus } from "../data/repository";
+import { registerUser, getFormStatus, getRegFormMessage } from "../data/repository";
+import parse from 'html-react-parser';
 
 // Functional Component for Signup Page
 function Register(props) {
@@ -11,7 +12,9 @@ function Register(props) {
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [formStatus, setFormStatus] = useState({});
+    const [regText, setRegText] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const currentYear = new Date().getFullYear();
     const current = new Date().toISOString().split("T")[0];
 
     // Set message to null automatically after a period of time.
@@ -20,8 +23,10 @@ function Register(props) {
         // Loads Form Status from DB
         async function loadFormStatus() {
             const currentFormStatus = await getFormStatus();
+            const currentRegText = await getRegFormMessage();
 
             setFormStatus(currentFormStatus);
+            setRegText(currentRegText);
             setIsLoading(false);
         }
 
@@ -162,7 +167,7 @@ function Register(props) {
         <>
             <br />
             <img className="img-fluid d-block mx-auto" style={{ textAlign: "center", margin: "auto", display: "block", maxWidth: "100%" }} src={"/assets/images/Registration Form Banner.png"} alt="Registration Banner" />
-            <h1 className="text-center mb-3" style={{ padding: "50px 20px 0 20px" }}>Masroor Academy Registration</h1>
+            <h1 className="text-center mb-3" style={{ padding: "50px 20px 0 20px" }}>Masroor Academy Registration {currentYear}</h1>
             <hr style={{ width: "50%", marginBottom: "20px", borderWidth: "1px", backgroundColor: "#5dc7d8" }} />
 
             {isLoading ?
@@ -173,8 +178,7 @@ function Register(props) {
                 <>
                     {formStatus.status ?
                         <div>
-                            <p style={{ fontSize: "17px", padding: "0 18%" }} className="text-center mb-3">Please fill in the form below in order to enroll for Masroor Academy. By filling in this form you accept all the rules and guidelines. <br />
-                                𝗡𝗢𝗧𝗘: The classes for Berwick, Langwarrin, Cranbourne East and Melbourne East will be held in Masjid Bait-ul-Salam. However, Jama'at West classes will be held in Melbourne West.</p>
+                             <div style={{ fontSize: "17px", padding: "0 18%" }} className="text-center mb-3">{parse(regText.text)}</div>
                             <p>&nbsp;</p>
                             <form className="sign-up-form" onSubmit={handleSubmit} noValidate>
                                 {/* Name Field */}
@@ -224,9 +228,9 @@ function Register(props) {
                                     <br />
                                     <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Clyde" checked={values.jamaat === "Clyde"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Clyde</span>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne East" checked={values.jamaat === "Melbourne East"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne East</span>
+                                    {/* <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne East" checked={values.jamaat === "Melbourne East"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne East</span>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne West" checked={values.jamaat === "Melbourne West"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne West</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne West" checked={values.jamaat === "Melbourne West"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne West</span> */}
                                     {errors.jamaat && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
                                     )}

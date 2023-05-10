@@ -165,6 +165,21 @@ async function updateFormText(formText) {
   return response.data;
 }
 
+// Update Registration Message Request For API from DB
+async function updateRegFormMessage(formText) {
+  const response = await axios.post(API_HOST + "/MAApi/formStatus/updateRegFormMessage", formText, getHeaders());
+
+  return response.data;
+}
+
+// Get Registration Message Request For API from DB
+async function getRegFormMessage() {
+  const response = await axios.get(API_HOST + "/MAApi/formStatus/getRegFormMessage", getHeaders());
+
+  return response.data;
+}
+
+
 // ---------- Resources --------------------------------------------
 // Sets Current User In Local Storage
 async function uploadResource(formData) {
@@ -267,5 +282,6 @@ export {
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
   getSelectedId2, removeSelectedId2, selectedId2, registerUser, updateFormStatus, getFormStatus, updateFormText,
-  uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages
+  uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages,
+  updateRegFormMessage, getRegFormMessage
 }

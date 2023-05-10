@@ -263,6 +263,7 @@ async function addData() {
     // await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
 
     await db.formStatus.create();
+    await db.formStatus.create({id: "regFormMessage", status: null, text: "Please fill in the form below in order to enroll for Masroor Academy. By filling in this form you accept all the rules and guidelines."});
 
 
 }

@@ -12,6 +12,11 @@ module.exports = (express, app) => {
     router.post("/updateFormStatus", validateToken, controller.updateFormStatus);
 
     router.post("/updateFormText", validateToken, controller.updateFormText);
+
+    router.post("/updateRegFormMessage", validateToken, controller.updateRegFormMessage);
+
+    router.get("/getRegFormMessage", validateToken, controller.getRegFormMessage);
+    
   
     // Add routes to server.
     app.use("/MAApi/formStatus", router);
