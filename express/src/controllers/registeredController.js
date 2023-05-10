@@ -57,9 +57,12 @@ exports.create = async (req, res) => {
       dob: req.body.dob,
       auxiliary: req.body.auxiliary,
       jamaat: req.body.jamaat,
-      pname: req.body.pname,
-      pemail: req.body.pemail,
-      contact: req.body.contact
+      fathersName: req.body.fathersName,
+      fathersEmail: req.body.fathersEmail,
+      fathersContact: req.body.fathersContact,
+      mothersName: req.body.mothersName,
+      mothersEmail: req.body.mothersEmail,
+      mothersContact: req.body.mothersContact,
     });
 
     res.json(registered);

@@ -1,6 +1,6 @@
 
 // Importing React classes and functions from node modules
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { registerUser, getFormStatus, getRegFormMessage } from "../data/repository";
 import parse from 'html-react-parser';
 
@@ -8,7 +8,7 @@ import parse from 'html-react-parser';
 function Register(props) {
 
     // State Variables Declaration for useState and useContext Hooks
-    const [values, setValues] = useState({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", pname: "", pemail: "", contact: "" });
+    const [values, setValues] = useState({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [formStatus, setFormStatus] = useState({});
@@ -16,6 +16,7 @@ function Register(props) {
     const [isLoading, setIsLoading] = useState(true);
     const currentYear = new Date().getFullYear();
     const current = new Date().toISOString().split("T")[0];
+    const userInputRef = useRef(null);
 
     // Set message to null automatically after a period of time.
     useEffect(() => {
@@ -59,9 +60,15 @@ function Register(props) {
 
         // Validate form and if invalid do not contact API.
         const { trimmedValues, isValid } = await handleValidation();
-        if (!isValid)
+        if (!isValid) {
+            // scroll to the first user input box
+            userInputRef.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest',
+            });
             return;
-        else {
+        } else {
             // Clear all errors
             setErrors("");
         }
@@ -70,7 +77,7 @@ function Register(props) {
             // Create user.
             await registerUser(trimmedValues);
             // Clear all errors and fields
-            setValues({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", pname: "", pemail: "", contact: "" });
+            setValues({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
             setErrors("");
             // Show success message.
             setMessage(
@@ -116,31 +123,54 @@ function Register(props) {
         if (value.length === 0)
             formErrors[key] = "Please select a Jama'at.";
 
-        // Validation for Parent's Name Field
-        key = "pname";
+        // Validation for Fathers Name Field
+        key = "fathersName";
         value = trimmedValues[key];
         if (value.length === 0)
-            formErrors[key] = "Parent's Name is required.";
+            formErrors[key] = "Fathers Name is required.";
         else if (value.length > 40)
             formErrors[key] = "Name length cannot be greater than 40.";
 
-        // Validation for Parent's Email Field
-        key = "pemail";
+        // Validation for Fathers Email Field
+        key = "fathersEmail";
         value = trimmedValues[key];
         if (value.length === 0)
-            formErrors[key] = "Parent Email address is required.";
+            formErrors[key] = "Fathers Email address is required.";
         else if (value.length > 128)
-            formErrors[key] = "Parent Email length cannot be greater than 128.";
+            formErrors[key] = "Email length cannot be greater than 128.";
         else if (!/\S+@\S+\.\S+/.test(value))
-            formErrors[key] = "Please enter a valid Parent email address";
+            formErrors[key] = "Please enter a valid email address";
 
-        // Validation for Parent's Name Field
-        key = "contact";
+        // Validation for Fathers Name Field
+        key = "fathersContact";
         value = trimmedValues[key];
         if (value.length === 0)
-            formErrors[key] = "Parent's Phone Number is Required.";
+            formErrors[key] = "Fathers Phone Number is Required.";
         else if (value.length > 10)
             formErrors[key] = "Contact Number cannot be greater than 10.";
+
+        // Validation for Parent's Name Field
+        key = "mothersName";
+        value = trimmedValues[key];
+
+        // Validation for Parent's Email Field
+        key = "mothersEmail";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 128)
+                formErrors[key] = "Email length cannot be greater than 128.";
+            else if (!/\S+@\S+\.\S+/.test(value))
+                formErrors[key] = "Please enter a valid email address";
+        }
+
+
+        // Validation for Parent's Name Field
+        key = "mothersContact";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 10)
+                formErrors[key] = "Contact Number cannot be greater than 10.";
+        }
 
 
         // Sets Errors If any Validation Fails
@@ -178,14 +208,15 @@ function Register(props) {
                 <>
                     {formStatus.status ?
                         <div>
-                             <div style={{ fontSize: "17px", padding: "0 18%" }} className="text-center mb-3">{parse(regText.text)}</div>
+                            <div style={{ fontSize: "17px", padding: "0 18%" }} className="text-center mb-3">{parse(regText.text)}</div>
                             <p>&nbsp;</p>
                             <form className="sign-up-form" onSubmit={handleSubmit} noValidate>
                                 {/* Name Field */}
                                 <div className="form-group">
                                     <label htmlFor="name"><b className="required-field" style={{ fontSize: "20px" }}>Student's Full Name:</b></label>
-                                    <input type="text" className="form-control" id="name" name="name" placeholder="Please enter student's full name" value={values.name} onChange={handleInputChange} required />
-                                    <small id="studentNameHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's full name to avoid confusion with other students with the same name!</small>
+                                    <input type="text" className="form-control" id="name" name="name" placeholder="Please enter student's full name" ref={userInputRef} value={values.name} onChange={handleInputChange} required />
+                                    <small id="studentNameHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's full name to avoid confusion with other students with the same name.
+                                        Note If there are children with the same name their parents name will be added next to it in brackets for Identification purposes.</small>
                                     {errors.name && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
                                     )}
@@ -203,6 +234,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="date"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
                                     <input type="date" className="form-control" id="dob" name="dob" placeholder="Please enter your Date of Birth" value={values.dob} onChange={handleInputChange} max={current} required />
+                                    <small id="studentDobHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter the correct date of birth, to allocate your child to their respective groups.</small>
                                     {errors.dob && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.dob}</p>
                                     )}
@@ -235,29 +267,54 @@ function Register(props) {
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
                                     )}
                                 </div>
-                                {/* Parents Name Field */}
+                                {/* Fathers Name Field */}
                                 <div className="form-group">
-                                    <label htmlFor="pname"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Full Name:</b></label>
-                                    <input type="text" className="form-control" id="pname" name="pname" placeholder="Please enter parent's full name" value={values.pname} onChange={handleInputChange} required />
-                                    {errors.pname && (
-                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.pname}</p>
+                                    <label htmlFor="fathersName"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Full Name:</b></label>
+                                    <input type="text" className="form-control" id="fathersName" name="fathersName" placeholder="Please enter fathers full name" value={values.fathersName} onChange={handleInputChange} required />
+                                    {errors.fathersName && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersName}</p>
                                     )}
                                 </div>
-                                {/* Parents Email Field */}
+                                {/* Fathers Email Field */}
                                 <div className="form-group">
-                                    <label htmlFor="email"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Email:</b></label>
-                                    <input type="email" className="form-control" id="pemail" name="pemail" placeholder="Please enter parent's email" value={values.pemail} onChange={handleInputChange} required />
-                                    {errors.pemail && (
-                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.pemail}</p>
+                                    <label htmlFor="fathersEmail"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Email:</b></label>
+                                    <input type="fathersEmail" className="form-control" id="fathersEmail" name="fathersEmail" placeholder="Please enter fathers email" value={values.fathersEmail} onChange={handleInputChange} required />
+                                    {errors.fathersEmail && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersEmail}</p>
                                     )}
                                 </div>
-                                {/* Parent's Contact Number Field */}
+                                {/* Fathers Contact Number Field */}
                                 <div className="form-group">
-                                    <label htmlFor="contact"><b className="required-field" style={{ fontSize: "20px" }}>Parent's Contact Number:</b></label>
-                                    <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="contact" name="contact" placeholder="Please enter parent's contact number" value={values.contact} onChange={handleInputChange} required />
-                                    <small id="contact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
-                                    {errors.contact && (
-                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.contact}</p>
+                                    <label htmlFor="fathersContact"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Contact Number:</b></label>
+                                    <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="fathersContact" name="fathersContact" placeholder="Please enter fathers contact number" value={values.fathersContact} onChange={handleInputChange} required />
+                                    <small id="fathersContact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
+                                    {errors.fathersContact && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersContact}</p>
+                                    )}
+                                </div>
+                                {/* Mothers Name Field */}
+                                <div className="form-group">
+                                    <label htmlFor="mothersName"><b style={{ fontSize: "20px" }}>Mothers Full Name:</b></label>
+                                    <input type="text" className="form-control" id="mothersName" name="mothersName" placeholder="Please enter mothers full name" value={values.mothersName} onChange={handleInputChange} required />
+                                    {errors.mothersName && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersName}</p>
+                                    )}
+                                </div>
+                                {/* Mothers Email Field */}
+                                <div className="form-group">
+                                    <label htmlFor="mothersEmail"><b style={{ fontSize: "20px" }}>Mothers Email:</b></label>
+                                    <input type="mothersEmail" className="form-control" id="mothersEmail" name="mothersEmail" placeholder="Please enter mothers email" value={values.mothersEmail} onChange={handleInputChange} required />
+                                    {errors.mothersEmail && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersEmail}</p>
+                                    )}
+                                </div>
+                                {/* Mothers Contact Number Field */}
+                                <div className="form-group">
+                                    <label htmlFor="mothersContact"><b style={{ fontSize: "20px" }}>Mothers Contact Number:</b></label>
+                                    <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="mothersContact" name="mothersContact" placeholder="Please enter mothers contact number" value={values.mothersContact} onChange={handleInputChange} required />
+                                    <small id="mothersContact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: In case of girls registration, this field is mandatory. For boys, fill only if you want communication to be sent to mothers too. JazakAllah</small>
+                                    {errors.mothersContact && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersContact}</p>
                                     )}
                                 </div>
                                 <button type="submit" className="btn btn-primary">Submit</button>

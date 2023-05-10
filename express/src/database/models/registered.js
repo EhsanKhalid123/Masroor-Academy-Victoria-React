@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) =>
         },
         name: {
             type: DataTypes.STRING(40),
-            allowNull: false
+            allowNull: true
         },
         email: {
             type: DataTypes.STRING(40),
@@ -22,27 +22,39 @@ module.exports = (sequelize, DataTypes) =>
         },
         dob: {
             type: DataTypes.DATEONLY(),
-            allowNull: false
+            allowNull: true
         },
         auxiliary: {
             type: DataTypes.STRING(32),
-            allowNull: false
+            allowNull: true
         },
         jamaat: {
             type: DataTypes.STRING(15),
-            allowNull: false
+            allowNull: true
         },
-        pname: {
+        fathersName: {
             type: DataTypes.STRING(32),
-            allowNull: false
+            allowNull: true
         },
-        pemail: {
+        fathersEmail: {
             type: DataTypes.STRING(32),
-            allowNull: false
+            allowNull: true
         },
-        contact: {
+        fathersContact: {
             type: DataTypes.STRING(10),
-            allowNull: false
+            allowNull: true
+        },
+        mothersName: {
+            type: DataTypes.STRING(32),
+            allowNull: true
+        },
+        mothersEmail: {
+            type: DataTypes.STRING(32),
+            allowNull: true
+        },
+        mothersContact: {
+            type: DataTypes.STRING(10),
+            allowNull: true
         }
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).
