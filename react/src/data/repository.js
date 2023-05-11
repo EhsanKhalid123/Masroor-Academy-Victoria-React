@@ -51,11 +51,11 @@ async function getProfileUsers() {
   return response.data;
 }
 
-// Find User Details Request For API from DB
-async function findUser(id) {
-  const response = await axios.get(API_HOST + `/MAApi/users/select/${id}`, getHeaders());
-  return response.data;
-}
+// // Find User Details Request For API from DB
+// async function findUser(id) {
+//   const response = await axios.get(API_HOST + `/MAApi/users/select/${id}`, getHeaders());
+//   return response.data;
+// }
 
 // Create User Request For API to DB
 async function createUser(user) {
@@ -64,12 +64,12 @@ async function createUser(user) {
   return response.data;
 }
 
-// Register User Request For API to DB
-async function registerUser(registered) {
-  const response = await axios.post(API_HOST + "/MAApi/registered", registered, getHeaders());
+// // Register User Request For API to DB
+// async function registerUser(registered) {
+//   const response = await axios.post(API_HOST + "/MAApi/registered", registered, getHeaders());
 
-  return response.data;
-}
+//   return response.data;
+// }
 
 // Update User Details Request For API to DB
 async function updateUser(user, id, loggedInUser) {
@@ -91,8 +91,8 @@ async function deleteUserDB(user) {
   return response.data;
 }
 
-// --- Post ---------------------------------------------------------------------------------------
-// Get Post Details Request For API from DB
+// --- Homeworks ---------------------------------------------------------------------------------------
+// Get Homeworks Details Request For API from DB
 async function getHomeworks() {
   const response = await axios.get(API_HOST + "/MAApi/homeworks", getHeaders());
 
@@ -274,14 +274,14 @@ function removeSelectedId2() {
 
 // Exports all these functions to be used by other componenets
 export {
-  verifyUser, findUser, createUser,
+  verifyUser, createUser,
   getHomeworks, createHomeworks, deleteHomeworks,
   getUser, removeUser, deleteUserDB,
   getProfile, updateUser, setUser, deleteHomeworks2,
   createAnnouncements, getAnnouncements,
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
-  getSelectedId2, removeSelectedId2, selectedId2, registerUser, updateFormStatus, getFormStatus, updateFormText,
+  getSelectedId2, removeSelectedId2, selectedId2, updateFormStatus, getFormStatus, updateFormText,
   uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages,
   updateRegFormMessage, getRegFormMessage
 }

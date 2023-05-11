@@ -7,7 +7,7 @@ module.exports = (express, app) => {
     const { validateToken } = require("../middlewares/AuthMiddleware.js");
   
     // Select all users.
-    router.get("/", validateToken, controller.getFormStatusAndText);
+    router.get("/", controller.getFormStatusAndText);
  
     router.post("/updateFormStatus", validateToken, controller.updateFormStatus);
 
@@ -15,7 +15,7 @@ module.exports = (express, app) => {
 
     router.post("/updateRegFormMessage", validateToken, controller.updateRegFormMessage);
 
-    router.get("/getRegFormMessage", validateToken, controller.getRegFormMessage);
+    router.get("/getRegFormMessage", controller.getRegFormMessage);
     
   
     // Add routes to server.

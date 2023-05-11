@@ -13,10 +13,7 @@ module.exports = (express, app) => {
   router.get("/", validateToken, controller.all);
 
   // Select a single user with id.
-  router.get("/select/:id", validateToken, controller.one);
-
-  // Select a single user with id.
-  router.get("/get/:id", validateToken, controller.one2);
+  router.get("/get/:id", validateToken, controller.one);
 
   // Select one user from the database if username and password are a match.
   router.post("/Sign-in", controller.login);
@@ -28,7 +25,7 @@ module.exports = (express, app) => {
   router.post("/update/:id", validateToken, controller.update);
 
   // Create a new user.
-  router.post("/", validateToken, controller.create);
+  router.post("/", controller.create);
 
   // Add routes to server.
   app.use("/MAApi/users", router);

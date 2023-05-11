@@ -1,7 +1,7 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { createUser, findUser } from "../data/repository";
+import { createUser, getProfile } from "../data/repository";
 
 // Functional Component for Create Staff User Page
 function CreateStaffUser(props) {
@@ -96,7 +96,7 @@ function CreateStaffUser(props) {
             formErrors[key] = "ID is required.";
         else if (value === "Admin")
             formErrors[key] = "ID Cannot be Admin";
-        else if (await findUser(value) !== null) {
+        else if (await getProfile(value) !== null) {
             formErrors[key] = "User already exists with this ID.";
         }
 

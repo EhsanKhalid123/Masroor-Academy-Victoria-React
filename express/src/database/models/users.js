@@ -17,29 +17,65 @@ module.exports = (sequelize, DataTypes) =>
         },
         name: {
             type: DataTypes.STRING(40),
-            allowNull: false
+            allowNull: true
         },
         hashed_password: {
             type: DataTypes.STRING(32),
-            allowNull: false
+            allowNull: true
         },
         group: {
             type: DataTypes.STRING(32),
-            allowNull: false
+            allowNull: true
         },
         gender: {
-            type: DataTypes.STRING(15),
-            allowNull: false
+            type: DataTypes.STRING(32),
+            allowNull: true
         },
         class: {
-            type: DataTypes.STRING(15),
+            type: DataTypes.STRING(32),
             allowNull: true
         },
         archived: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
             allowNull: false
-        }
+        },
+        studentEmail: {
+            type: DataTypes.STRING(40),
+            allowNull: true
+        },
+        studentDob: {
+            type: DataTypes.DATEONLY(),
+            allowNull: true
+        },
+        jamaat: {
+            type: DataTypes.STRING(32),
+            allowNull: true
+        },
+        fathersName: {
+            type: DataTypes.STRING(32),
+            allowNull: true
+        },
+        fathersEmail: {
+            type: DataTypes.STRING(40),
+            allowNull: true
+        },
+        fathersContact: {
+            type: DataTypes.STRING(10),
+            allowNull: true
+        },
+        mothersName: {
+            type: DataTypes.STRING(32),
+            allowNull: true
+        },
+        mothersEmail: {
+            type: DataTypes.STRING(40),
+            allowNull: true
+        },
+        mothersContact: {
+            type: DataTypes.STRING(10),
+            allowNull: true
+        },
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).
         timestamps: false

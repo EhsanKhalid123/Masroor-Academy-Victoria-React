@@ -1,14 +1,14 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { registerUser, getFormStatus, getRegFormMessage } from "../data/repository";
+import { getFormStatus, getRegFormMessage, createUser } from "../data/repository";
 import parse from 'html-react-parser';
 
 // Functional Component for Signup Page
 function Register(props) {
 
     // State Variables Declaration for useState and useContext Hooks
-    const [values, setValues] = useState({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+    const [values, setValues] = useState({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", archived: "", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [formStatus, setFormStatus] = useState({});
@@ -75,9 +75,9 @@ function Register(props) {
 
         try {
             // Create user.
-            await registerUser(trimmedValues);
+            await createUser(trimmedValues);
             // Clear all errors and fields
-            setValues({ name: "", email: "", dob: "", auxiliary: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+            setValues({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", archived: "", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
             setErrors("");
             // Show success message.
             setMessage(
@@ -105,14 +105,24 @@ function Register(props) {
         else if (value.length > 40)
             formErrors[key] = "Name length cannot be greater than 40.";
 
+        // Validation for Student Email Field
+        key = "studentEmail";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 128)
+                formErrors[key] = "Email length cannot be greater than 128.";
+            else if (!/\S+@\S+\.\S+/.test(value))
+                formErrors[key] = "Please enter a valid email address";
+        }
+
         // Validation for date of birth Field
-        key = "dob";
+        key = "studentDob";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Date of Birth is required.";
 
         // Validation for auxiliary radio button Field
-        key = "auxiliary";
+        key = "gender";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Please select an auxiliary.";
@@ -149,11 +159,11 @@ function Register(props) {
         else if (value.length > 10)
             formErrors[key] = "Contact Number cannot be greater than 10.";
 
-        // Validation for Parent's Name Field
+        // Validation for Mothers Name Field
         key = "mothersName";
         value = trimmedValues[key];
 
-        // Validation for Parent's Email Field
+        // Validation for Mothers Email Field
         key = "mothersEmail";
         value = trimmedValues[key];
         if (value.length !== 0) {
@@ -163,8 +173,7 @@ function Register(props) {
                 formErrors[key] = "Please enter a valid email address";
         }
 
-
-        // Validation for Parent's Name Field
+        // Validation for Mothers Name Field
         key = "mothersContact";
         value = trimmedValues[key];
         if (value.length !== 0) {
@@ -223,31 +232,31 @@ function Register(props) {
                                 </div>
                                 {/* Email Field */}
                                 <div className="form-group">
-                                    <label htmlFor="email"><b style={{ fontSize: "20px" }}>Student's Email:</b></label>
-                                    <input type="email" className="form-control" id="email" name="email" placeholder="Please enter student's email" value={values.email} onChange={handleInputChange} />
+                                    <label htmlFor="studentEmail"><b style={{ fontSize: "20px" }}>Student's Email:</b></label>
+                                    <input type="email" className="form-control" id="studentEmail" name="studentEmail" placeholder="Please enter student's email" value={values.studentEmail} onChange={handleInputChange} />
                                     <small id="studentEmailHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's Email if they have any otherwise leave blank</small>
-                                    {errors.email && (
-                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.email}</p>
+                                    {errors.studentEmail && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentEmail}</p>
                                     )}
                                 </div>
                                 {/* DOB Field */}
                                 <div className="form-group">
-                                    <label htmlFor="date"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
-                                    <input type="date" className="form-control" id="dob" name="dob" placeholder="Please enter your Date of Birth" value={values.dob} onChange={handleInputChange} max={current} required />
+                                    <label htmlFor="studentDob"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
+                                    <input type="date" className="form-control" id="studentDob" name="studentDob" placeholder="Please enter your Date of Birth" value={values.studentDob} onChange={handleInputChange} max={current} required />
                                     <small id="studentDobHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter the correct date of birth, to allocate your child to their respective groups.</small>
-                                    {errors.dob && (
-                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.dob}</p>
+                                    {errors.studentDob && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentDob}</p>
                                     )}
                                 </div>
                                 {/* Auxilary Field */}
                                 <div className="form-group">
-                                    <label htmlFor="Auxilary"><b className="required-field" style={{ fontSize: "20px" }}>Auxiliary Organisation:</b></label>
+                                    <label htmlFor="gender"><b className="required-field" style={{ fontSize: "20px" }}>Auxiliary Organisation:</b></label>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="auxiliary" value="Atfal-ul-Ahmadiyya" checked={values.auxiliary === "Atfal-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Atfal-ul-Ahmadiyya</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="gender" value="Atfal-ul-Ahmadiyya" checked={values.gender === "Atfal-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Atfal-ul-Ahmadiyya</span>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="auxiliary" value="Nasirat-ul-Ahmadiyya" checked={values.auxiliary === "Nasirat-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Nasirat-ul-Ahmadiyya</span>
-                                    {errors.auxiliary && (
-                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.auxiliary}</p>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="gender" value="Nasirat-ul-Ahmadiyya" checked={values.gender === "Nasirat-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Nasirat-ul-Ahmadiyya</span>
+                                    {errors.gender && (
+                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.gender}</p>
                                     )}
                                 </div>
                                 {/* Jama'at Field */}

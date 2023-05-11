@@ -20,18 +20,6 @@ exports.all = async (req, res) => {
 exports.one = async (req, res) => {
   try {
     const user = await db.users.findByPk(req.params.id);
-    
-    res.json(user);
-  } catch (error) {
-    // Send an error response.
-    res.status(500).json({ message: "Error Retrieving Data" });
-  }
-};
-
-// Select one user from the database.
-exports.one2 = async (req, res) => {
-  try {
-    const user = await db.users.findByPk(req.params.id);
 
     res.json(user);
   } catch (error) {
@@ -49,7 +37,7 @@ exports.login = async (req, res) => {
       // Login failed.
       res.json(null);
     } else {
-      const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender }, process.env.jwtkey, {
+      const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender, jamaat: user.jamaat, studentEmail: user.studentEmail }, process.env.jwtkey, {
         expiresIn: 7200,
       })
       res.json(accessToken);
@@ -69,11 +57,21 @@ exports.create = async (req, res) => {
     const user = await db.users.create({
       id: req.body.id,
       name: req.body.name,
+      hashed_password: req.body.hashed_password,
       group: req.body.group,
       gender: req.body.gender,
-      archived: req.body.archived,
-      hashed_password: req.body.hashed_password,
       class: req.body.class,
+      archived: req.body.archived,
+      studentEmail: req.body.studentEmail,
+      studentDob: req.body.studentDob,
+      jamaat: req.body.jamaat,
+      fathersName: req.body.fathersName,
+      fathersEmail: req.body.fathersEmail,
+      fathersContact: req.body.fathersContact,
+      mothersName: req.body.mothersName,
+      mothersEmail: req.body.mothersEmail,
+      mothersContact: req.body.mothersContact,
+      
     });
 
     res.json(user);
@@ -92,15 +90,18 @@ exports.update = async (req, res) => {
     const user = await db.users.findByPk(id);
 
     user.name = req.body.name;
+    user.hashed_password = req.body.hashed_password;
     user.group = req.body.group;
     user.gender = req.body.gender;
-    user.archived = req.body.archived;
-    user.hashed_password = req.body.hashed_password;
     user.class = req.body.class;
+    user.archived = req.body.archived;
+    user.studentEmail = req.body.studentEmail,
+    user.jamaat = req.body.jamaat;
+    
 
     await user.save();
 
-    const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender }, process.env.jwtkey, {
+    const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, gender: user.gender, class: user.class, archived: user.archived, studentEmail: user.studentEmail, jamaat: user.jamaat  }, process.env.jwtkey, {
       expiresIn: 7200,
     })
 
