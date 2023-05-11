@@ -51,25 +51,12 @@ async function getProfileUsers() {
   return response.data;
 }
 
-// // Find User Details Request For API from DB
-// async function findUser(id) {
-//   const response = await axios.get(API_HOST + `/MAApi/users/select/${id}`, getHeaders());
-//   return response.data;
-// }
-
 // Create User Request For API to DB
 async function createUser(user) {
   const response = await axios.post(API_HOST + "/MAApi/users", user, getHeaders());
 
   return response.data;
 }
-
-// // Register User Request For API to DB
-// async function registerUser(registered) {
-//   const response = await axios.post(API_HOST + "/MAApi/registered", registered, getHeaders());
-
-//   return response.data;
-// }
 
 // Update User Details Request For API to DB
 async function updateUser(user, id, loggedInUser) {
