@@ -1,14 +1,14 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { getFormStatus, getRegFormMessage, createUser } from "../data/repository";
+import { getFormStatus, getRegFormMessage, createUser, checkUserExists, getProfile, getProfileUsers } from "../data/repository";
 import parse from 'html-react-parser';
 
 // Functional Component for Signup Page
 function Register(props) {
 
     // State Variables Declaration for useState and useContext Hooks
-    const [values, setValues] = useState({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", archived: "", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+    const [values, setValues] = useState({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: "", archived: "false", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [formStatus, setFormStatus] = useState({});
@@ -54,6 +54,35 @@ function Register(props) {
         setValues({ ...values, [event.target.name]: event.target.value });
     };
 
+    const generateUserId = async (name, fathersName, gender, jamaat) => {
+
+        const userExists = await checkUserExists(name, fathersName);
+
+        if (userExists) {
+            return null;
+        }
+
+        if (gender === "Atfal-ul-Ahmadiyya")
+            gender = "Male";
+        else if (gender === "Nasirat-ul-Ahmadiyya")
+            gender = "Female";
+
+        let id;
+        let num = 1;
+        let suffix = num.toString().padStart(3, '0');
+
+        while (true) {
+            id = `${gender[0]}-${jamaat[0]}-${suffix}`;
+            if (await getProfile(id) === null) {
+                break;
+            }
+            num++;
+            suffix = num.toString().padStart(3, '0');
+        }
+
+        return id;
+    };
+
     // Handler for form Submission
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -74,10 +103,40 @@ function Register(props) {
         }
 
         try {
+
+            // Generate user ID.
+            const generatedID = await generateUserId(
+                trimmedValues.name,
+                trimmedValues.fathersName,
+                trimmedValues.gender,
+                trimmedValues.jamaat
+            );
+
+            const formErrors = {};
+            if (generatedID === null){
+                formErrors["message"] = "Student with the name: " + trimmedValues.name + ", Fathers Name: " + trimmedValues.fathersName + " already exists, If you have already registered or the student and fathers name is the same as yours and you haven't already registered please contact the principal for details! ";
+                setErrors(formErrors);
+                return;
+            }
+      
+            if (await getProfile(generatedID) !== null) {
+                formErrors["message"] = "User with this ID already exists, This is an issue in the backend, please immediately contact the Principal or email us at masrooracademyvic1@gmail.com";
+                setErrors(formErrors);
+                return;
+            }
+
+            // Update trimmedValues with generated ID.
+            const updatedTrimmedValues = {
+                ...trimmedValues,
+                id: generatedID
+            };
+
             // Create user.
-            await createUser(trimmedValues);
+
+            await createUser(updatedTrimmedValues);
+
             // Clear all errors and fields
-            setValues({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", archived: "", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+            setValues({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
             setErrors("");
             // Show success message.
             setMessage(

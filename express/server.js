@@ -24,7 +24,6 @@ app.use(cors());
 require("./src/routes/usersRoutes.js")(express, app);
 require("./src/routes/homeworkPostsRoutes.js")(express, app);
 require("./src/routes/announcementRoutes.js")(express, app);
-require("./src/routes/registeredRoutes.js")(express, app);
 require("./src/routes/formStatusRoutes.js")(express, app);
 require("./src/routes/imageRoutes.js")(express, app);
 require("./src/routes/resourcesRoutes.js")(express, app);

@@ -4,6 +4,9 @@ const argon2 = require("argon2");
 const { sign } = require('jsonwebtoken');
 require('dotenv').config();
 
+const { Op } = require('sequelize');
+const sequelize = db.sequelize;
+
 // Endpoint for Select all users from the database.
 exports.all = async (req, res) => {
   try {
@@ -77,7 +80,6 @@ exports.create = async (req, res) => {
     res.json(user);
   } catch (error) {
     // Send an error response.
-    console.log(error)
     res.status(500).json({ message: "Error Creating Data" });
   }
 };
@@ -146,8 +148,35 @@ exports.delete = async (req, res) => {
     return res.json(removed);
   } catch (error) {
     // Send an error response.
-    console.log(error);
     res.status(500).json({ message: "Error Deleting Data" });
+  }
+};
+
+// check if a user with same name and parent name already exists.
+exports.check = async (req, res) => {
+  try {
+    const studentName = req.body.name.toLowerCase();
+    const fathersName = req.body.fathersName.toLowerCase();
+
+    const getUser = await db.users.findOne({
+      where: {
+        [Op.and]: [
+          sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), studentName),
+          sequelize.where(sequelize.fn('LOWER', sequelize.col('fathersName')), fathersName)
+        ]
+      }
+    });
+
+    // const getUser = await db.users.findOne({ where: { name: studentName, fathersName: fathersName } });
+    if (getUser !== null) {
+      return res.json(getUser);
+    } else {
+      return res.json(null);
+    }
+
+  } catch (error) {
+    // Send an error response.
+    res.status(500).json({ message: "Error Fetching Data" });
   }
 };
 

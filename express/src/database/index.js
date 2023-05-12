@@ -1,8 +1,4 @@
 
-/* REFERENCE:
-   Some of the Code below is taken & adapted from Lab Examples of Week 8 and 9. 
-*/
-
 // ORM Related Code Goes in This File.
 
 // Import Sequelize Library and its Components.
@@ -25,7 +21,6 @@ db.sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
 
 // Define Models.
 // Importing database tables/models to create and use.
-db.registereds = require("./models/registered.js")(db.sequelize, DataTypes);
 db.users = require("./models/users.js")(db.sequelize, DataTypes);
 db.homeworkPosts = require("./models/homeworkPosts.js")(db.sequelize, DataTypes);
 db.announcements = require("./models/announcements.js")(db.sequelize, DataTypes);

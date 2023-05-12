@@ -1,8 +1,4 @@
 
-/* REFERENCE:
-   Some of the Code below is taken & adapted from Lab Examples of Week 8 and 9. 
-*/
-
 module.exports = (express, app) => {
   // Importing libraries and files
   const controller = require("../controllers/usersController.js");
@@ -13,7 +9,10 @@ module.exports = (express, app) => {
   router.get("/", validateToken, controller.all);
 
   // Select a single user with id.
-  router.get("/get/:id", validateToken, controller.one);
+  router.get("/get/:id", controller.one);
+
+   // Check if student and parent name already exists in one row.
+   router.post("/check", controller.check);
 
   // Select one user from the database if username and password are a match.
   router.post("/Sign-in", controller.login);

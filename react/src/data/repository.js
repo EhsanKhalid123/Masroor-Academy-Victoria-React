@@ -13,7 +13,7 @@ const SELECT_KEY2 = "SelectedID2";
 function getHeaders() {
   return {
     headers: {
-      accessToken: sessionStorage.getItem("user"),
+      accessToken: sessionStorage.getItem(USER_KEY),
     },
   };
 }
@@ -47,6 +47,13 @@ async function getProfile(id) {
 // Get User Details Request For API from DB
 async function getProfileUsers() {
   const response = await axios.get(API_HOST + `/MAApi/users`, getHeaders());
+
+  return response.data;
+}
+
+// Get User Details Request For API from DB
+async function checkUserExists(name, fathersName) {
+  const response = await axios.post(API_HOST + `/MAApi/users/check`, { name, fathersName }, getHeaders());
 
   return response.data;
 }
@@ -261,7 +268,7 @@ function removeSelectedId2() {
 
 // Exports all these functions to be used by other componenets
 export {
-  verifyUser, createUser,
+  verifyUser, createUser, checkUserExists,
   getHomeworks, createHomeworks, deleteHomeworks,
   getUser, removeUser, deleteUserDB,
   getProfile, updateUser, setUser, deleteHomeworks2,
