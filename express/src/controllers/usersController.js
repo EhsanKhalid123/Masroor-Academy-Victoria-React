@@ -56,11 +56,17 @@ exports.create = async (req, res) => {
   try {
     // const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
 
+    let hashedPassword = req.body.hashed_password;
+
+    if (hashedPassword !== "student" || hashedPassword === null) {
+      hashedPassword = "student";
+    }
+
     // Following properties are required for user to be created in DB
     const user = await db.users.create({
       id: req.body.id,
       name: req.body.name,
-      hashed_password: req.body.hashed_password,
+      hashed_password: hashedPassword,
       group: req.body.group,
       gender: req.body.gender,
       class: req.body.class,
@@ -74,7 +80,7 @@ exports.create = async (req, res) => {
       mothersName: req.body.mothersName,
       mothersEmail: req.body.mothersEmail,
       mothersContact: req.body.mothersContact,
-      
+
     });
 
     res.json(user);
@@ -98,12 +104,12 @@ exports.update = async (req, res) => {
     user.class = req.body.class;
     user.archived = req.body.archived;
     user.studentEmail = req.body.studentEmail,
-    user.jamaat = req.body.jamaat;
-    
+      user.jamaat = req.body.jamaat;
+
 
     await user.save();
 
-    const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, gender: user.gender, class: user.class, archived: user.archived, studentEmail: user.studentEmail, jamaat: user.jamaat  }, process.env.jwtkey, {
+    const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, gender: user.gender, class: user.class, archived: user.archived, studentEmail: user.studentEmail, jamaat: user.jamaat }, process.env.jwtkey, {
       expiresIn: 7200,
     })
 

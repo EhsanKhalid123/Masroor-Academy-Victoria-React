@@ -1,14 +1,14 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { getFormStatus, getRegFormMessage, createUser, checkUserExists, getProfile, getProfileUsers } from "../data/repository";
+import { getFormStatus, getRegFormMessage, createUser, checkUserExists, getProfile } from "../data/repository";
 import parse from 'html-react-parser';
 
 // Functional Component for Signup Page
 function Register(props) {
 
     // State Variables Declaration for useState and useContext Hooks
-    const [values, setValues] = useState({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: "", archived: "false", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+    const [values, setValues] = useState({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: null, archived: false, studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [formStatus, setFormStatus] = useState({});
@@ -113,12 +113,12 @@ function Register(props) {
             );
 
             const formErrors = {};
-            if (generatedID === null){
+            if (generatedID === null) {
                 formErrors["message"] = "Student with the name: " + trimmedValues.name + ", Fathers Name: " + trimmedValues.fathersName + " already exists, If you have already registered or the student and fathers name is the same as yours and you haven't already registered please contact the principal for details! ";
                 setErrors(formErrors);
                 return;
             }
-      
+
             if (await getProfile(generatedID) !== null) {
                 formErrors["message"] = "User with this ID already exists, This is an issue in the backend, please immediately contact the Principal or email us at masrooracademyvic1@gmail.com";
                 setErrors(formErrors);
@@ -136,7 +136,7 @@ function Register(props) {
             await createUser(updatedTrimmedValues);
 
             // Clear all errors and fields
-            setValues({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+            setValues({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: null, archived: false, studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
             setErrors("");
             // Show success message.
             setMessage(
@@ -163,6 +163,10 @@ function Register(props) {
             formErrors[key] = "Student Name is required.";
         else if (value.length > 40)
             formErrors[key] = "Name length cannot be greater than 40.";
+        else if (/\d+/.test(value))
+            formErrors[key] = "Name cannot have any numbers.";
+        else if (value === "Admin")
+            formErrors[key] = "Name Cannot be Admin";
 
         // Validation for Student Email Field
         key = "studentEmail";
@@ -199,6 +203,10 @@ function Register(props) {
             formErrors[key] = "Fathers Name is required.";
         else if (value.length > 40)
             formErrors[key] = "Name length cannot be greater than 40.";
+        else if (/\d+/.test(value))
+            formErrors[key] = "Father Name cannot have any numbers.";
+        else if (value === "Admin")
+            formErrors[key] = "Father Name Cannot be Admin";
 
         // Validation for Fathers Email Field
         key = "fathersEmail";
@@ -221,6 +229,12 @@ function Register(props) {
         // Validation for Mothers Name Field
         key = "mothersName";
         value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (/\d+/.test(value))
+                formErrors[key] = "Mother Name cannot have any numbers.";
+            else if (value === "Admin")
+                formErrors[key] = "Mother Name Cannot be Admin";
+        }
 
         // Validation for Mothers Email Field
         key = "mothersEmail";
@@ -250,7 +264,17 @@ function Register(props) {
     // Trim Fields Function to trim all spaces from the trimmedValues constant recieved from other function.
     const trimFields = () => {
         const trimmedValues = {};
-        Object.keys(values).map(key => trimmedValues[key] = values[key].trim());
+        // Object.keys(values).map(key => trimmedValues[key] = values[key].trim());
+        Object.keys(values).map(key => {
+            const value = values[key];
+            if (typeof value === 'string') {
+                trimmedValues[key] = value.trim();
+            } else {
+                trimmedValues[key] = value;
+            }
+            return null;
+        });
+
         setValues(trimmedValues);
 
         return trimmedValues;
@@ -283,7 +307,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="name"><b className="required-field" style={{ fontSize: "20px" }}>Student's Full Name:</b></label>
                                     <input type="text" className="form-control" id="name" name="name" placeholder="Please enter student's full name" ref={userInputRef} value={values.name} onChange={handleInputChange} required />
-                                    <small id="studentNameHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's full name to avoid confusion with other students with the same name.
+                                    <small id="studentNameHelp" className="form-text text-muted" style={{ fontWeight: "bold", fontSize: "15px" }}>Please enter student's full name to avoid confusion with other students with the same name.
                                         Note If there are children with the same name their parents name will be added next to it in brackets for Identification purposes.</small>
                                     {errors.name && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
@@ -293,7 +317,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="studentEmail"><b style={{ fontSize: "20px" }}>Student's Email:</b></label>
                                     <input type="email" className="form-control" id="studentEmail" name="studentEmail" placeholder="Please enter student's email" value={values.studentEmail} onChange={handleInputChange} />
-                                    <small id="studentEmailHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter student's Email if they have any otherwise leave blank</small>
+                                    <small id="studentEmailHelp" className="form-text text-muted" style={{ fontWeight: "bold", fontSize: "15px" }}>Please enter student's Email if they have any otherwise leave blank</small>
                                     {errors.studentEmail && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentEmail}</p>
                                     )}
@@ -302,7 +326,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="studentDob"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
                                     <input type="date" className="form-control" id="studentDob" name="studentDob" placeholder="Please enter your Date of Birth" value={values.studentDob} onChange={handleInputChange} max={current} required />
-                                    <small id="studentDobHelp" className="form-text text-muted" style={{ fontWeight: "bold" }}>Please enter the correct date of birth, to allocate your child to their respective groups.</small>
+                                    <small id="studentDobHelp" className="form-text" style={{ fontWeight: "bold", color: "rgb(217 67 67)", fontSize: "15px" }}>Please enter the correct date of birth, and make sure to select or enter the correct birth year to allocate your child to their respective groups.</small>
                                     {errors.studentDob && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentDob}</p>
                                     )}
@@ -355,7 +379,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="fathersContact"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Contact Number:</b></label>
                                     <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="fathersContact" name="fathersContact" placeholder="Please enter fathers contact number" value={values.fathersContact} onChange={handleInputChange} required />
-                                    <small id="fathersContact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
+                                    <small id="fathersContact" className="form-text text-muted" style={{ fontWeight: "bold", fontSize: "15px" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
                                     {errors.fathersContact && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersContact}</p>
                                     )}
@@ -380,7 +404,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="mothersContact"><b style={{ fontSize: "20px" }}>Mothers Contact Number:</b></label>
                                     <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="mothersContact" name="mothersContact" placeholder="Please enter mothers contact number" value={values.mothersContact} onChange={handleInputChange} required />
-                                    <small id="mothersContact" className="form-text text-muted" style={{ fontWeight: "bold" }}>NOTE: In case of girls registration, this field is mandatory. For boys, fill only if you want communication to be sent to mothers too. JazakAllah</small>
+                                    <small id="mothersContact" className="form-text text-muted" style={{ fontWeight: "bold", fontSize: "15px" }}>NOTE: In case of girls registration, this field is mandatory. For boys, fill only if you want communication to be sent to mothers too. JazakAllah</small>
                                     {errors.mothersContact && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersContact}</p>
                                     )}
