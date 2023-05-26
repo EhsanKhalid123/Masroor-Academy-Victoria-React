@@ -3,16 +3,18 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactSwitch from 'react-switch';
 import { deleteUserDB, getSelectedId, getProfile, updateUser } from "../data/repository";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Functional Component for MyProfile
 function AdminProfile(props) {
 
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [errors, setErrors] = useState({});
-    const [userProfile, setUsersProfile] = useState({ id: '', name: '', hashed_password: '', group: '', gender: '', class: '' });
+    const [userProfile, setUsersProfile] = useState({ id: '', name: '', hashed_password: '', group: '', gender: '', class: '', studentEmail: '', jamaat: '', mothersName: '', mothersContact: '', mothersEmail: '', fathersContact: '', fathersEmail: '', fathersName: '' });
     const [staticUserProfile, setStaticUsersProfile] = useState({ id: '', name: '', hashed_password: '', group: '', gender: '', class: '' });
     const [checked, setChecked] = useState(false);
     const [message, setMessage] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
     const location = useLocation();
     const { groupNumber, userProfilePage } = location.state ? location.state : {};
     const navigate = useNavigate();
@@ -72,6 +74,10 @@ function AdminProfile(props) {
         setUsersProfile({ ...userProfile, [event.target.name]: event.target.value });
         setErrors("");
     };
+
+    const toggleShowPassword = () => {
+        setShowPassword((prevState) => !prevState);
+      };
 
     // Handler for form submission for when details are updated.
     const handleSubmit = async (event) => {
@@ -144,10 +150,62 @@ function AdminProfile(props) {
                 formErrors[key] = "Class can only be Holy Quran or Ahmadiyyat or Islam or Namaz";
         }
 
+        // Validation for Jama'at radio button Field
+        key = "jamaat";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Please select a Jama'at.";
+
         key = "hashed_password";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Password field cannot be empty";
+
+        // Validation for Fathers Email Field
+        key = "fathersEmail";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Fathers Email address is required.";
+        else if (value.length > 128)
+            formErrors[key] = "Email length cannot be greater than 128.";
+        else if (!/\S+@\S+\.\S+/.test(value))
+            formErrors[key] = "Please enter a valid email address";
+
+        // Validation for Fathers Name Field
+        key = "fathersContact";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Fathers Phone Number is Required.";
+        else if (value.length > 10)
+            formErrors[key] = "Contact Number cannot be greater than 10.";
+
+        // Validation for Mothers Name Field
+        key = "mothersName";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (/\d+/.test(value))
+                formErrors[key] = "Mother Name cannot have any numbers.";
+            else if (value === "Admin")
+                formErrors[key] = "Mother Name Cannot be Admin";
+        }
+
+        // Validation for Mothers Email Field
+        key = "mothersEmail";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 128)
+                formErrors[key] = "Email length cannot be greater than 128.";
+            else if (!/\S+@\S+\.\S+/.test(value))
+                formErrors[key] = "Please enter a valid email address";
+        }
+
+        // Validation for Mothers Name Field
+        key = "mothersContact";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 10)
+                formErrors[key] = "Contact Number cannot be greater than 10.";
+        }
 
         // Sets Errors If any Validation Fails
         setErrors(formErrors);
@@ -205,6 +263,43 @@ function AdminProfile(props) {
                                         <p>
                                             <strong>Gender:</strong> {userProfile?.gender}
                                         </p>
+                                        {userProfile?.group !== "Admin" &&
+                                            <p>
+                                                <strong>Class:</strong> {userProfile?.class}
+                                            </p>
+                                        }
+                                        {userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "Admin" &&
+                                            <>
+                                                <p>
+                                                    <strong>Jamaat:</strong> {userProfile?.jamaat}
+                                                </p>
+                                                <p>
+                                                    <strong>Father's Name:</strong> {userProfile?.fathersName}
+                                                </p>
+                                                <p>
+                                                    <strong>Father's Contact:</strong> {userProfile?.fathersContact}
+                                                </p>
+                                                <p>
+                                                    <strong>Father's Email:</strong> {userProfile?.fathersEmail}
+                                                </p>
+                                                <p>
+                                                    <strong>Mother's Name:</strong> {userProfile?.mothersName}
+                                                </p>
+                                                <p>
+                                                    <strong>Mother's Contact:</strong> {userProfile?.mothersContact}
+                                                </p>
+                                                <p>
+                                                    <strong>Mother's Email:</strong> {userProfile?.mothersEmail}
+                                                </p>
+                                                <p>
+                                                    <strong>Student Email:</strong> {userProfile?.studentEmail}
+                                                </p>
+                                                <p>
+                                                    <strong>Student DOB:</strong> {userProfile?.studentDob}
+                                                </p>
+                                            </>
+                                        }
+
                                         {props.user.group === "Admin" &&
                                             <p>
                                                 <strong>Archived:</strong> {userProfile?.archived ? "true" : "false"}
@@ -266,7 +361,14 @@ function AdminProfile(props) {
                                         {/* Password Field */}
                                         <div className="form-group">
                                             <label htmlFor="hashed_password"><b>Password:</b></label>
-                                            <input type="text" className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} required />
+                                           <div className="password-input-wrapper">
+                                            <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} required />
+                                            {showPassword ? (
+                                            <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
+                                        ) : (
+                                            <FaEye className="password-icon" onClick={toggleShowPassword} />
+                                        )}
+                                        </div>
                                             {errors.hashed_password && (
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
                                             )}
@@ -295,6 +397,77 @@ function AdminProfile(props) {
                                                     <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.class}</p>
                                                 )}
                                             </div>
+                                        }
+                                        {(userProfile.group !== "Male Teacher" && userProfile.group !== "Female Teacher" && userProfile.group !== "Admin") &&
+                                            <>
+                                                <div className="form-group">
+                                                    <label htmlFor="jamaat"><b>Jama'at:</b></label>
+                                                    <input type="text" className="form-control" id="jamaat" name="jamaat" placeholder="Enter a new Jama'at" value={userProfile.jamaat} onChange={handleInputChange} />
+                                                    {errors.jamaat && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
+                                                    )}
+                                                </div>
+                                                {/* Student Email Field */}
+                                                <div className="form-group">
+                                                    <label htmlFor="studentEmail"><b>Student Email:</b></label>
+                                                    <input type="email" className="form-control" id="studentEmail" name="studentEmail" placeholder="Enter a new student email" value={userProfile.studentEmail} onChange={handleInputChange} />
+                                                    {errors.studentEmail && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentEmail}</p>
+                                                    )}
+                                                </div>
+                                                {props.user.id === "Admin" &&
+                                                    <>
+                                                        {/* Fathers Name Field */}
+                                                        <div className="form-group">
+                                                            <label htmlFor="fathersName"><b>Fathers Name:</b></label>
+                                                            <input type="text" className="form-control" id="fathersName" name="fathersName" placeholder="Enter a new fathers name" value={userProfile.fathersName} onChange={handleInputChange} />
+                                                            {errors.fathersName && (
+                                                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersName}</p>
+                                                            )}
+                                                        </div>
+                                                    </>
+                                                }
+                                                {/* Fathers Email Field */}
+                                                <div className="form-group">
+                                                    <label htmlFor="fathersEmail"><b>Fathers Email:</b></label>
+                                                    <input type="email" className="form-control" id="fathersEmail" name="fathersEmail" placeholder="Enter a new fathers email" value={userProfile.fathersEmail} onChange={handleInputChange} />
+                                                    {errors.fathersEmail && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersEmail}</p>
+                                                    )}
+                                                </div>
+                                                {/* Fathers Contact Field */}
+                                                <div className="form-group">
+                                                    <label htmlFor="fathersContact"><b>Fathers Contact:</b></label>
+                                                    <input type="text" className="form-control" id="fathersContact" name="fathersContact" placeholder="Enter a new fathers contact" value={userProfile.fathersContact} onChange={handleInputChange} />
+                                                    {errors.fathersContact && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersContact}</p>
+                                                    )}
+                                                </div>
+                                                {/* Mothers Name Field */}
+                                                <div className="form-group">
+                                                    <label htmlFor="mothersName"><b>Mothers Name:</b></label>
+                                                    <input type="text" className="form-control" id="mothersName" name="mothersName" placeholder="Enter a new mothers name" value={userProfile.mothersName} onChange={handleInputChange} />
+                                                    {errors.mothersName && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersName}</p>
+                                                    )}
+                                                </div>
+                                                {/* Mothers Email Field */}
+                                                <div className="form-group">
+                                                    <label htmlFor="mothersEmail"><b>Mothers Email:</b></label>
+                                                    <input type="email" className="form-control" id="mothersEmail" name="mothersEmail" placeholder="Enter a new mothers email" value={userProfile.mothersEmail} onChange={handleInputChange} />
+                                                    {errors.mothersEmail && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersEmail}</p>
+                                                    )}
+                                                </div>
+                                                {/* Mothers Contact Field */}
+                                                <div className="form-group">
+                                                    <label htmlFor="mothersContact"><b>Mothers Contact:</b></label>
+                                                    <input type="text" className="form-control" id="mothersContact" name="mothersContact" placeholder="Enter a new mothers contact" value={userProfile.mothersContact} onChange={handleInputChange} />
+                                                    {errors.mothersContact && (
+                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersContact}</p>
+                                                    )}
+                                                </div>
+                                            </>
                                         }
                                         <div className="form-group">
                                             <label htmlFor="gender"><b>Archived:</b></label> <br />

@@ -3,15 +3,17 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReactSwitch from 'react-switch';
 import { deleteUserDB, getProfile, updateUser } from "../data/repository";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Functional Component for MyProfile
 function StudentStaffProfile(props) {
 
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [errors, setErrors] = useState({});
-    const [userProfile, setUsersProfile] = useState({ name: '', hashed_password: '', group: '', gender: '' });
+    const [userProfile, setUsersProfile] = useState({ name: '', hashed_password: '', group: '', gender: '', studentEmail: '', jamaat: '', mothersName: '', mothersContact: '', mothersEmail: '', fathersContact: '', fathersEmail: '' });
     const [checked, setChecked] = useState(false);
     const [message, setMessage] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { userProfilePage } = location.state ? location.state : {};
@@ -56,6 +58,10 @@ function StudentStaffProfile(props) {
         // Update the archived value in the userProfile object
         setUsersProfile({ ...userProfile, archived: event });
     }
+
+    const toggleShowPassword = () => {
+        setShowPassword((prevState) => !prevState);
+      };
 
     // Generic change handler.
     const handleSubmit = async (event) => {
@@ -122,10 +128,72 @@ function StudentStaffProfile(props) {
             }
         }
 
+        // Validation for Jama'at radio button Field
+        key = "jamaat";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Please select a Jama'at.";
+
         key = "hashed_password";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Password field cannot be empty";
+
+        // Validation for Student Email Field
+        key = "studentEmail";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 128)
+                formErrors[key] = "Email length cannot be greater than 128.";
+            else if (!/\S+@\S+\.\S+/.test(value))
+                formErrors[key] = "Please enter a valid email address";
+        }
+
+        // Validation for Fathers Email Field
+        key = "fathersEmail";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Fathers Email address is required.";
+        else if (value.length > 128)
+            formErrors[key] = "Email length cannot be greater than 128.";
+        else if (!/\S+@\S+\.\S+/.test(value))
+            formErrors[key] = "Please enter a valid email address";
+
+        // Validation for Fathers Name Field
+        key = "fathersContact";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Fathers Phone Number is Required.";
+        else if (value.length > 10)
+            formErrors[key] = "Contact Number cannot be greater than 10.";
+
+        // Validation for Mothers Name Field
+        key = "mothersName";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (/\d+/.test(value))
+                formErrors[key] = "Mother Name cannot have any numbers.";
+            else if (value === "Admin")
+                formErrors[key] = "Mother Name Cannot be Admin";
+        }
+
+        // Validation for Mothers Email Field
+        key = "mothersEmail";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 128)
+                formErrors[key] = "Email length cannot be greater than 128.";
+            else if (!/\S+@\S+\.\S+/.test(value))
+                formErrors[key] = "Please enter a valid email address";
+        }
+
+        // Validation for Mothers Name Field
+        key = "mothersContact";
+        value = trimmedValues[key];
+        if (value.length !== 0) {
+            if (value.length > 10)
+                formErrors[key] = "Contact Number cannot be greater than 10.";
+        }
 
         // Sets Errors If any Validation Fails
         setErrors(formErrors);
@@ -167,121 +235,216 @@ function StudentStaffProfile(props) {
     return (
 
         <div>
-                {userProfilePage === "allUserProfile" && (
-                    <div className="row justify-content-center">
-                        <div className="col-md-6">
-                            <div className="card">
-                                <h5 className="card-header card text-white bg-info">Profile Info</h5>
-                                <div className="card-body">
-                                    <div className="row">
-                                        <div className="col-md-3">
-                                            <img
-                                                className="rounded-circle profileImage"
-                                                src={process.env.PUBLIC_URL + "assets/images/profileImage.png"}
-                                                alt="Account Icon"
-                                            />
-                                        </div>
+            {userProfilePage === "allUserProfile" && (
+                <div className="row justify-content-center">
+                    <div className="col-md-6">
+                        <div className="card">
+                            <h5 className="card-header card text-white bg-info">Profile Info</h5>
+                            <div className="card-body">
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <img
+                                            className="rounded-circle profileImage"
+                                            src={process.env.PUBLIC_URL + "assets/images/profileImage.png"}
+                                            alt="Account Icon"
+                                        />
+                                    </div>
 
-                                        <div className="col-md-9">
-                                            <h2 className="mb-0"> {userProfile.name}</h2>
-                                            <p className="lead">
-                                                <b style={{ fontWeight: "bold" }}>ID:</b> {props.user.id}
-                                            </p>
-                                            <hr />
-                                            <p>
-                                                {props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" ? (
-                                                    <>
-                                                        <strong>Group:</strong> {userProfile.group}</>
-                                                ) : (
-                                                    <>
-                                                        <strong>Class:</strong> {userProfile.class}</>
-                                                )}
-                                            </p>
-                                            <p>
-                                                <strong>Gender:</strong> {userProfile.gender}
-                                            </p>
-                                            {props.user.group === "Admin" &&
+                                    <div className="col-md-9">
+                                        <h2 className="mb-0"> {userProfile.name}</h2>
+                                        <p className="lead">
+                                            <b style={{ fontWeight: "bold" }}>ID:</b> {props.user.id}
+                                        </p>
+                                        <hr />
+                                        <p>
+                                            {props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" ? (
+                                                <>
+                                                    <strong>Group:</strong> {userProfile.group}</>
+                                            ) : (
+                                                <>
+                                                    <strong>Class:</strong> {userProfile.class}</>
+                                            )}
+                                        </p>
+                                        <p>
+                                            <strong>Gender:</strong> {userProfile.gender}
+                                        </p>
+                                        {props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin" &&
+                                            <>
                                                 <p>
-                                                    <strong>Archived:</strong> {userProfile?.archived ? "true" : "false"}
+                                                    <strong>Father's Name:</strong> {userProfile?.fathersName}
                                                 </p>
-                                            }
-                                        </div>
-                                        <div style={{ margin: "auto" }}>
-                                            {(props.user.group === "Admin" && props.user.id === "Admin") &&
-                                                <button onClick={togglePopup} className="btn btn-danger">
-                                                    Delete
-                                                </button>
-                                            }
-                                        </div>
+                                                <p>
+                                                    <strong>Father's Contact:</strong> {userProfile?.fathersContact}
+                                                </p>
+                                                <p>
+                                                    <strong>Father's Email:</strong> {userProfile?.fathersEmail}
+                                                </p>
+                                                <p>
+                                                    <strong>Mother's Name:</strong> {userProfile?.mothersName}
+                                                </p>
+                                                <p>
+                                                    <strong>Mother's Contact:</strong> {userProfile?.mothersContact}
+                                                </p>
+                                                <p>
+                                                    <strong>Mother's Email:</strong> {userProfile?.mothersEmail}
+                                                </p>
+                                                <p>
+                                                    <strong>Student Email:</strong> {userProfile?.studentEmail}
+                                                </p>
+                                                <p>
+                                                    <strong>Student DOB:</strong> {userProfile?.studentDob}
+                                                </p>
+                                            </>
+                                        }
+                                        {props.user.group === "Admin" &&
+                                            <p>
+                                                <strong>Archived:</strong> {userProfile?.archived ? "true" : "false"}
+                                            </p>
+                                        }
+                                    </div>
+                                    <div style={{ margin: "auto" }}>
+                                        {(props.user.group === "Admin" && props.user.id === "Admin") &&
+                                            <button onClick={togglePopup} className="btn btn-danger">
+                                                Delete
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6 mt-custom">
-                            <div className="card">
-                                <h5 className="card-header card text-white bg-info">Edit Profile</h5>
-                                <div className="card-body">
-                                    <form onSubmit={handleSubmit} noValidate>
-                                        {props.user.group === "Admin" &&
-                                            <>
-                                                <div className="form-group">
-                                                    <label htmlFor="id"><b>ID:</b></label>
-                                                    <input type="text" className="form-control" id="id" name="id" placeholder="Your ID" value={props.user.id} disabled />
-                                                </div>
-                                                {/* Name Field */}
-                                                <div className="form-group">
-                                                    <label htmlFor="name"><b>Name:</b></label>
-                                                    <input type="text" className="form-control" id="name" name="name" placeholder="Enter a New Name" value={userProfile.name} onChange={handleInputChange} required />
-                                                    {errors.name && (
-                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
-                                                    )}
-                                                </div>
-                                            </>
-                                        }
-                                        {/* Password Field */}
-                                        <div className="form-group">
-                                            <label htmlFor="name"><b>Password:</b></label>
-                                            <input type="text" className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile.hashed_password} onChange={handleInputChange} />
-                                            {errors.hashed_password && (
-                                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
-                                            )}
-                                        </div>
-                                        {props.user.group === "Admin" &&
-                                            <>
-                                                {/* Group Field */}
-                                                <div className="form-group">
-                                                    <label htmlFor="group"><b>Group:</b></label>
-                                                    <input type="text" className="form-control" id="group" name="group" placeholder="Enter a New Group" value={userProfile.group} onChange={handleInputChange} required />
-                                                    {errors.group && (
-                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
-                                                    )}
-                                                </div>
-                                                {/* Gender Field */}
-                                                <div className="form-group">
-                                                    <label htmlFor="gender"><b>Gender:</b></label>
-                                                    <input type="text" className="form-control" id="gender" name="gender" placeholder="Enter a New Gender" value={userProfile.gender} onChange={handleInputChange} required />
-                                                    {errors.gender && (
-                                                        <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.gender}</p>
-                                                    )}
-                                                </div>
-                                            </>
-                                        }
-                                        {(props.user.group === "Admin" && props.user.id === "Admin") &&
+                    </div>
+                    <div className="col-md-6 mt-custom">
+                        <div className="card">
+                            <h5 className="card-header card text-white bg-info">Edit Profile</h5>
+                            <div className="card-body">
+                                <form onSubmit={handleSubmit} noValidate>
+                                    {props.user.group === "Admin" &&
+                                        <>
                                             <div className="form-group">
-                                                <label htmlFor="archived"><b>Archived:</b></label> <br />
-                                                <ReactSwitch checked={checked} onChange={handleToggleChange} />
+                                                <label htmlFor="id"><b>ID:</b></label>
+                                                <input type="text" className="form-control" id="id" name="id" placeholder="Your ID" value={props.user.id} disabled />
                                             </div>
-                                        }
+                                            {/* Name Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="name"><b>Name:</b></label>
+                                                <input type="text" className="form-control" id="name" name="name" placeholder="Enter a New Name" value={userProfile.name} onChange={handleInputChange} required />
+                                                {errors.name && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
+                                                )}
+                                            </div>
+                                        </>
+                                    }
+                                    {/* Password Field */}
+                                    <div className="form-group">
+                                        <label htmlFor="hashed_password"><b>Password:</b></label>
+                                        <div className="password-input-wrapper">
+                                        <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile.hashed_password} onChange={handleInputChange} />
+                                        {showPassword ? (
+                                            <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
+                                        ) : (
+                                            <FaEye className="password-icon" onClick={toggleShowPassword} />
+                                        )}
+                                        {errors.hashed_password && (
+                                            <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
+                                        )}
+                                        </div>
+                                    </div>
 
-                                        <button type="submit" className="btn btn-primary" style={{ margin: "10px", textAlign: "center" }}>Save</button>
-                                        {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
-                                    </form>
-                                </div>
+                                    {(props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") &&
+                                        <>
+                                            <div className="form-group">
+                                                <label htmlFor="jamaat"><b>Jama'at:</b></label>
+                                                <input type="text" className="form-control" id="jamaat" name="jamaat" placeholder="Enter a new Jama'at" value={userProfile.jamaat} onChange={handleInputChange} />
+                                                {errors.jamaat && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
+                                                )}
+                                            </div>
+                                            {/* Student Email Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="studentEmail"><b>Student Email:</b></label>
+                                                <input type="email" className="form-control" id="studentEmail" name="studentEmail" placeholder="Enter a new student email" value={userProfile.studentEmail} onChange={handleInputChange} />
+                                                {errors.studentEmail && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentEmail}</p>
+                                                )}
+                                            </div>
+                                            {/* Fathers Email Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="fathersEmail"><b>Fathers Email:</b></label>
+                                                <input type="email" className="form-control" id="fathersEmail" name="fathersEmail" placeholder="Enter a new fathers email" value={userProfile.fathersEmail} onChange={handleInputChange} />
+                                                {errors.fathersEmail && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersEmail}</p>
+                                                )}
+                                            </div>
+                                            {/* Fathers Contact Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="fathersContact"><b>Fathers Contact:</b></label>
+                                                <input type="text" className="form-control" id="fathersContact" name="fathersContact" placeholder="Enter a new fathers contact" value={userProfile.fathersContact} onChange={handleInputChange} />
+                                                {errors.fathersContact && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersContact}</p>
+                                                )}
+                                            </div>
+                                            {/* Mothers Name Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="mothersName"><b>Mothers Name:</b></label>
+                                                <input type="text" className="form-control" id="mothersName" name="mothersName" placeholder="Enter a new mothers name" value={userProfile.mothersName} onChange={handleInputChange} />
+                                                {errors.mothersName && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersName}</p>
+                                                )}
+                                            </div>
+                                            {/* Mothers Email Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="mothersEmail"><b>Mothers Email:</b></label>
+                                                <input type="email" className="form-control" id="mothersEmail" name="mothersEmail" placeholder="Enter a new mothers email" value={userProfile.mothersEmail} onChange={handleInputChange} />
+                                                {errors.mothersEmail && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersEmail}</p>
+                                                )}
+                                            </div>
+                                            {/* Mothers Contact Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="mothersContact"><b>Mothers Contact:</b></label>
+                                                <input type="text" className="form-control" id="mothersContact" name="mothersContact" placeholder="Enter a new mothers contact" value={userProfile.mothersContact} onChange={handleInputChange} />
+                                                {errors.mothersContact && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersContact}</p>
+                                                )}
+                                            </div>
+                                        </>
+                                    }
+                                    {props.user.group === "Admin" &&
+                                        <>
+                                            {/* Group Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="group"><b>Group:</b></label>
+                                                <input type="text" className="form-control" id="group" name="group" placeholder="Enter a New Group" value={userProfile.group} onChange={handleInputChange} required />
+                                                {errors.group && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
+                                                )}
+                                            </div>
+                                            {/* Gender Field */}
+                                            <div className="form-group">
+                                                <label htmlFor="gender"><b>Gender:</b></label>
+                                                <input type="text" className="form-control" id="gender" name="gender" placeholder="Enter a New Gender" value={userProfile.gender} onChange={handleInputChange} required />
+                                                {errors.gender && (
+                                                    <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.gender}</p>
+                                                )}
+                                            </div>
+                                        </>
+                                    }
+                                    {(props.user.group === "Admin" && props.user.id === "Admin") &&
+                                        <div className="form-group">
+                                            <label htmlFor="archived"><b>Archived:</b></label> <br />
+                                            <ReactSwitch id="archived" checked={checked} onChange={handleToggleChange} />
+                                        </div>
+                                    }
+
+                                    <button type="submit" className="btn btn-primary" style={{ margin: "10px", textAlign: "center" }}>Save</button>
+                                    {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
+                                </form>
                             </div>
                         </div>
                     </div>
-                )}
-            
+                </div>
+            )}
+
             <div>
                 {/* Popup box only opens if state variable is set to true for deleting account */}
                 {confirmPopup &&

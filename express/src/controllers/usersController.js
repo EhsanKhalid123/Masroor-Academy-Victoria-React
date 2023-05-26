@@ -103,8 +103,13 @@ exports.update = async (req, res) => {
     user.gender = req.body.gender;
     user.class = req.body.class;
     user.archived = req.body.archived;
-    user.studentEmail = req.body.studentEmail,
-      user.jamaat = req.body.jamaat;
+    user.studentEmail = req.body.studentEmail;
+    user.jamaat = req.body.jamaat;
+    user.fathersEmail = req.body.fathersEmail;
+    user.fathersContact = req.body.fathersContact;
+    user.mothersName = req.body.mothersName;
+    user.mothersEmail = req.body.mothersEmail;
+    user.mothersContact = req.body.mothersContact;
 
 
     await user.save();
