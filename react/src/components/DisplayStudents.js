@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2 } from "../data/repository";
 
-function Group(props) {
+function DisplayStudents(props) {
 
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -175,4 +175,4 @@ function Group(props) {
 }
 
 // Export the Student Function
-export default Group;
+export default DisplayStudents;

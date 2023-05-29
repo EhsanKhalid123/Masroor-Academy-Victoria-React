@@ -353,7 +353,7 @@ function AdminProfile(props) {
                                         {/* Name Field */}
                                         <div className="form-group">
                                             <label htmlFor="name"><b>Name:</b></label>
-                                            <input type="text" className="form-control" id="name" name="name" placeholder="Enter a New Name" value={userProfile?.name} onChange={handleInputChange} required />
+                                            <input type="text" className="form-control" id="name" name="name" placeholder="Enter a New Name" value={userProfile?.name} onChange={handleInputChange} autoComplete="username" required />
                                             {errors.name && (
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.name}</p>
                                             )}
@@ -362,7 +362,7 @@ function AdminProfile(props) {
                                         <div className="form-group">
                                             <label htmlFor="hashed_password"><b>Password:</b></label>
                                            <div className="password-input-wrapper">
-                                            <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} required />
+                                            <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} autoComplete="current-password" required />
                                             {showPassword ? (
                                             <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
                                         ) : (

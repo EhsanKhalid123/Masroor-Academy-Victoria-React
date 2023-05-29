@@ -14,18 +14,22 @@ import Announcements from './Announcements';
 import MessageContext from "../data/MessageContext";
 import About from "./About";
 import ErrorPage from "./ErrorPage";
-import Dashboard from "./Dashboard";
+import StaffDashboard from "./StaffDashboard";
 import AddHomework from "./AddHomework";
 import Register from "./Register";
 import Resources from "./Resources";
 import SelectGroup from './SelectGroup';
-import Group from './Group';
+import DisplayStudents from './DisplayStudents';
 import Syllabus from './Syllabus';
 import StudentDashboard from './StudentDashboard';
 import Profile from './Profile';
-import Staff from './Staff';
+import DisplayStaff from './DisplayStaff';
 import Settings from './Settings';
 import CreateStaffUser from './CreateStaffUser';
+import CreateClass from './CreateClass';
+import CreateGroup from './CreateGroup';
+import DisplayGroup from './DisplayGroup';
+import DisplayClass from './DisplayClass';
 
 // Functional Component for App
 function App() {
@@ -118,21 +122,25 @@ function App() {
                 <>
                   {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
                     <>
-                      <Route path="/Dashboard" element={<Dashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Dashboard" element={<StaffDashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/AddHomework" element={<AddHomework user={decodedUser} />} />
                       <Route path="/SelectGroupHomework" element={<SelectGroup user={decodedUser} selectGroup={"homework"} />} />
                       <Route path="/SelectGroupStudent" element={<SelectGroup user={decodedUser} selectGroup={"student"} />} />
-                      <Route path="/HomeworkGroup/:groupNumber" element={<Group user={decodedUser} group={"homework"} />} />
-                      <Route path="/StudentGroup/:groupNumber" element={<Group user={decodedUser} group={"student"} />} />
+                      <Route path="/HomeworkGroup/:groupNumber" element={<DisplayStudents user={decodedUser} group={"homework"} />} />
+                      <Route path="/StudentGroup/:groupNumber" element={<DisplayStudents user={decodedUser} group={"student"} />} />
                     </>
                   }
 
                   {decodedUser.group === "Admin" &&
                     <>
-                      <Route path="/Staff" element={<Staff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/Staff" element={<DisplayStaff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Settings" element={<Settings user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/CreateStaffUser" element={<CreateStaffUser user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/CreateGroup" element={<CreateGroup user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/ViewGroup" element={<DisplayGroup user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/CreateClass" element={<CreateClass user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/ViewClass" element={<DisplayClass user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                     </>
                   }
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile } from "../data/repository";
 
-function Staff(props) {
+function DisplayStaff(props) {
 
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -138,4 +138,4 @@ function Staff(props) {
 }
 
 // Export the Student Function
-export default Staff;
+export default DisplayStaff;

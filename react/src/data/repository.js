@@ -211,6 +211,56 @@ async function fetchImages() {
   return response.data;
 }
 
+// ---------- Groups and Classes --------------------------------------------
+
+async function createGroup(group) {
+  const response = await axios.post(API_HOST + "/MAApi/groups", group, getHeaders());
+  
+  return response.data;
+}
+
+async function getGroups() {
+  const response = await axios.get(API_HOST + "/MAApi/groups", getHeaders());
+  return response.data;
+}
+
+// Get User Details Request For API from DB
+async function getGroupById(id) {
+  const response = await axios.get(API_HOST + `/MAApi/groups/get/${id}`, getHeaders());
+
+  return response.data;
+}
+
+// Delete User Request For API from DB
+async function deleteGroup(group) {
+  const response = await axios.post(API_HOST + "/MAApi/groups/delete", group, getHeaders());
+
+  return response.data;
+}
+
+async function createClass(classes) {
+  const response = await axios.post(API_HOST + "/MAApi/classes", classes, getHeaders());
+  
+  return response.data;
+}
+
+async function getClasses() {
+  const response = await axios.get(API_HOST + "/MAApi/classes", getHeaders());
+  return response.data;
+}
+
+async function getClassById(id) {
+  const response = await axios.get(API_HOST + `/MAApi/classes/get/${id}`, getHeaders());
+
+  return response.data;
+}
+
+// Delete User Request For API from DB
+async function deleteClass(classes) {
+  const response = await axios.post(API_HOST + "/MAApi/classes/delete", classes, getHeaders());
+
+  return response.data;
+}
 
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
@@ -277,5 +327,6 @@ export {
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
   getSelectedId2, removeSelectedId2, selectedId2, updateFormStatus, getFormStatus, updateFormText,
   uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages,
-  updateRegFormMessage, getRegFormMessage
+  updateRegFormMessage, getRegFormMessage, createClass, createGroup, getClasses, getGroups,
+  getGroupById, getClassById, deleteGroup, deleteClass
 }

@@ -27,6 +27,8 @@ db.announcements = require("./models/announcements.js")(db.sequelize, DataTypes)
 db.formStatus = require("./models/formStatus.js")(db.sequelize, DataTypes);
 db.images = require("./models/images.js")(db.sequelize, DataTypes);
 db.resources = require("./models/resources.js")(db.sequelize, DataTypes);
+db.groups = require("./models/groups.js")(db.sequelize, DataTypes);
+db.classes = require("./models/classes.js")(db.sequelize, DataTypes);
 
 // Relate homework posts and user through foreign key.
 // Relating homework table to the Users table with a foreign key.

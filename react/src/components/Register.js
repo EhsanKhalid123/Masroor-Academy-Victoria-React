@@ -333,24 +333,24 @@ function Register(props) {
                                 </div>
                                 {/* Auxilary Field */}
                                 <div className="form-group">
-                                    <label htmlFor="gender"><b className="required-field" style={{ fontSize: "20px" }}>Auxiliary Organisation:</b></label>
+                                    <label htmlFor="atfal"><b className="required-field" style={{ fontSize: "20px" }}>Auxiliary Organisation:</b></label>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="gender" value="Atfal-ul-Ahmadiyya" checked={values.gender === "Atfal-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Atfal-ul-Ahmadiyya</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="atfal" name="gender" value="Atfal-ul-Ahmadiyya" checked={values.gender === "Atfal-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Atfal-ul-Ahmadiyya</span>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} name="gender" value="Nasirat-ul-Ahmadiyya" checked={values.gender === "Nasirat-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Nasirat-ul-Ahmadiyya</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="nasirat" name="gender" value="Nasirat-ul-Ahmadiyya" checked={values.gender === "Nasirat-ul-Ahmadiyya"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Nasirat-ul-Ahmadiyya</span>
                                     {errors.gender && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.gender}</p>
                                     )}
                                 </div>
                                 {/* Jama'at Field */}
                                 <div className="form-group">
-                                    <label htmlFor="Auxilary"><b className="required-field" style={{ fontSize: "20px" }}>Jama'at:</b></label>
+                                    <label htmlFor="berwick"><b className="required-field" style={{ fontSize: "20px" }}>Jama'at:</b></label>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Berwick" checked={values.jamaat === "Berwick"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Berwick</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="berwick" name="jamaat" value="Berwick" checked={values.jamaat === "Berwick"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Berwick</span>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Langwarrin" checked={values.jamaat === "Langwarrin"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Langwarrin</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="langwarrin" name="jamaat" value="Langwarrin" checked={values.jamaat === "Langwarrin"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Langwarrin</span>
                                     <br />
-                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Clyde" checked={values.jamaat === "Clyde"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Clyde</span>
+                                    <input type="radio" style={{ width: "20px", height: "20px" }} id="clyde" name="jamaat" value="Clyde" checked={values.jamaat === "Clyde"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Clyde</span>
                                     <br />
                                     {/* <input type="radio" style={{ width: "20px", height: "20px" }} id="jamaat" name="jamaat" value="Melbourne East" checked={values.jamaat === "Melbourne East"} onChange={handleOptionChange} required /> <span style={{ fontSize: "20px" }}>Melbourne East</span>
                                     <br />
