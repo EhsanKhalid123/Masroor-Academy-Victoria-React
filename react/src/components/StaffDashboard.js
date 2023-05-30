@@ -1,6 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { getProfileUsers, getHomeworks, getAnnouncements, fetchResources, fetchImages } from "../data/repository";
+import { getProfileUsers, getHomeworks, getAnnouncements, fetchResources, fetchImages, getClasses, getGroups } from "../data/repository";
 
 function Dashboard(props) {
 
@@ -13,6 +13,9 @@ function Dashboard(props) {
     const [totalStudents, setTotalStudents] = useState(0);
     const [totalTeachers, setTotalTeachers] = useState(0);
     const [totalAdmins, setTotalAdmins] = useState(0);
+    const [totalGroups, setTotalGroups] = useState(0);
+    const [totalStudentGroups, setTotalStudentGroups] = useState(0);
+    const [totalClasses, setTotalClasses] = useState(0);
     const [maleTeachers, setMaleTeachers] = useState(0);
     const [femaleTeachers, setFemaleTeachers] = useState(0);
     const [atfal, setAtfal] = useState(0);
@@ -27,6 +30,8 @@ function Dashboard(props) {
             const currentAnnouncements = await getAnnouncements();
             const currentResources = await fetchResources();
             const currentImages = await fetchImages();
+            const currentClasses = await getClasses();
+            const currentGroups = await getGroups();
 
             // Count total number of Homeworks Posted
             setTotalHomeworks(currentHomeworks.length);
@@ -38,6 +43,18 @@ function Dashboard(props) {
             setTotalResources(currentResources.length);
             // Count total number of Images
             setTotalImages(currentImages.length);
+            // Count total number of Classes
+            setTotalClasses(currentClasses.length);
+            // Count total number of Groups
+            setTotalGroups(currentGroups.length);
+
+            // Filter out groups with names "Admin," "Male Teacher," and "Female Teacher"
+            const filteredGroups = currentGroups.filter(group => {
+                return !(group === "Admin" && group === "Male Teacher" && group === "Female Teacher");
+            });
+            setTotalStudentGroups(filteredGroups.length);
+            // const studentGroups = currentDetails.filter(user => !(user.group === 'Male Teacher' && user.group === 'Female Teacher' && user.group === 'Admin'));
+            // setTotalStudentGroups(filteredGroups.length);
 
             // Count total number of teachers
             const teachers = currentDetails.filter(user => (user.group === 'Male Teacher' || user.group === 'Female Teacher'));
@@ -92,7 +109,7 @@ function Dashboard(props) {
                                         <h5>Total Groups:</h5>
                                     </div>
                                     <div className="card-body">
-                                        <h2 className="card-title font-weight-bold">Coming Soon</h2>
+                                        <h2 className="card-title font-weight-bold">{totalStudentGroups}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -279,7 +296,7 @@ function Dashboard(props) {
                                         <h5>Total Groups:</h5>
                                     </div>
                                     <div className="card-body">
-                                        <h2 className="card-title font-weight-bold">Coming Soon</h2>
+                                        <h2 className="card-title font-weight-bold">{totalGroups}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -290,7 +307,7 @@ function Dashboard(props) {
                                         <h5>Total Classes:</h5>
                                     </div>
                                     <div className="card-body">
-                                        <h2 className="card-title font-weight-bold">Coming Soon</h2>
+                                        <h2 className="card-title font-weight-bold">{totalClasses}</h2>
                                     </div>
                                 </div>
                             </div>

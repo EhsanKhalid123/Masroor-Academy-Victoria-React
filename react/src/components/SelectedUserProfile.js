@@ -422,7 +422,7 @@ function AdminProfile(props) {
                                         {(userProfile.group === "Male Teacher" || userProfile.group === "Female Teacher") &&
                                             <div className="form-group">
                                                 <label htmlFor="class"><b>Class:</b></label>
-                                                <select id="class" name="class" value={selectedClassesDropdownValue} onChange={handleClassesDropdownChange}>
+                                                <select id="class" name="class" className="form-control" value={selectedClassesDropdownValue} onChange={handleClassesDropdownChange}>
                                                     <option value="" disabled hidden>Select a Class</option>
                                                     {classesDropdownValues.map(classes => (
                                                         <option key={classes.id} value={classes.group}>{classes.class}</option>

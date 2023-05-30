@@ -1,7 +1,7 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { createUser, getProfile } from "../data/repository";
+import { createUser, getProfile, getGroups, getClasses } from "../data/repository";
 
 // Functional Component for Create Staff User Page
 function CreateStaffUser(props) {
@@ -12,9 +12,28 @@ function CreateStaffUser(props) {
     const [message, setMessage] = useState(null);
     const [messageError, setMessageError] = useState(null);
     const userInputRef = useRef(null);
+    const [dropdownValues, setDropdownValues] = useState([]);
+    const [selectedDropdownValue, setSelectedDropdownValue] = useState('');
+    const [classesDropdownValues, setClassesDropdownValues] = useState([]);
+    const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState('');
 
     // Set message to null automatically after a period of time.
     useEffect(() => {
+
+        async function loadGroups() {
+            const currentGroups = await getGroups();
+            setDropdownValues(currentGroups);
+        }
+
+        async function loadClasses() {
+            const currentClasses = await getClasses();
+            setClassesDropdownValues(currentClasses);
+        }
+
+        // Calls the functions above
+        loadGroups();
+        loadClasses();
+
         if (message === null) {
             return;
         }
@@ -45,6 +64,16 @@ function CreateStaffUser(props) {
         setErrors("");
     };
 
+    // Handle the dropdown selection
+    const handleDropdownChange = event => {
+        setSelectedDropdownValue(event.target.value);
+    };
+
+    // Handle the classes dropdown selection
+    const handleClassesDropdownChange = event => {
+        setSelectedClassesDropdownValue(event.target.value);
+    };
+
     // Handler for form Submission
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -68,11 +97,16 @@ function CreateStaffUser(props) {
                 ...otherValues
             };
 
+            updatedTrimmedValues.group = selectedDropdownValue;
+            updatedTrimmedValues.class = selectedClassesDropdownValue;
+
             // Create user.
             await createUser(updatedTrimmedValues);
 
             // Clear all errors and fields
             setValues({ id: "", name: "", hashed_password: "", group: "", gender: "", class: "", archived: false });
+            setSelectedClassesDropdownValue('');
+            setSelectedDropdownValue('');
             setErrors("");
             // Show success message.
             setMessage(
@@ -114,30 +148,25 @@ function CreateStaffUser(props) {
 
         // Validation for Group Field
         key = "group";
-        value = trimmedValues[key];
+        value = key;
         if (value.length === 0)
-            formErrors[key] = "Group cannot be empty.";
-        else if (value !== "Admin" && value !== "Male Teacher" && value !== "Female Teacher") {
-            formErrors[key] = "Group can only be Admin or Male Teacher or Female Teacher";
-        }
+            formErrors[key] = "Please select a Group";
+
 
         // Validation for Gender Field
         key = "gender";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Gender cannot be empty.";
-        else if (value !== "Male" && value !== "Female") {
+        else if (value !== "Male" && value !== "Female" && value !== "Admin") {
             formErrors[key] = "Gender can only be Male or Female";
         }
 
         // Validation for Class Field
         key = "class";
-        value = trimmedValues[key];
-        if (value.length > 0) {
-            if (value !== "Islam" && value !== "Ahmadiyyat" && value !== "Holy Quran" && value !== "Namaz")
-                formErrors[key] = "Class can only be Islam, Ahmadiyyat, Holy Quran and Namaz.";
-        } else if (value.length === 0)
-            value = null;
+        value = key;
+        if (value.length === 0)
+            formErrors[key] = "Please select a Class";
 
         // Sets Errors If any Validation Fails
         setErrors(formErrors);
@@ -148,7 +177,7 @@ function CreateStaffUser(props) {
     // Trim Fields Function to trim all spaces from the trimmedValues constant recieved from other function.
     const trimFields = () => {
         const trimmedValues = {};
-        // Object.keys(values).map(key => trimmedValues[key] = values[key].trim());
+
         Object.keys(values).map(key => {
             const value = values[key];
             if (typeof value === 'string') {
@@ -215,7 +244,13 @@ function CreateStaffUser(props) {
                                     {/* Group Field */}
                                     <div className="form-group">
                                         <label htmlFor="group"><b>Group:</b></label>
-                                        <input type="text" className="form-control" id="group" name="group" placeholder="Admin, Male Teacher or Female Teacher" value={values.group} onChange={handleInputChange} required />
+                                        <select id="group" name="group" className="form-control" value={selectedDropdownValue} onChange={handleDropdownChange}>
+                                            <option value="" disabled hidden>Select a Group</option>
+                                            {dropdownValues.map(group => (
+                                                <option key={group.id} value={group.group}>{group.group}</option>
+                                            ))}
+                                        </select>
+                                        {/* <input type="text" className="form-control" id="group" name="group" placeholder="Admin, Male Teacher or Female Teacher" value={values.group} onChange={handleInputChange} required /> */}
                                         {errors.group && (
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
                                         )}
@@ -231,7 +266,13 @@ function CreateStaffUser(props) {
                                     {/* Class Field */}
                                     <div className="form-group">
                                         <label htmlFor="class"><b>Class:</b></label>
-                                        <input type="text" className="form-control" id="class" name="class" placeholder="Holy Quran, Ahmadiyyat, Islam, Namaz" value={values.class} onChange={handleInputChange} />
+                                        <select id="class" name="class" className="form-control" value={selectedClassesDropdownValue} onChange={handleClassesDropdownChange}>
+                                            <option value="" disabled hidden>Select a Class</option>
+                                            {classesDropdownValues.map(classes => (
+                                                <option key={classes.id} value={classes.group}>{classes.class}</option>
+                                            ))}
+                                        </select>
+                                        {/* <input type="text" className="form-control" id="class" name="class" placeholder="Holy Quran, Ahmadiyyat, Islam, Namaz" value={values.class} onChange={handleInputChange} /> */}
                                         {errors.class && (
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.class}</p>
                                         )}
