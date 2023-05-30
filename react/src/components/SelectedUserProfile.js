@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactSwitch from 'react-switch';
-import { deleteUserDB, getSelectedId, getProfile, updateUser } from "../data/repository";
+import { deleteUserDB, getSelectedId, getProfile, updateUser, getGroups, getClasses } from "../data/repository";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Functional Component for MyProfile
@@ -18,6 +18,10 @@ function AdminProfile(props) {
     const location = useLocation();
     const { groupNumber, userProfilePage } = location.state ? location.state : {};
     const navigate = useNavigate();
+    const [dropdownValues, setDropdownValues] = useState([]);
+    const [selectedDropdownValue, setSelectedDropdownValue] = useState(userProfile?.group);
+    const [classesDropdownValues, setClassesDropdownValues] = useState([]);
+    const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState(userProfile?.class);
 
     // Load userProfile from DB.
     useEffect(() => {
@@ -28,10 +32,24 @@ function AdminProfile(props) {
             setUsersProfile(currentDetails);
             setStaticUsersProfile(currentDetails);
             setChecked(currentDetails?.archived);
+            setSelectedDropdownValue(currentDetails?.group);
+            setSelectedClassesDropdownValue(currentDetails?.class);
+        }
+
+        async function loadGroups() {
+            const currentGroups = await getGroups();
+            setDropdownValues(currentGroups);
+        }
+
+        async function loadClasses() {
+            const currentClasses = await getClasses();
+            setClassesDropdownValues(currentClasses);
         }
 
         // Calls the functions above
         loadUserProfile();
+        loadGroups();
+        loadClasses();
 
         if (message === null)
             return;
@@ -75,9 +93,19 @@ function AdminProfile(props) {
         setErrors("");
     };
 
+    // Handle the dropdown selection
+    const handleDropdownChange = event => {
+        setSelectedDropdownValue(event.target.value);
+    };
+
+    // Handle the classes dropdown selection
+    const handleClassesDropdownChange = event => {
+        setSelectedClassesDropdownValue(event.target.value);
+    };
+
     const toggleShowPassword = () => {
         setShowPassword((prevState) => !prevState);
-      };
+    };
 
     // Handler for form submission for when details are updated.
     const handleSubmit = async (event) => {
@@ -89,6 +117,8 @@ function AdminProfile(props) {
             return;
 
         trimmedValues.archived = userProfile?.archived;
+        trimmedValues.group = selectedDropdownValue;
+        trimmedValues.class = selectedClassesDropdownValue;
 
         // update user.
         await updateUser(trimmedValues, userProfile.id, props.user.id);
@@ -113,18 +143,9 @@ function AdminProfile(props) {
 
         // Individual field Validation
         key = "group";
-        value = trimmedValues[key];
+        value = key;
         if (value.length === 0)
             formErrors[key] = "Group field cannot be empty";
-        else if (staticUserProfile.group === "Admin" || staticUserProfile.group === "Male Teacher" || staticUserProfile.group === "Female Teacher") {
-            if (value !== "Admin" && value !== "Male Teacher" && value !== "Female Teacher") {
-                formErrors[key] = "Group can only be Admin or Male Teacher or Female Teacher";
-            }
-        } else if (staticUserProfile.group === "14-15 (Group 4)" || staticUserProfile.group === "12-13 (Group 3)" || staticUserProfile.group === "9-11 (Group 2)" || staticUserProfile.group === "7-8 (Group 1)") {
-            if (value !== "14-15 (Group 4)" && value !== "12-13 (Group 3)" && value !== "9-11 (Group 2)" && value !== "7-8 (Group 1)") {
-                formErrors[key] = "Group can only be 14-15 (Group 4) or 12-13 (Group 3) or 9-11 (Group 2) or 7-8 (Group 1) ";
-            }
-        }
 
         // Individual field Validation
         key = "gender";
@@ -141,70 +162,74 @@ function AdminProfile(props) {
             }
         }
 
-        key = "class";
-        value = trimmedValues[key];
-        if (value !== null && value !== undefined) {
-            if (value.length === 0)
-                formErrors[key] = "Class field cannot be empty";
-            else if (value !== "Holy Quran" && value !== "Ahmadiyyat" && value !== "Islam" && value !== "Namaz")
-                formErrors[key] = "Class can only be Holy Quran or Ahmadiyyat or Islam or Namaz";
-        }
-
-        // Validation for Jama'at radio button Field
-        key = "jamaat";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Please select a Jama'at.";
-
         key = "hashed_password";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Password field cannot be empty";
 
-        // Validation for Fathers Email Field
-        key = "fathersEmail";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Email address is required.";
-        else if (value.length > 128)
-            formErrors[key] = "Email length cannot be greater than 128.";
-        else if (!/\S+@\S+\.\S+/.test(value))
-            formErrors[key] = "Please enter a valid email address";
+        if (userProfile?.group !== "Admin") {
 
-        // Validation for Fathers Name Field
-        key = "fathersContact";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Phone Number is Required.";
-        else if (value.length > 10)
-            formErrors[key] = "Contact Number cannot be greater than 10.";
-
-        // Validation for Mothers Name Field
-        key = "mothersName";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (/\d+/.test(value))
-                formErrors[key] = "Mother Name cannot have any numbers.";
-            else if (value === "Admin")
-                formErrors[key] = "Mother Name Cannot be Admin";
+            // Individual field Validation
+            key = "class";
+            value = key;
+            if (value.length === 0)
+                formErrors[key] = "Please select a class.";
         }
 
-        // Validation for Mothers Email Field
-        key = "mothersEmail";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 128)
+        if (userProfile?.group !== "Admin" && userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "") {
+
+            // Validation for Jama'at radio button Field
+            key = "jamaat";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Please select a Jama'at.";
+
+            // Validation for Fathers Email Field
+            key = "fathersEmail";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Email address is required.";
+            else if (value.length > 128)
                 formErrors[key] = "Email length cannot be greater than 128.";
             else if (!/\S+@\S+\.\S+/.test(value))
                 formErrors[key] = "Please enter a valid email address";
-        }
 
-        // Validation for Mothers Name Field
-        key = "mothersContact";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 10)
+            // Validation for Fathers Name Field
+            key = "fathersContact";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Phone Number is Required.";
+            else if (value.length > 10)
                 formErrors[key] = "Contact Number cannot be greater than 10.";
+
+            // Validation for Mothers Name Field
+            key = "mothersName";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (/\d+/.test(value))
+                    formErrors[key] = "Mother Name cannot have any numbers.";
+                else if (value === "Admin")
+                    formErrors[key] = "Mother Name Cannot be Admin";
+            }
+
+            // Validation for Mothers Email Field
+            key = "mothersEmail";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (value.length > 128)
+                    formErrors[key] = "Email length cannot be greater than 128.";
+                else if (!/\S+@\S+\.\S+/.test(value))
+                    formErrors[key] = "Please enter a valid email address";
+            }
+
+            // Validation for Mothers Name Field
+            key = "mothersContact";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (value.length > 10)
+                    formErrors[key] = "Contact Number cannot be greater than 10.";
+            }
+
         }
 
         // Sets Errors If any Validation Fails
@@ -263,12 +288,12 @@ function AdminProfile(props) {
                                         <p>
                                             <strong>Gender:</strong> {userProfile?.gender}
                                         </p>
-                                        {userProfile?.group !== "Admin" &&
+                                        {userProfile?.group === "Admin" && userProfile?.group === "Male Teacher" && userProfile?.group === "Female Teacher" &&
                                             <p>
                                                 <strong>Class:</strong> {userProfile?.class}
                                             </p>
                                         }
-                                        {userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "Admin" &&
+                                        {userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "Admin" && userProfile?.group !== "" &&
                                             <>
                                                 <p>
                                                     <strong>Jamaat:</strong> {userProfile?.jamaat}
@@ -361,14 +386,14 @@ function AdminProfile(props) {
                                         {/* Password Field */}
                                         <div className="form-group">
                                             <label htmlFor="hashed_password"><b>Password:</b></label>
-                                           <div className="password-input-wrapper">
-                                            <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} autoComplete="current-password" required />
-                                            {showPassword ? (
-                                            <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
-                                        ) : (
-                                            <FaEye className="password-icon" onClick={toggleShowPassword} />
-                                        )}
-                                        </div>
+                                            <div className="password-input-wrapper">
+                                                <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile?.hashed_password} onChange={handleInputChange} autoComplete="current-password" required />
+                                                {showPassword ? (
+                                                    <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
+                                                ) : (
+                                                    <FaEye className="password-icon" onClick={toggleShowPassword} />
+                                                )}
+                                            </div>
                                             {errors.hashed_password && (
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
                                             )}
@@ -376,7 +401,12 @@ function AdminProfile(props) {
                                         {/* Group Field */}
                                         <div className="form-group">
                                             <label htmlFor="group"><b>Group:</b></label>
-                                            <input type="text" className="form-control" id="group" name="group" placeholder="Enter a New Group" value={userProfile?.group} onChange={handleInputChange} required />
+                                            <select id="group" name="group" className="form-control" value={selectedDropdownValue} onChange={handleDropdownChange}>
+                                                <option value="" disabled hidden>Select a Group</option>
+                                                {dropdownValues.map(group => (
+                                                    <option key={group.id} value={group.group}>{group.group}</option>
+                                                ))}
+                                            </select>
                                             {errors.group && (
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
                                             )}
@@ -392,13 +422,18 @@ function AdminProfile(props) {
                                         {(userProfile.group === "Male Teacher" || userProfile.group === "Female Teacher") &&
                                             <div className="form-group">
                                                 <label htmlFor="class"><b>Class:</b></label>
-                                                <input type="text" className="form-control" id="class" name="class" placeholder="Enter a New Class" value={userProfile?.class} onChange={handleInputChange} required />
+                                                <select id="class" name="class" value={selectedClassesDropdownValue} onChange={handleClassesDropdownChange}>
+                                                    <option value="" disabled hidden>Select a Class</option>
+                                                    {classesDropdownValues.map(classes => (
+                                                        <option key={classes.id} value={classes.group}>{classes.class}</option>
+                                                    ))}
+                                                </select>
                                                 {errors.class && (
                                                     <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.class}</p>
                                                 )}
                                             </div>
                                         }
-                                        {(userProfile.group !== "Male Teacher" && userProfile.group !== "Female Teacher" && userProfile.group !== "Admin") &&
+                                        {(userProfile.group !== "Male Teacher" && userProfile.group !== "Female Teacher" && userProfile.group !== "Admin" && userProfile?.group !== "") &&
                                             <>
                                                 <div className="form-group">
                                                     <label htmlFor="jamaat"><b>Jama'at:</b></label>

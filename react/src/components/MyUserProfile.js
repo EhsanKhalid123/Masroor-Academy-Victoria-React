@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReactSwitch from 'react-switch';
-import { deleteUserDB, getProfile, updateUser } from "../data/repository";
+import { deleteUserDB, getProfile, updateUser, getGroups } from "../data/repository";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // Functional Component for MyProfile
@@ -17,6 +17,8 @@ function StudentStaffProfile(props) {
     const navigate = useNavigate();
     const location = useLocation();
     const { userProfilePage } = location.state ? location.state : {};
+    const [dropdownValues, setDropdownValues] = useState([]);
+    const [selectedDropdownValue, setSelectedDropdownValue] = useState(userProfile?.group);
 
     // Load userProfile from DB.
     useEffect(() => {
@@ -26,10 +28,17 @@ function StudentStaffProfile(props) {
             const currentDetails = await getProfile(props.user.id);
             setUsersProfile(currentDetails)
             setChecked(currentDetails?.archived);
+            setSelectedDropdownValue(currentDetails?.group);
+        }
+
+        async function loadGroups() {
+            const currentGroups = await getGroups();
+            setDropdownValues(currentGroups);
         }
 
         // Calls the functions above
         loadUserProfile();
+        loadGroups();
 
         if (message === null)
             return;
@@ -48,6 +57,11 @@ function StudentStaffProfile(props) {
         setErrors("");
     };
 
+    // Handle the dropdown selection
+    const handleDropdownChange = event => {
+        setSelectedDropdownValue(event.target.value);
+    };
+
     // Popup Toggle Switch Function
     const togglePopup = () => {
         setconfirmPopup(!confirmPopup);
@@ -61,7 +75,7 @@ function StudentStaffProfile(props) {
 
     const toggleShowPassword = () => {
         setShowPassword((prevState) => !prevState);
-      };
+    };
 
     // Generic change handler.
     const handleSubmit = async (event) => {
@@ -71,6 +85,8 @@ function StudentStaffProfile(props) {
         const { trimmedValues, isValid } = await handleValidation();
         if (!isValid)
             return;
+
+        trimmedValues.group = selectedDropdownValue;
 
         // update user.
         await updateUser(trimmedValues, userProfile.id, props.user.id);
@@ -100,18 +116,11 @@ function StudentStaffProfile(props) {
 
         // Individual field Validation
         key = "group";
-        value = trimmedValues[key];
+        value = key;
         if (value.length === 0)
-            formErrors[key] = "Group field cannot be empty";
-        else if (props.user.group === "Admin" || props.user.group === "Male Teacher" || props.user.group === "Female Teacher") {
-            if (value !== "Admin" && value !== "Male Teacher" && value !== "Female Teacher") {
-                formErrors[key] = "Group can only be Admin or Male Teacher or Female Teacher";
-            }
-        } else if (props.user.group === "14-15 (Group 4)" || props.user.group === "12-13 (Group 3)" || props.user.group === "9-11 (Group 2)" || props.user.group === "7-8 (Group 1)") {
-            if (value !== "14-15 (Group 4)" && value !== "12-13 (Group 3)" && value !== "9-11 (Group 2)" && value !== "7-8 (Group 1)") {
-                formErrors[key] = "Group can only be 14-15 (Group 4) or 12-13 (Group 3) or 9-11 (Group 2) or 7-8 (Group 1) ";
-            }
-        }
+            formErrors[key] = "Please select a Group";
+        else if (value === "Select a Group")
+            formErrors[key] = "Please select a Group";
 
         // Individual field Validation
         key = "gender";
@@ -128,71 +137,74 @@ function StudentStaffProfile(props) {
             }
         }
 
-        // Validation for Jama'at radio button Field
-        key = "jamaat";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Please select a Jama'at.";
-
         key = "hashed_password";
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Password field cannot be empty";
 
-        // Validation for Student Email Field
-        key = "studentEmail";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 128)
+        if (props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") {
+
+            // Validation for Jama'at radio button Field
+            key = "jamaat";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Please select a Jama'at.";
+
+            // Validation for Student Email Field
+            key = "studentEmail";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (value.length > 128)
+                    formErrors[key] = "Email length cannot be greater than 128.";
+                else if (!/\S+@\S+\.\S+/.test(value))
+                    formErrors[key] = "Please enter a valid email address";
+            }
+
+            // Validation for Fathers Email Field
+            key = "fathersEmail";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Email address is required.";
+            else if (value.length > 128)
                 formErrors[key] = "Email length cannot be greater than 128.";
             else if (!/\S+@\S+\.\S+/.test(value))
                 formErrors[key] = "Please enter a valid email address";
-        }
 
-        // Validation for Fathers Email Field
-        key = "fathersEmail";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Email address is required.";
-        else if (value.length > 128)
-            formErrors[key] = "Email length cannot be greater than 128.";
-        else if (!/\S+@\S+\.\S+/.test(value))
-            formErrors[key] = "Please enter a valid email address";
-
-        // Validation for Fathers Name Field
-        key = "fathersContact";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Phone Number is Required.";
-        else if (value.length > 10)
-            formErrors[key] = "Contact Number cannot be greater than 10.";
-
-        // Validation for Mothers Name Field
-        key = "mothersName";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (/\d+/.test(value))
-                formErrors[key] = "Mother Name cannot have any numbers.";
-            else if (value === "Admin")
-                formErrors[key] = "Mother Name Cannot be Admin";
-        }
-
-        // Validation for Mothers Email Field
-        key = "mothersEmail";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 128)
-                formErrors[key] = "Email length cannot be greater than 128.";
-            else if (!/\S+@\S+\.\S+/.test(value))
-                formErrors[key] = "Please enter a valid email address";
-        }
-
-        // Validation for Mothers Name Field
-        key = "mothersContact";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 10)
+            // Validation for Fathers Name Field
+            key = "fathersContact";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Phone Number is Required.";
+            else if (value.length > 10)
                 formErrors[key] = "Contact Number cannot be greater than 10.";
+
+            // Validation for Mothers Name Field
+            key = "mothersName";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (/\d+/.test(value))
+                    formErrors[key] = "Mother Name cannot have any numbers.";
+                else if (value === "Admin")
+                    formErrors[key] = "Mother Name Cannot be Admin";
+            }
+
+            // Validation for Mothers Email Field
+            key = "mothersEmail";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (value.length > 128)
+                    formErrors[key] = "Email length cannot be greater than 128.";
+                else if (!/\S+@\S+\.\S+/.test(value))
+                    formErrors[key] = "Please enter a valid email address";
+            }
+
+            // Validation for Mothers Name Field
+            key = "mothersContact";
+            value = trimmedValues[key];
+            if (value.length !== 0) {
+                if (value.length > 10)
+                    formErrors[key] = "Contact Number cannot be greater than 10.";
+            }
         }
 
         // Sets Errors If any Validation Fails
@@ -338,15 +350,15 @@ function StudentStaffProfile(props) {
                                     <div className="form-group">
                                         <label htmlFor="hashed_password"><b>Password:</b></label>
                                         <div className="password-input-wrapper">
-                                        <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile.hashed_password} onChange={handleInputChange} autoComplete="current-password" required />
-                                        {showPassword ? (
-                                            <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
-                                        ) : (
-                                            <FaEye className="password-icon" onClick={toggleShowPassword} />
-                                        )}
-                                        {errors.hashed_password && (
-                                            <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
-                                        )}
+                                            <input type={showPassword ? "text" : "password"} className="form-control" id="hashed_password" name="hashed_password" placeholder="Enter a New Password" value={userProfile.hashed_password} onChange={handleInputChange} autoComplete="current-password" required />
+                                            {showPassword ? (
+                                                <FaEyeSlash className="password-icon" onClick={toggleShowPassword} />
+                                            ) : (
+                                                <FaEye className="password-icon" onClick={toggleShowPassword} />
+                                            )}
+                                            {errors.hashed_password && (
+                                                <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.hashed_password}</p>
+                                            )}
                                         </div>
                                     </div>
 
@@ -414,7 +426,12 @@ function StudentStaffProfile(props) {
                                             {/* Group Field */}
                                             <div className="form-group">
                                                 <label htmlFor="group"><b>Group:</b></label>
-                                                <input type="text" className="form-control" id="group" name="group" placeholder="Enter a New Group" value={userProfile.group} onChange={handleInputChange} required />
+                                                <select id="group" name="group" className="form-control" value={selectedDropdownValue} onChange={handleDropdownChange}>
+                                                    <option value="" disabled hidden>Select a Group</option>
+                                                    {dropdownValues.map(group => (
+                                                        <option key={group.id} value={group.group}>{group.group}</option>
+                                                    ))}
+                                                </select>
                                                 {errors.group && (
                                                     <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
                                                 )}

@@ -83,7 +83,7 @@ function CreateGroup(props) {
     const handleValidation = async () => {
         const trimmedValues = trimFields();
         const formErrors = {};
-        const GroupValidationRegex = /^\d+-\d+\s\(Group\s\d+\)$/;
+        // const GroupValidationRegex = /^\d+-\d+\s\(Group\s\d+\)$/;
 
         let key = "id";
         let value = trimmedValues[key];
@@ -95,8 +95,8 @@ function CreateGroup(props) {
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Group cannot be empty.";
-        else if (!GroupValidationRegex.test(value))
-            formErrors[key] = "Group must have an age followed by the Group and Number, the Group Number must match the ID number";
+        // else if (!GroupValidationRegex.test(value))
+        //     formErrors[key] = "Group must have an age followed by the Group and Number, the Group Number must match the ID number";
 
         // Sets Errors If any Validation Fails
         setErrors(formErrors);
