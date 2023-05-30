@@ -177,7 +177,7 @@ function CreateStaffUser(props) {
                 <div className="row justify-content-center">
                     <div className="col-md-6 mt-custom">
                         <div className="card">
-                            <h5 className="card-header card text-white bg-info">Create New Staff User</h5>
+                            <h5 className="card-header card text-white bg-custom">Create New Staff User</h5>
                             <div className="card-body text-center">
                                 <div className="col-md-3" style={{ display: "block", margin: "auto" }}>
                                     <img
@@ -238,7 +238,7 @@ function CreateStaffUser(props) {
                                     </div>
 
 
-                                    <button type="submit" className="btn btn-primary" style={{ margin: "10px", textAlign: "center" }}>Create User</button>
+                                    <button type="submit" className="btn btn-custom" style={{ margin: "10px", textAlign: "center" }}>Create User</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                     {messageError && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{messageError}</div>}
                                 </form>

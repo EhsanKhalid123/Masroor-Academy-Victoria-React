@@ -251,7 +251,7 @@ function StudentStaffProfile(props) {
                 <div className="row justify-content-center">
                     <div className="col-md-6">
                         <div className="card">
-                            <h5 className="card-header card text-white bg-info">Profile Info</h5>
+                            <h5 className="card-header card text-white bg-custom">Profile Info</h5>
                             <div className="card-body">
                                 <div className="row">
                                     <div className="col-md-3">
@@ -327,7 +327,7 @@ function StudentStaffProfile(props) {
                     </div>
                     <div className="col-md-6 mt-custom">
                         <div className="card">
-                            <h5 className="card-header card text-white bg-info">Edit Profile</h5>
+                            <h5 className="card-header card text-white bg-custom">Edit Profile</h5>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit} noValidate>
                                     {props.user.group === "Admin" &&
@@ -453,7 +453,7 @@ function StudentStaffProfile(props) {
                                         </div>
                                     }
 
-                                    <button type="submit" className="btn btn-primary" style={{ margin: "10px", textAlign: "center" }}>Save</button>
+                                    <button type="submit" className="btn btn-custom" style={{ margin: "10px", textAlign: "center" }}>Save</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                 </form>
                             </div>

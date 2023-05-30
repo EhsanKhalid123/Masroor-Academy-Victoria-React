@@ -126,7 +126,7 @@ function CreateGroup(props) {
                 <div className="row justify-content-center">
                     <div className="col-md-6 mt-custom">
                         <div className="card">
-                            <h5 className="card-header card text-white bg-info">Create a New Group</h5>
+                            <h5 className="card-header card text-white bg-custom">Create a New Group</h5>
                             <div className="card-body text-center">
 
                                 <form onSubmit={handleSubmit} noValidate>
@@ -147,7 +147,7 @@ function CreateGroup(props) {
                                         )}
                                     </div>
 
-                                    <button type="submit" className="btn btn-primary" style={{ margin: "10px", textAlign: "center" }}>Create Group</button>
+                                    <button type="submit" className="btn btn-custom" style={{ margin: "10px", textAlign: "center" }}>Create Group</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                     {messageError && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{messageError}</div>}
                                 </form>

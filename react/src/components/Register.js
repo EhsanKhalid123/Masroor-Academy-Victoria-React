@@ -409,7 +409,7 @@ function Register(props) {
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersContact}</p>
                                     )}
                                 </div>
-                                <button type="submit" className="btn btn-primary">Submit</button>
+                                <button type="submit" className="btn btn-custom">Submit</button>
 
                                 {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                 {errors.message && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{errors.message}</div>}
