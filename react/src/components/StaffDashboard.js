@@ -48,13 +48,14 @@ function Dashboard(props) {
             // Count total number of Groups
             setTotalGroups(currentGroups.length);
 
-            // Filter out groups with names "Admin," "Male Teacher," and "Female Teacher"
-            const filteredGroups = currentGroups.filter(group => {
-                return !(group === "Admin" && group === "Male Teacher" && group === "Female Teacher");
-            });
-            setTotalStudentGroups(filteredGroups.length);
-            // const studentGroups = currentDetails.filter(user => !(user.group === 'Male Teacher' && user.group === 'Female Teacher' && user.group === 'Admin'));
-            // setTotalStudentGroups(filteredGroups.length);
+            const studentGroups = currentGroups.filter(groups =>
+                  groups.group !== 'Male Teacher' &&
+                  groups.group !== 'Female Teacher' &&
+                  groups.group !== 'Admin' &&
+                  groups.group !== 'Principal'
+              );
+
+            setTotalStudentGroups(studentGroups.length);
 
             // Count total number of teachers
             const teachers = currentDetails.filter(user => (user.group === 'Male Teacher' || user.group === 'Female Teacher'));
