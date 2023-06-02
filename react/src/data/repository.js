@@ -262,6 +262,39 @@ async function deleteClass(classes) {
   return response.data;
 }
 
+// ---------- Syllabus --------------------------------------------
+
+async function createSyllabus(groupId, syllabus) {
+  const response = await axios.post(API_HOST + "/MAApi/syllabus", {groupId, syllabus}, getHeaders());
+  
+  return response.data;
+}
+
+async function getSyllabus() {
+  const response = await axios.get(API_HOST + "/MAApi/syllabus", getHeaders());
+  return response.data;
+}
+
+async function getSyllabusById(id) {
+  const response = await axios.get(API_HOST + `/MAApi/syllabus/get/${id}`, getHeaders());
+
+  return response.data;
+}
+
+// Delete User Request For API from DB
+async function deleteSyllabus(syllabus) {
+  const response = await axios.post(API_HOST + "/MAApi/syllabus/delete", syllabus, getHeaders());
+
+  return response.data;
+}
+
+// Update Registration Message Request For API from DB
+async function updateSyllabus(groupId, syllabus) {
+  const response = await axios.post(API_HOST + "/MAApi/syllabus/update", {groupId, syllabus}, getHeaders());
+
+  return response.data;
+}
+
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
 function setUser(user) {
@@ -328,5 +361,6 @@ export {
   getSelectedId2, removeSelectedId2, selectedId2, updateFormStatus, getFormStatus, updateFormText,
   uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages,
   updateRegFormMessage, getRegFormMessage, createClass, createGroup, getClasses, getGroups,
-  getGroupById, getClassById, deleteGroup, deleteClass
+  getGroupById, getClassById, deleteGroup, deleteClass, createSyllabus, getSyllabus,
+  getSyllabusById, deleteSyllabus, updateSyllabus
 }

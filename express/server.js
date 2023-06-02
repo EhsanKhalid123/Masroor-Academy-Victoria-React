@@ -29,6 +29,7 @@ require("./src/routes/imageRoutes.js")(express, app);
 require("./src/routes/resourcesRoutes.js")(express, app);
 require("./src/routes/classesRoutes.js")(express, app);
 require("./src/routes/groupsRoutes.js")(express, app);
+require("./src/routes/syllabusRoutes.js")(express, app);
 
 if (process.env.NODE_ENV === "production"){
   app.use(express.static('react/build'))

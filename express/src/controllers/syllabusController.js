@@ -1,75 +1,76 @@
 // Old fashioned Import statements for libraries and files
 const db = require("../database");
 
-// Endpoint for Select all classes from the database.
+// Endpoint for Select all syllabus from the database.
 exports.all = async (req, res) => {
   try {
-    const varClasses = await db.classes.findAll();
+    const syllabus = await db.syllabus.findAll();
 
-    res.json(varClasses);
+    res.json(syllabus);
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Retrieving Data" });
   }
 };
 
-// Select one class from the database.
+// Select one syllabus from the database.
 exports.one = async (req, res) => {
   try {
-    const varClasses = await db.classes.findByPk(req.params.id);
-
-    res.json(varClasses);
+    const syllabus = await db.syllabus.findOne({ where: { groupId: req.params.id } });
+    console.log(syllabus);
+    res.json(syllabus);
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Retrieving Data" });
   }
 };
 
-// Create a class in the database.
+// Create a syllabus in the database.
 exports.create = async (req, res) => {
   try {
 
-    // Following properties are required for class to be created in DB
-    const varClasses = await db.classes.create({
-      id: req.body.id,
-      class: req.body.class,
+    // Following properties are required for syllabus to be created in DB
+    const syllabus = await db.syllabus.create({
+
+      syllabusContent: req.body.syllabus,
+      groupId: req.body.groupId
     });
 
-    res.json(varClasses);
+    res.json(syllabus);
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Creating Data" });
   }
 };
 
-// Update class Details in the database.
+// Update syllabus Details in the database.
 exports.update = async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req.body.groupId;
 
-    const varClasses = await db.classes.findByPk(id);
+    const syllabus = await db.syllabus.findOne({ where: { groupId: id } });
 
-    varClasses.class = req.body.class;
+    syllabus.syllabusContent = req.body.syllabus;
 
-    await varClasses.save();
+    await syllabus.save();
 
-    return res.json(varClasses);
+    return res.json(syllabus);
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Updating Data" });
   }
 };
 
-// Remove a class from the database.
+// Remove a syllabus from the database.
 exports.delete = async (req, res) => {
   try {
     const id = req.body.id;
 
     let removed = false;
 
-    const varClasses = await db.classes.findByPk(id);
-    if (varClasses !== null) {
-      await varClasses.destroy();
+    const syllabus = await db.syllabus.findByPk(id);
+    if (syllabus !== null) {
+      await syllabus.destroy();
       removed = true;
     }
 

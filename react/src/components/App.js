@@ -119,6 +119,7 @@ function App() {
                 <Route path="/Home" element={<Navigate to="/Dashboard" replace />} />
                 <Route path="/Resources" element={<Resources user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <Route path="/Profile" element={<Profile user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                <Route path="/Syllabus" element={<Syllabus user={decodedUser} />} />
                 <>
                   {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
                     <>
@@ -147,7 +148,6 @@ function App() {
                   {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin") &&
                     <>
                       <Route path="/Dashboard" element={<StudentDashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
-                      <Route path="/Syllabus" element={<Syllabus user={decodedUser} />} />
                     </>
                   }
 
