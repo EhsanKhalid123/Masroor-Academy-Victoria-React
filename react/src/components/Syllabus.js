@@ -98,51 +98,49 @@ function Syllabus(props) {
                             </div>
                         </div>
                     ))}
+
+                    <p>&nbsp;</p>
                 </>
             }
 
-            {props.user.group !== "Admin" &&
-                <>
-                    <div className="col-lg-6 mb-4" style={{ display: "block", margin: "auto" }}>
-                        <div className="text-center">
+            <div className="col-lg-6 mb-4" style={{ display: "block", margin: "auto" }}>
+                <div className="text-center">
 
-                            <div className="card">
-                                <h5 className="card-header card text-white bg-custom">Syllabus:</h5>
-                                {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") &&
-                                    <h5 className="card-header card" style={{ color: "#112c3f" }}>{props.user.group}</h5>
-                                }
-                                <div className="card-body">
+                    <div className="card">
+                        <h5 className="card-header card text-white bg-custom">Syllabus:</h5>
+                        {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin") &&
+                            <h5 className="card-header card" style={{ color: "#112c3f" }}>{props.user.group}</h5>
+                        }
+                        <div className="card-body">
 
-                                    {groups.map((group) => (
-                                        <div key={group.id}>
-                                            {props.user.group === group.group && (
-                                                <pre className="" style={{ whiteSpace: 'pre-wrap', marginBottom: 0, fontSize: "16px", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' }}>
-                                                    {typeof syllabusMap[group.id] === 'string' ? parse(syllabusMap[group.id]) : ""}
-                                                </pre>
-                                            )}
-                                        </div>
-                                    ))}
-
-                                    {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher") &&
-                                        groups.map((group) => (
-                                            <div key={group.id}>
-
-                                                <pre className="" style={{ whiteSpace: 'pre-wrap', marginBottom: 0, fontSize: "16px", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' }}>
-                                                    <hr style={{ border: '1px dashed' }}></hr>
-                                                    <h5 style={{ color: "blueviolet" }}>{group.group}:</h5>
-                                                    {typeof syllabusMap[group.id] === 'string' ? parse(syllabusMap[group.id]) : ""}
-                                                </pre>
-
-                                            </div>
-                                        ))
-                                    }
-
+                            {groups.map((group) => (
+                                <div key={group.id}>
+                                    {props.user.group === group.group && (
+                                        <pre className="" style={{ whiteSpace: 'pre-wrap', marginBottom: 0, fontSize: "16px", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' }}>
+                                            {typeof syllabusMap[group.id] === 'string' ? parse(syllabusMap[group.id]) : ""}
+                                        </pre>
+                                    )}
                                 </div>
-                            </div>
+                            ))}
+
+                            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
+                                groups.map((group) => (
+                                    <div key={group.id}>
+
+                                        <pre className="" style={{ whiteSpace: 'pre-wrap', marginBottom: 0, fontSize: "16px", fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif' }}>
+                                            <h5 style={{ color: "blueviolet" }}>{group.group}:</h5>
+                                            {typeof syllabusMap[group.id] === 'string' ? parse(syllabusMap[group.id]) : ""}
+                                            <hr style={{ border: '1px dashed' }}></hr>
+                                        </pre>
+
+                                    </div>
+                                ))
+                            }
+
                         </div>
                     </div>
-                </>
-            }
+                </div>
+            </div>
             <p>&nbsp;</p>
         </div>
 
