@@ -77,6 +77,7 @@ function DisplayStaff(props) {
                                     <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">Gender</th>
                                     <th></th>
 
                                 </tr>
@@ -95,6 +96,7 @@ function DisplayStaff(props) {
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                                <td style={{ color: "#112c3f" }}>{userDetails.gender}</td>
 
                                                 <td>
                                                     <Link to="/Profile" state={{ groupNumber, userProfilePage }}>
