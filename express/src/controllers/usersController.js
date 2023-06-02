@@ -57,10 +57,13 @@ exports.create = async (req, res) => {
     // const hash = await argon2.hash(req.body.password, { type: argon2.argon2id });
 
     let hashedPassword = req.body.hashed_password;
+    let group = req.body.group;
 
-    if (hashedPassword !== "student" || hashedPassword === null) {
-      hashedPassword = "student";
-    }
+    if (group !== "Admin" && group !== "Male Teacher" && group !== "Female Teacher" && group !== "Principal"){
+      if (hashedPassword !== "student" || hashedPassword === null) {
+        hashedPassword = "student";
+      }
+    }   
 
     // Following properties are required for user to be created in DB
     const user = await db.users.create({

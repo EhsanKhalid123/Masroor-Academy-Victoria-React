@@ -84,6 +84,7 @@ function Syllabus(props) {
             {props.user.group === "Admin" &&
                 <>
                     <h3 className="text-center">Add Syllabus:</h3>
+                    <br/>
                     {groups.map((group) => (
                         <div key={group.id}>
                             <h4 className="text-center">{group.group}:</h4>
