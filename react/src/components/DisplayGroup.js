@@ -74,6 +74,7 @@ function DisplayGroup(props) {
                                     <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                     <th></th>
+                                    <th></th>
 
                                 </tr>
                             </thead>
@@ -90,6 +91,7 @@ function DisplayGroup(props) {
                                         <td>
                                             <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(groupDetails.id); await togglePopup() }} >Delete</button>
                                         </td>
+                                        <td></td>
                                     </tr>
 
 

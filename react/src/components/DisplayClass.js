@@ -74,7 +74,7 @@ function DisplayClass(props) {
                                     <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Class</th>
                                     <th></th>
-
+                                    <th></th>
                                 </tr>
                             </thead>
                             {/* Mapping Users state Variable to access its content easily to display in Table */}
@@ -90,6 +90,7 @@ function DisplayClass(props) {
                                         <td>
                                             <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(classDetails.id); await togglePopup() }} >Delete</button>
                                         </td>
+                                        <td></td>
                                     </tr>
 
 

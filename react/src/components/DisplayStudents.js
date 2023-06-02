@@ -113,6 +113,7 @@ function DisplayStudents(props) {
                                     <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">Gender</th>
                                     <th></th>
 
                                 </tr>
@@ -132,11 +133,13 @@ function DisplayStudents(props) {
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                                    <td style={{ color: "#112c3f" }}>{userDetails.gender}</td>
 
                                                     <td>
                                                         <Link to={selectLink} state={{ groupNumber, userProfilePage }}>
                                                             <button className="btn2 btn-custom" onClick={() => { selectedId(userDetails.id); selectedId2(userDetails.name) }}>Select</button>
                                                         </Link>
+                                                        
                                                         {(props.user.group === "Admin" && props.group === "student" && props.user.id === "Admin") &&
                                                             <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(userDetails.id); await togglePopup()}} >Delete</button>
                                                         }
