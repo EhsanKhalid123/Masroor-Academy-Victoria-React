@@ -81,7 +81,7 @@ function Syllabus(props) {
         <div>
             <p>&nbsp;</p>
 
-            {props.user.group === "Admin" &&
+            {((props.user.group === "Admin") || (props.user.group === "Principal" && props.user.gender === "Male")) &&
                 <>
                     <h3 className="text-center">Add Syllabus:</h3>
                     <br/>
@@ -109,7 +109,7 @@ function Syllabus(props) {
 
                     <div className="card">
                         <h5 className="card-header card text-white bg-custom">Syllabus:</h5>
-                        {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin") &&
+                        {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin" && props.user.group !== "Principal") &&
                             <h5 className="card-header card" style={{ color: "#112c3f" }}>{props.user.group}</h5>
                         }
                         <div className="card-body">
@@ -124,7 +124,7 @@ function Syllabus(props) {
                                 </div>
                             ))}
 
-                            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
+                            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin" || props.user.group === "Principal") &&
                                 groups.map((group) => (
                                     <div key={group.id}>
 

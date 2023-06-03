@@ -259,7 +259,7 @@ async function addData() {
 
     // await db.users.create({ id: "FemaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Female" });
     // await db.users.create({ id: "MaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Male" });
-    await db.users.create({ id: "Admin", name: "Admin", hashed_password: "maadminboard", group: "Admin", gender: "Admin", archived: false });
+    await db.users.create({ id: "Admin", name: "SysAdmin", hashed_password: "maadminboard", group: "Admin", gender: "Admin", archived: false });
     // await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
 
     await db.formStatus.create(); // Creates the Default Form Status from Model

@@ -167,7 +167,7 @@ function AdminProfile(props) {
         if (value.length === 0)
             formErrors[key] = "Password field cannot be empty";
 
-        if (userProfile?.group !== "Admin") {
+        if (userProfile?.group !== "Admin" && userProfile?.group !== "Principal") {
 
             // Individual field Validation
             key = "class";
@@ -176,7 +176,7 @@ function AdminProfile(props) {
                 formErrors[key] = "Please select a class.";
         }
 
-        if (userProfile?.group !== "Admin" && userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "") {
+        if (userProfile?.group !== "Admin" && userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "" && userProfile?.group !== "Principal") {
 
             // Validation for Jama'at radio button Field
             key = "jamaat";
@@ -288,12 +288,12 @@ function AdminProfile(props) {
                                         <p>
                                             <strong>Gender:</strong> {userProfile?.gender}
                                         </p>
-                                        {userProfile?.group === "Admin" && userProfile?.group === "Male Teacher" && userProfile?.group === "Female Teacher" &&
+                                        {(userProfile?.group !== "Admin") && (userProfile?.group === "Male Teacher" || userProfile?.group === "Female Teacher") && (userProfile?.group !== "Principal") &&
                                             <p>
                                                 <strong>Class:</strong> {userProfile?.class}
                                             </p>
                                         }
-                                        {userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "Admin" && userProfile?.group !== "" &&
+                                        {userProfile?.group !== "Male Teacher" && userProfile?.group !== "Female Teacher" && userProfile?.group !== "Admin" && userProfile?.group !== "" && userProfile?.group !== "Principal" &&
                                             <>
                                                 <p>
                                                     <strong>Jamaat:</strong> {userProfile?.jamaat}
@@ -325,7 +325,7 @@ function AdminProfile(props) {
                                             </>
                                         }
 
-                                        {props.user.group === "Admin" &&
+                                        {props.user.id === "Admin" &&
                                             <p>
                                                 <strong>Archived:</strong> {userProfile?.archived ? "true" : "false"}
                                             </p>
@@ -363,7 +363,7 @@ function AdminProfile(props) {
                             </div>
                         </div>
                     </div>
-                    {props.user.group === "Admin" &&
+                    {(props.user.group === "Admin" || props.user.group === "Principal") &&
                         <div className="col-md-6 mt-custom">
                             <div className="card">
                                 <h5 className="card-header card text-white bg-custom">Edit Profile</h5>
@@ -403,9 +403,18 @@ function AdminProfile(props) {
                                             <label htmlFor="group"><b>Group:</b></label>
                                             <select id="group" name="group" className="form-control" value={selectedDropdownValue} onChange={handleDropdownChange}>
                                                 <option value="" disabled hidden>Select a Group</option>
-                                                {dropdownValues.map(group => (
-                                                    <option key={group.id} value={group.group}>{group.group}</option>
-                                                ))}
+                                                {dropdownValues.map(group => {
+                                                    if (props.user.group === "Principal" && props.user.gender === "Female") {
+                                                        // Only show certain options for Principal with gender Female
+                                                        if (group.group !== "Principal" && group.group !== "Admin" && group.group !== "Male Teacher") {
+                                                            return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                        }
+                                                    } else {
+                                                        // Show all options for other users or conditions
+                                                        return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                    }
+                                                    return null;
+                                                })}
                                             </select>
                                             {errors.group && (
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
@@ -433,7 +442,7 @@ function AdminProfile(props) {
                                                 )}
                                             </div>
                                         }
-                                        {(userProfile.group !== "Male Teacher" && userProfile.group !== "Female Teacher" && userProfile.group !== "Admin" && userProfile?.group !== "") &&
+                                        {(userProfile.group !== "Male Teacher" && userProfile.group !== "Female Teacher" && userProfile.group !== "Admin" && userProfile?.group !== "" && userProfile?.group !== "Principal") &&
                                             <>
                                                 <div className="form-group">
                                                     <label htmlFor="jamaat"><b>Jama'at:</b></label>
@@ -504,10 +513,12 @@ function AdminProfile(props) {
                                                 </div>
                                             </>
                                         }
-                                        <div className="form-group">
-                                            <label htmlFor="gender"><b>Archived:</b></label> <br />
-                                            <ReactSwitch checked={checked} onChange={handleToggleChange} />
-                                        </div>
+                                        {props.user.id === "Admin" &&
+                                            <div className="form-group">
+                                                <label htmlFor="gender"><b>Archived:</b></label> <br />
+                                                <ReactSwitch checked={checked} onChange={handleToggleChange} />
+                                            </div>
+                                        }
                                         <button type="submit" className="btn btn-custom" style={{ margin: "10px", textAlign: "center" }}>Save</button>
                                         {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                     </form>

@@ -84,7 +84,7 @@ function Resources(props) {
     return (
         <div>
             <br />
-            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
+            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin" || props.user.group === "Principal") &&
                 <div className="text-center">
                     <input type="file" name="file" ref={fileInputRef} onChange={handleFileChange} />
                     <button className="btn btn-info" style={{ marginLeft: "5px" }} onClick={handleUpload}>Upload</button>
@@ -130,7 +130,7 @@ function Resources(props) {
                                             <td>{resource.filename}</td>
                                             <td><button className="btn btn-custom" onClick={() => handleDownload(resource.id)}>Download</button></td>
                                             <td>
-                                                {props.user.group === "Admin" &&
+                                                {props.user.id === "Admin" &&
                                                     <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteResource(resource) }} >Delete</button>
                                                 }
                                             </td>

@@ -121,7 +121,7 @@ function App() {
                 <Route path="/Profile" element={<Profile user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                 <Route path="/Syllabus" element={<Syllabus user={decodedUser} />} />
                 <>
-                  {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin") &&
+                  {(decodedUser.group === "Male Teacher" || decodedUser.group === "Female Teacher" || decodedUser.group === "Admin" || decodedUser.group === "Principal") &&
                     <>
                       <Route path="/Dashboard" element={<StaffDashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
@@ -133,8 +133,9 @@ function App() {
                     </>
                   }
 
-                  {decodedUser.group === "Admin" &&
+                  {(decodedUser.group === "Admin" || decodedUser.group === "Principal") &&
                     <>
+                      <Route path="/Register" element={<Register />} />
                       <Route path="/Staff" element={<DisplayStaff user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/Settings" element={<Settings user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/CreateStaffUser" element={<CreateStaffUser user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
@@ -145,7 +146,7 @@ function App() {
                     </>
                   }
 
-                  {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin") &&
+                  {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin" && decodedUser.group !== "Principal") &&
                     <>
                       <Route path="/Dashboard" element={<StudentDashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                     </>

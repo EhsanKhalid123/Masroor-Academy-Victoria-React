@@ -88,9 +88,23 @@ function DisplayStaff(props) {
                             }).map((userDetails) =>
                                 <tbody key={userDetails.id}>
                                     {/* Dont display the name of the logged in user and the System Admin but the rest of the staff */}
-                                    {(userDetails.name !== props.user.name && userDetails.id !== "Admin" && (userDetails.group === "Admin" || userDetails.group === "Male Teacher" || userDetails.group === "Female Teacher")) &&
+                                    {(userDetails.name !== props.user.name && userDetails.id !== "Admin" &&
+                                        (
+                                            (props.user.group === "Admin" &&
+                                                (userDetails.group === "Male Teacher" || userDetails.group === "Female Teacher" || userDetails.group === "Principal" || userDetails.group === "Admin")
+                                            ) ||
+                                            (
+                                                (props.user.group === "Principal" && props.user.gender === "Female") &&
+                                                (userDetails.group === "Female Teacher")
+                                            ) ||
+                                            (
+                                                (props.user.group === "Principal" && props.user.gender === "Male") &&
+                                                (userDetails.group === "Male Teacher")
+                                            )
+                                        )
+                                    ) &&
                                         <>
-                                
+
                                             <tr>
                                                 <td></td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>

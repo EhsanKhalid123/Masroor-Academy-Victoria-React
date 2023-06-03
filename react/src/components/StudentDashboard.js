@@ -76,8 +76,8 @@ function StudentDashboard(props) {
                                                     <div className="noBottomMargin"><pre className="postStyle card-text">{parse(homework.homeworkText)}</pre></div>
                                                 </div>
                                                 <div className="card-footer text-center" style={{ color: "rgb(202 42 55)" }}>
-                                                    {homework.poster.group === "Admin" ?
-                                                        homework.poster.name + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                    {(homework.poster.group === "Admin" || homework.poster.group === "Principal") ?
+                                                        homework.poster.name + " - " + homework.poster.group + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                         :
                                                         homework.poster.name + " - " + homework.poster.class + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                     }
@@ -118,8 +118,8 @@ function StudentDashboard(props) {
                                             </div>
 
                                             <div className="card-footer text-center" style={{ color: "rgb(202 42 55)" }}>
-                                                {announcement.user.group === "Admin" ?
-                                                    announcement.user.name + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                {(announcement.user.group === "Admin" || announcement.user.group === "Principal") ?
+                                                    announcement.user.name + " - " + announcement.user.group + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                     :
                                                     announcement.user.name + " - " + announcement.user.class + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                 }

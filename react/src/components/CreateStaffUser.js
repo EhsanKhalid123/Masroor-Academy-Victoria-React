@@ -139,6 +139,8 @@ function CreateStaffUser(props) {
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Full Name is required.";
+        else if (value === "SysAdmin")
+            formErrors[key] = "ID Cannot be SysAdmin";
 
         // Validation for Password Field
         key = "hashed_password";
@@ -246,11 +248,19 @@ function CreateStaffUser(props) {
                                         <label htmlFor="group"><b>Group:</b></label>
                                         <select id="group" name="group" className="form-control" value={selectedDropdownValue} onChange={handleDropdownChange}>
                                             <option value="" disabled hidden>Select a Group</option>
-                                            {dropdownValues.map(group => (
-                                                <option key={group.id} value={group.group}>{group.group}</option>
-                                            ))}
+                                            {dropdownValues.map(group => {
+                                                if (props.user.group === "Principal" && props.user.gender === "Female") {
+                                                    // Only show certain options for Principal with gender Female
+                                                    if (group.group !== "Principal" && group.group !== "Admin" && group.group !== "Male Teacher") {
+                                                        return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                    }
+                                                } else {
+                                                    // Show all options for other users or conditions
+                                                    return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                }
+                                                return null;
+                                            })}
                                         </select>
-                                        {/* <input type="text" className="form-control" id="group" name="group" placeholder="Admin, Male Teacher or Female Teacher" value={values.group} onChange={handleInputChange} required /> */}
                                         {errors.group && (
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
                                         )}

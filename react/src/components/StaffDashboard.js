@@ -16,6 +16,7 @@ function Dashboard(props) {
     const [totalGroups, setTotalGroups] = useState(0);
     const [totalStudentGroups, setTotalStudentGroups] = useState(0);
     const [totalClasses, setTotalClasses] = useState(0);
+    const [totalPrincipals, setTotalPrincipals] = useState(0);
     const [maleTeachers, setMaleTeachers] = useState(0);
     const [femaleTeachers, setFemaleTeachers] = useState(0);
     const [atfal, setAtfal] = useState(0);
@@ -49,11 +50,11 @@ function Dashboard(props) {
             setTotalGroups(currentGroups.length);
 
             const studentGroups = currentGroups.filter(groups =>
-                  groups.group !== 'Male Teacher' &&
-                  groups.group !== 'Female Teacher' &&
-                  groups.group !== 'Admin' &&
-                  groups.group !== 'Principal'
-              );
+                groups.group !== 'Male Teacher' &&
+                groups.group !== 'Female Teacher' &&
+                groups.group !== 'Admin' &&
+                groups.group !== 'Principal'
+            );
 
             setTotalStudentGroups(studentGroups.length);
 
@@ -72,6 +73,9 @@ function Dashboard(props) {
 
             const femaleTeachers = currentDetails.filter(user => (user.group === 'Female Teacher'));
             setFemaleTeachers(femaleTeachers.length);
+
+            const principals = currentDetails.filter(user => (user.group === 'Principal'));
+            setTotalPrincipals(principals.length);
 
             const atfal = currentDetails.filter(user => (user.gender === 'Atfal'));
             setAtfal(atfal.length);
@@ -98,7 +102,7 @@ function Dashboard(props) {
             </h4>
             <p>&nbsp;</p>
 
-            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher") &&
+            {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || (props.user.group === "Principal" && props.user.gender === "Female")) &&
                 <>
                     <div className="container">
 
@@ -114,7 +118,7 @@ function Dashboard(props) {
                                     </div>
                                 </div>
                             </div>
-                            {props.user.group === "Female Teacher" &&
+                            {(props.user.group === "Female Teacher" || props.user.group === "Principal") &&
                                 <div className="col-sm-4 mt-custom" style={{ display: "block", margin: "auto", marginTop: "20px" }}>
                                     <div className="card text-center">
                                         <div className="card-header" style={{ backgroundColor: "rgb(238 183 49 / 52%)" }}>
@@ -125,6 +129,19 @@ function Dashboard(props) {
                                         </div>
                                     </div>
                                 </div>
+                            }
+
+                            {props.user.group === "Principal" && props.user.gender === "Female" &&
+                                <div className="col-sm-4 mt-custom" style={{ display: "block", margin: "auto", marginTop: "20px" }}>
+                                <div className="card text-center">
+                                    <div className="card-header" style={{ backgroundColor: "rgb(49 200 238 / 52%)" }}>
+                                        <h5>Female Teachers:</h5>
+                                    </div>
+                                    <div className="card-body">
+                                        <h2 className="card-title font-weight-bold">{femaleTeachers}</h2>
+                                    </div>
+                                </div>
+                            </div>
                             }
 
                             {props.user.group === "Male Teacher" &&
@@ -144,7 +161,7 @@ function Dashboard(props) {
                 </>
             }
 
-            {props.user.group === "Admin" &&
+            {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
                 <>
                     <div className="container">
 
@@ -312,6 +329,18 @@ function Dashboard(props) {
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div className="col-sm-4 mt-custom" style={{ display: "block", margin: "auto", marginTop: "20px" }}>
+                                <div className="card text-center">
+                                    <div className="card-header" style={{ backgroundColor: "rgb(79 169 29 / 44%)" }}>
+                                        <h5>Total Principals:</h5>
+                                    </div>
+                                    <div className="card-body">
+                                        <h2 className="card-title font-weight-bold">{totalPrincipals}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        
                         </div>
 
                     </div>

@@ -59,7 +59,7 @@ function Navigation(props) {
                   <NavLink className="nav-link2 nav-link" to="/Dashboard">Dashboard</NavLink>
                 </li>
                 {/* If the user is Teacher or Admin Account then Display Following Links */}
-                {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin") &&
+                {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin" || props.user.group === "Principal") &&
                   <>
 
                     <li className="nav-item">
@@ -69,7 +69,7 @@ function Navigation(props) {
                     <li className="nav-item">
                       <NavLink className="nav-link2 nav-link" to="/SelectGroupAttendance">Attendance</NavLink>
                     </li>
-                 
+
                     <li className="nav-item dropdown">
                       <div className="nav-link nav-link2 dropdown-toggle exclude" style={{ color: "#112c3f" }} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Homework
@@ -94,7 +94,7 @@ function Navigation(props) {
                   </>
                 }
 
-                {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin") &&
+                {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin" && props.user.group !== "Principal") &&
                   <li className="nav-item">
                     <NavLink className="nav-link2 nav-link" to="/Syllabus">Syllabus</NavLink>
                   </li>
@@ -128,16 +128,22 @@ function Navigation(props) {
                     </div>
                     <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                       <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Profile" state={{ userProfilePage, userProfileId }}>My Profile</Link>
-                      {props.user.group === "Admin" &&
+                      {(props.user.group === "Admin" || props.user.group === "Principal") &&
                         <>
                           <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Staff">View Staff</Link>
                           <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/CreateStaffUser">Create Staff User</Link>
-                          <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/ViewGroup">View Groups</Link>
-                          <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/CreateGroup">Create Groups</Link>
-                          <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/ViewClass">View Classes</Link>
-                          <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/CreateClass">Create Classes</Link>
+                          {(props.user.group !== "Principal" || props.user.gender !== "Female") &&
+                            <>
+                              <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/ViewGroup">View Groups</Link>
+                              <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/CreateGroup">Create Groups</Link>
+                              <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/ViewClass">View Classes</Link>
+                              <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/CreateClass">Create Classes</Link>
+                            </>
+                          }
                           <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Register">Create Student</Link>
-                          <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Settings">Settings</Link>
+                          {(props.user.group !== "Principal" || props.user.gender !== "Female") &&
+                            <Link className="dropdown-item" style={{ color: "#112c3f" }} to="/Settings">Settings</Link>
+                          }
                         </>
                       }
                       <div className="dropdown-divider"></div>

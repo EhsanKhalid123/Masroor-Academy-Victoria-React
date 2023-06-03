@@ -104,7 +104,7 @@ function Settings(props) {
             </h1>
             <p>&nbsp;</p>
             <>
-                {props.user.group === "Admin" &&
+                {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender !== "Female")) &&
                     <div style={{ textAlign: "center" }}>
 
                         <h4>Registration Form Status Setting:</h4>

@@ -142,7 +142,7 @@ function StudentStaffProfile(props) {
         if (value.length === 0)
             formErrors[key] = "Password field cannot be empty";
 
-        if (props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") {
+        if (props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Principal") {
 
             // Validation for Jama'at radio button Field
             key = "jamaat";
@@ -269,7 +269,7 @@ function StudentStaffProfile(props) {
                                         </p>
                                         <hr />
                                         <p>
-                                            {props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" ? (
+                                            {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") || (props.user.group === "Principal" && props.user.group === "Admin") ? (
                                                 <>
                                                     <strong>Group:</strong> {userProfile.group}</>
                                             ) : (
@@ -280,7 +280,7 @@ function StudentStaffProfile(props) {
                                         <p>
                                             <strong>Gender:</strong> {userProfile.gender}
                                         </p>
-                                        {props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin" &&
+                                        {props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin" && props.user.group !== "Principal" &&
                                             <>
                                                 <p>
                                                     <strong>Father's Name:</strong> {userProfile?.fathersName}
@@ -308,7 +308,7 @@ function StudentStaffProfile(props) {
                                                 </p>
                                             </>
                                         }
-                                        {props.user.group === "Admin" &&
+                                        {(props.user.id === "Admin") &&
                                             <p>
                                                 <strong>Archived:</strong> {userProfile?.archived ? "true" : "false"}
                                             </p>
@@ -330,7 +330,7 @@ function StudentStaffProfile(props) {
                             <h5 className="card-header card text-white bg-custom">Edit Profile</h5>
                             <div className="card-body">
                                 <form onSubmit={handleSubmit} noValidate>
-                                    {props.user.group === "Admin" &&
+                                    {(props.user.group === "Admin" || props.user.group === "Principal") &&
                                         <>
                                             <div className="form-group">
                                                 <label htmlFor="id"><b>ID:</b></label>
@@ -362,7 +362,7 @@ function StudentStaffProfile(props) {
                                         </div>
                                     </div>
 
-                                    {(props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") &&
+                                    {(props.user.group !== "Admin" && props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Principal") &&
                                         <>
                                             <div className="form-group">
                                                 <label htmlFor="jamaat"><b>Jama'at:</b></label>
@@ -421,7 +421,7 @@ function StudentStaffProfile(props) {
                                             </div>
                                         </>
                                     }
-                                    {props.user.group === "Admin" &&
+                                    {props.user.id === "Admin" &&
                                         <>
                                             {/* Group Field */}
                                             <div className="form-group">
