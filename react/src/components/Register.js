@@ -124,11 +124,18 @@ function Register(props) {
                 setErrors(formErrors);
                 return;
             }
+            
+            var gender = null; 
+            if (trimmedValues.gender === "Atfal-ul-Ahmadiyya")
+                gender = "Atfal";
+            else if (trimmedValues.gender === "Nasirat-ul-Ahmadiyya")
+                gender = "Nasirat";
 
             // Update trimmedValues with generated ID.
             const updatedTrimmedValues = {
                 ...trimmedValues,
-                id: generatedID
+                id: generatedID,
+                gender: gender
             };
 
             // Create user.
