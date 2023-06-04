@@ -15,15 +15,18 @@ function Navigation(props) {
   useEffect(() => {
 
     // Loads User Details from DB
-    async function loadclassDetails() {
-      const currentClasses = await getClasses();
-      setClassData(currentClasses);
+    if (props.user !== null) {
+      async function loadclassDetails() {
+        const currentClasses = await getClasses();
+        setClassData(currentClasses);
+      }
+
+
+      // Calls the functions above
+      loadclassDetails();
     }
 
-    // Calls the functions above
-    loadclassDetails();
-
-  }, []);
+  }, [props.user]);
 
   const HomeLink = () => {
     if (location.pathname === "/" || location.pathname === "/Home") {

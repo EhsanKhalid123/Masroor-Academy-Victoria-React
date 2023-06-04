@@ -182,7 +182,7 @@ function DisplayClass(props) {
                             </thead>
                             {/* Mapping Users state Variable to access its content easily to display in Table */}
                             {classes.filter((classDetails) => {
-                                return search.toLowerCase() === '' ? classDetails : classDetails.class.toLowerCase().includes(search) || classDetails.id.includes(search);
+                                return search.toLowerCase() === '' ? classDetails : (classDetails.class && classDetails.class.toLowerCase().includes(search)) || (classDetails.id && classDetails.id.includes(search));
                             }).map((classDetails) =>
                                 <tbody key={classDetails.id}>
 

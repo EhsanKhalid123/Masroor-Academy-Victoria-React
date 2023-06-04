@@ -51,6 +51,42 @@ exports.login = async (req, res) => {
   }
 };
 
+function assignGroup(groups, studentDob) {
+  // Get the user's birth year from their date of birth
+  const birthYear = new Date(studentDob).getFullYear();
+  console.log(birthYear);
+
+  let assignedGroup = null;
+
+  // Find the group that matches the user's birth year
+  for (const group of groups) {
+    const groupYears = group.year.split("-"); // Split the year range into an array
+    console.log(groupYears);
+
+    if (groupYears.length === 1) {
+      // Single year case
+      const year = parseInt(groupYears[0]);
+      console.log(year);
+      if (birthYear === year) {
+        assignedGroup = group.group;
+        break;
+      }
+    } else if (groupYears.length === 2) {
+      // Range case
+      const startYear = parseInt(groupYears[0]);
+      const endYear = parseInt(groupYears[1]);
+      console.log(startYear + " " + endYear);
+      if (startYear <= birthYear && birthYear <= endYear) {
+        assignedGroup = group.group;
+        break;
+      }
+    }
+  }
+
+  return assignedGroup;
+
+};
+
 // Create a user in the database.
 exports.create = async (req, res) => {
   try {
@@ -58,19 +94,24 @@ exports.create = async (req, res) => {
 
     let hashedPassword = req.body.hashed_password;
     let group = req.body.group;
+    var assignedGroup = null;
 
-    if (group !== "Admin" && group !== "Male Teacher" && group !== "Female Teacher" && group !== "Principal"){
+    if (group !== "Admin" && group !== "Male Teacher" && group !== "Female Teacher" && group !== "Principal") {
       if (hashedPassword !== "student" || hashedPassword === null) {
         hashedPassword = "student";
       }
-    }   
+    }
+
+    // Fetch groups from the database
+    const groups = await db.groups.findAll();
+    assignedGroup = assignGroup(groups, req.body.studentDob);
 
     // Following properties are required for user to be created in DB
     const user = await db.users.create({
       id: req.body.id,
       name: req.body.name,
       hashed_password: hashedPassword,
-      group: req.body.group,
+      group: assignedGroup,
       gender: req.body.gender,
       class: req.body.class,
       archived: req.body.archived,
@@ -181,7 +222,6 @@ exports.check = async (req, res) => {
       }
     });
 
-    // const getUser = await db.users.findOne({ where: { name: studentName, fathersName: fathersName } });
     if (getUser !== null) {
       return res.json(getUser);
     } else {

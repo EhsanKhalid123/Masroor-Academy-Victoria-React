@@ -3,7 +3,7 @@ module.exports = (express, app) => {
   // Importing libraries and files
   const controller = require("../controllers/usersController.js");
   const router = express.Router();
-  const {validateToken} = require("../middlewares/AuthMiddleware.js");
+  const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
   // Select all users.
   router.get("/", validateToken, controller.all);
@@ -11,8 +11,8 @@ module.exports = (express, app) => {
   // Select a single user with id.
   router.get("/get/:id", controller.one);
 
-   // Check if student and parent name already exists in one row.
-   router.post("/check", controller.check);
+  // Check if student and parent name already exists in one row.
+  router.post("/check", controller.check);
 
   // Select one user from the database if username and password are a match.
   router.post("/Sign-in", controller.login);

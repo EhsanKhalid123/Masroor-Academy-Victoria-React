@@ -190,7 +190,7 @@ function DisplayGroup(props) {
                             </thead>
                             {/* Mapping Users state Variable to access its content easily to display in Table */}
                             {groups.filter((groupDetails) => {
-                                return search.toLowerCase() === '' ? groupDetails : groupDetails.group.toLowerCase().includes(search) || groupDetails.id.includes(search) || groupDetails.year.includes(search);
+                                return search.toLowerCase() === '' ? groupDetails : (groupDetails.group && groupDetails.group.toLowerCase().includes(search)) || (groupDetails.id && groupDetails.id.includes(search)) || (groupDetails.year && groupDetails.year.includes(search));
                             }).map((groupDetails) =>
                                 <tbody key={groupDetails.id}>
 

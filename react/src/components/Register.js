@@ -143,7 +143,7 @@ function Register(props) {
             await createUser(updatedTrimmedValues);
 
             // Clear all errors and fields
-            setValues({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: null, archived: false, studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+            // setValues({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: null, archived: false, studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
             setErrors("");
             // Show success message.
             setMessage(

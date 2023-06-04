@@ -9,7 +9,7 @@ module.exports = (express, app) => {
   router.get("/", validateToken, controller.all);
 
   // Select a single user with id.
-  router.get("/get/:id", controller.one);
+  router.get("/get/:id", validateToken, controller.one);
 
   // Create a updates user details.
   router.post("/update/:id", validateToken, controller.update);
@@ -18,7 +18,7 @@ module.exports = (express, app) => {
   router.post("/delete", validateToken, controller.delete);
 
   // Create a new user.
-  router.post("/", controller.create);
+  router.post("/", validateToken, controller.create);
 
   // Add routes to server.
   app.use("/MAApi/groups", router);

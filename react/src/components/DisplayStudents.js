@@ -119,7 +119,7 @@ function DisplayStudents(props) {
                             </thead>
                             {/* Mapping Users state Variable to access its content easily to display in Table */}
                             {users.filter((userDetails) => {
-                                return search.toLowerCase() === '' ? userDetails : userDetails.name.toLowerCase().includes(search) || userDetails.group.toLowerCase().includes(search) || userDetails.id.toLowerCase().includes(search) || userDetails.gender.toLowerCase().includes(search);
+                                return search.toLowerCase() === '' ? userDetails : (userDetails.name && userDetails.name.toLowerCase().includes(search)) || (userDetails.group && userDetails.group.toLowerCase().includes(search)) || (userDetails.id && userDetails.id.toLowerCase().includes(search)) || (userDetails.gender && userDetails.gender.toLowerCase().includes(search));
                             }).map((userDetails) =>
                                 <tbody key={userDetails.id}>
                                     {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
