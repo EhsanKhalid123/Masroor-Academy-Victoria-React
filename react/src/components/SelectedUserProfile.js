@@ -181,13 +181,13 @@ function AdminProfile(props) {
             // Validation for Jama'at radio button Field
             key = "jamaat";
             value = trimmedValues[key];
-            if (value.length === 0)
+            if (!value || value.length === 0)
                 formErrors[key] = "Please select a Jama'at.";
 
             // Validation for Fathers Email Field
             key = "fathersEmail";
             value = trimmedValues[key];
-            if (value.length === 0)
+            if (!value || value.length === 0)
                 formErrors[key] = "Fathers Email address is required.";
             else if (value.length > 128)
                 formErrors[key] = "Email length cannot be greater than 128.";
@@ -197,7 +197,7 @@ function AdminProfile(props) {
             // Validation for Fathers Name Field
             key = "fathersContact";
             value = trimmedValues[key];
-            if (value.length === 0)
+            if (!value || value.length === 0)
                 formErrors[key] = "Fathers Phone Number is Required.";
             else if (value.length > 10)
                 formErrors[key] = "Contact Number cannot be greater than 10.";
@@ -205,7 +205,7 @@ function AdminProfile(props) {
             // Validation for Mothers Name Field
             key = "mothersName";
             value = trimmedValues[key];
-            if (value.length !== 0) {
+            if (value && value.length !== 0) {
                 if (/\d+/.test(value))
                     formErrors[key] = "Mother Name cannot have any numbers.";
                 else if (value === "Admin")
@@ -215,7 +215,7 @@ function AdminProfile(props) {
             // Validation for Mothers Email Field
             key = "mothersEmail";
             value = trimmedValues[key];
-            if (value.length !== 0) {
+            if (value && value.length !== 0) {
                 if (value.length > 128)
                     formErrors[key] = "Email length cannot be greater than 128.";
                 else if (!/\S+@\S+\.\S+/.test(value))
@@ -225,7 +225,7 @@ function AdminProfile(props) {
             // Validation for Mothers Name Field
             key = "mothersContact";
             value = trimmedValues[key];
-            if (value.length !== 0) {
+            if (value && value.length !== 0) {
                 if (value.length > 10)
                     formErrors[key] = "Contact Number cannot be greater than 10.";
             }

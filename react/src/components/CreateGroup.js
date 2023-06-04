@@ -88,6 +88,8 @@ function CreateGroup(props) {
         let value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "ID is required.";
+        else if (value === "5" || value === "6")
+            formErrors[key] = "ID 5 and 6 is Reserved Not Allowed."; // Because Group number 5 Displays All Students and 6 Displays Staff
 
         // Validation for group Field
         key = "group";

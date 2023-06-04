@@ -1,8 +1,25 @@
 // Importing React classes and functions from node modules
-import React, { } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getGroups } from "../data/repository";
+
 
 function SelectGroup(props) {
+
+    const [groups, setGroupsData] = useState([]);
+
+    // Load users from DB.
+    useEffect(() => {
+
+        // Loads User Details from DB
+        async function loadGroupDetails() {
+            const currentGroups = await getGroups();
+            setGroupsData(currentGroups)
+        }
+
+        // Calls the functions above
+        loadGroupDetails();
+    }, []);
 
     let linkTo;
     let message;
@@ -23,8 +40,29 @@ function SelectGroup(props) {
             <div style={{ display: "flex", justifyContent: "center" }}>
 
                 <div className="container">
-                    <div className="row" style={{justifyContent: "center"}}>
+                    <div className="row" style={{ justifyContent: "center" }}>
+                        {groups.filter((group) => !["Male Teacher", "Female Teacher", "Admin", "Principal",].includes(group.group)).map((group) => (
+                            <div key={group.id} style={{ margin: "5px" }}>
+                                <Link to={`${linkTo}/${group.id}`} className="selectGroupLinks" style={{ textDecoration: "none" }}>
+                                    <div className="card">
+                                        <div className="card-body" style={{ padding: "15px" }}>
+                                            <h5 className="text-center" style={{ marginBottom: "0px" }}>{group.group}</h5>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </div>
+                        ))}
+
                         <div style={{ margin: "5px" }}>
+                            <Link to={`${linkTo}/5`} className="selectGroupLinks" style={{ textDecoration: "none" }}>
+                                <div className="card">
+                                    <div className="card-body" style={{ padding: "15px" }}>
+                                        <h5 className="text-center" style={{ marginBottom: "0px" }}>All Students</h5>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                        {/* <div style={{ margin: "5px" }}>
                             <Link to={`${linkTo}/4`} className="selectGroupLinks" style={{ textDecoration: "none" }}>
                                 <div className="card">
                                     <div className="card-body" style={{ padding: "15px" }}>
@@ -68,7 +106,7 @@ function SelectGroup(props) {
                                     </div>
                                 </div>
                             </Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

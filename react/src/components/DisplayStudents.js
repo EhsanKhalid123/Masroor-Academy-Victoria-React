@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2 } from "../data/repository";
+import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2, getGroups } from "../data/repository";
 
 function DisplayStudents(props) {
 
@@ -9,6 +9,7 @@ function DisplayStudents(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [confirmPopup, setconfirmPopup] = useState(false);
+    const [groups, setGroupsData] = useState([]);
     const { groupNumber } = useParams();
     let userProfilePage;
 
@@ -22,8 +23,15 @@ function DisplayStudents(props) {
             setIsLoading(false);
         }
 
+        // Loads User Details from DB
+        async function loadGroupDetails() {
+            const currentGroups = await getGroups();
+            setGroupsData(currentGroups)
+        }
+
         // Calls the functions above
         loadUserDetails();
+        loadGroupDetails();
 
     }, []);
 
@@ -54,21 +62,12 @@ function DisplayStudents(props) {
 
     let groupDetails;
 
-    switch (groupNumber) {
-        case "1":
-            groupDetails = "7-8 (Group 1)";
-            break;
-        case "2":
-            groupDetails = "9-11 (Group 2)";
-            break;
-        case "3":
-            groupDetails = "12-13 (Group 3)";
-            break;
-        case "4":
-            groupDetails = "14-15 (Group 4)";
-            break;
-        default:
-            groupDetails = "Invalid group number";
+    const group = groups.find((group) => group.id === groupNumber);
+
+    if (group) {
+        groupDetails = group.group;
+    } else {
+        groupDetails = "Invalid group number";
     }
 
     let linkTo;
@@ -129,11 +128,11 @@ function DisplayStudents(props) {
                                             {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
                                             {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
                                                 (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) || 
+                                                (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
                                                 (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails)) ||
                                                 (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
                                                 (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
-                                                ) &&
+                                            ) &&
                                                 <tr>
                                                     <td></td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
