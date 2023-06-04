@@ -1,13 +1,29 @@
 // Importing React classes and functions from node modules
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import { getClasses } from "../data/repository";
 
 // Functional Component for Navigation Bar
 function Navigation(props) {
 
+  const [classes, setClassData] = useState([]);
   const location = useLocation();
   let userProfilePage = "allUserProfile";
   let userProfileId = props.user?.id;
+
+  // Load users from DB.
+  useEffect(() => {
+
+    // Loads User Details from DB
+    async function loadclassDetails() {
+      const currentClasses = await getClasses();
+      setClassData(currentClasses);
+    }
+
+    // Calls the functions above
+    loadclassDetails();
+
+  }, []);
 
   const HomeLink = () => {
     if (location.pathname === "/" || location.pathname === "/Home") {
@@ -76,7 +92,15 @@ function Navigation(props) {
                       </div>
                       <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                         <Link className="dropdown-item" to="/SelectGroupHomework">Post Homework</Link>
-                        <Link className="dropdown-item" to="/">{props.user.class}</Link>
+                        {props.user.class ? (
+                          // Display class name as a link
+                          <Link className="dropdown-item" to={`/class/${props.user.class}`}>{props.user.class}</Link>
+                        ) : (
+                          // Display groups with links to each group
+                          classes.map(classes => (
+                            <Link key={classes.id} className="dropdown-item" to={`/class/${classes.class}`}>{classes.class}</Link>
+                          ))
+                        )}
                       </div>
                     </li>
 
