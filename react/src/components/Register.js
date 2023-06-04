@@ -38,7 +38,7 @@ function Register(props) {
             return;
 
         // Time limit for message to display
-        const id = setTimeout(() => setMessage(null), 7000);
+        const id = setTimeout(() => setMessage(null), 20000);
 
         // When message changes clear the queued timeout function.
         return () => clearTimeout(id);
@@ -114,7 +114,7 @@ function Register(props) {
 
             const formErrors = {};
             if (generatedID === null) {
-                formErrors["message"] = "Student with the name: " + trimmedValues.name + ", Fathers Name: " + trimmedValues.fathersName + " already exists, If you have already registered or the student and fathers name is the same as yours and you haven't already registered please contact the principal for details! ";
+                formErrors["message"] = "Student with the name: " + trimmedValues.name + ", Fathers Name: " + trimmedValues.fathersName + " already exists, this means you are already registered from previous years please contact the Principal for you login details, but if you are completely new and can't register please contact the Principal or email us at masrooracademyvic1@gmail.com!";
                 setErrors(formErrors);
                 return;
             }
@@ -143,12 +143,15 @@ function Register(props) {
             await createUser(updatedTrimmedValues);
 
             // Clear all errors and fields
-            // setValues({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: null, archived: false, studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
+            setValues({ id: "", name: "", hashed_password: "student", group: "", gender: "", class: null, archived: false, studentEmail: "", studentDob: "", jamaat: "", fathersName: "", fathersEmail: "", fathersContact: "", mothersName: "", mothersEmail: "", mothersContact: "" });
             setErrors("");
             // Show success message.
             setMessage(
                 <>
-                    Jazzakallah for your response, you will soon be contacted for future events and details.
+                    Jazzakallah for your response, you will soon be contacted for future events and details.<br/>
+                    Please note your Login details - ID: {generatedID} Password: student <br/>
+                    Please use these details to login and please change password, if you forget the details please
+                    contact masrooracademyvic1@gmail.com or contact the Principal.
                 </>);
         } catch (error) {
             const submitError = {};
