@@ -112,20 +112,29 @@ function StudentDashboard(props) {
                             <>
                                 {announcements.map((announcement) =>
                                     <div key={announcement.announcement_id}>
-                                        <div className="card mb-3">
-                                            <div className="card-body">
-                                                <div className="noBottomMargin"><pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }} className="postStyle card-text">{parse(announcement.announcementText)}</pre></div>
-                                            </div>
+                                        {
+                                            (announcement.user.group === "Admin") || // Atfal Students can see Announcements made all Admins
+                                            (props.user.gender === "Atfal" && (announcement.user.group === "Male Teacher" || (announcement.user.group === "Principal" && announcement.user.gender === "Male"))) || // Atfal can see announcements made by Male Teachers and only Male Principals
+                                            (props.user.gender === "Nasirat" && (announcement.user.group === "Female Teacher" || announcement.user.group === "Principal" )) // Nasirat can see announcements made by Female Teachers and Principals
+                                                ? (
+                                                    <div className="card mb-3">
+                                                        <div className="card-body">
+                                                            <div className="noBottomMargin"><pre style={{ whiteSpace: "pre-wrap", wordWrap: "break-word" }} className="postStyle card-text">{parse(announcement.announcementText)}</pre></div>
+                                                        </div>
 
-                                            <div className="card-footer text-center" style={{ color: "rgb(202 42 55)" }}>
-                                                {(announcement.user.group === "Admin" || announcement.user.group === "Principal") ?
-                                                    announcement.user.name + " - " + announcement.user.group + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
-                                                    :
-                                                    announcement.user.name + " - " + announcement.user.class + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
-                                                }
-
-                                            </div>
-                                        </div>
+                                                        <div className="card-footer text-center" style={{ color: "rgb(202 42 55)" }}>
+                                                            {(announcement.user.group === "Admin" || (announcement.user.group === "Principal" && announcement.user.gender !== "Female")) ?
+                                                                announcement.user.name + " - " + announcement.user.group + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                                :
+                                                                (announcement.user.group === "Principal" && announcement.user.gender === "Female") ?
+                                                                    announcement.user.name + " - " + "In Charge Girls Section" + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                                    :
+                                                                    announcement.user.name + " - " + announcement.user.class + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                ) : null
+                                        }
                                     </div>
                                 )}
                             </>
