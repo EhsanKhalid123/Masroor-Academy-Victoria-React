@@ -141,8 +141,9 @@ function Announcements(props) {
                                     {
                                         (props.user.group === "Admin") || // Group Admin can see any announcement made by anyone
                                             (props.user.group === "Principal" && props.user.gender === "Male") ||  // Principal (Male) can see announcements made Everyone
+                                            ((props.user.group === "Principal" && props.user.gender === "Female") && (announcement.user.group !== "Male Teacher")) || // Female Principals can see all except Male Teachers Announcements
                                             (props.user.group === "Male Teacher" && announcement.user.group !== "Female Teacher" && announcement.user.gender !== "Female") || // Male teachers can only see their and other Male Teachers announcement and Admin and Male Principals
-                                            (props.user.group === "Female Teacher" && announcement.user.group !== "Male Teacher" || announcement.user.group === "Principal") // Female teachers can only see their and other Female teacher and Admins and all Principals Announcements
+                                            (props.user.group === "Female Teacher" && (announcement.user.group !== "Male Teacher" || announcement.user.group === "Principal")) // Female teachers can only see their and other Female teacher and Admins and all Principals Announcements
                                             ? (
                                                 <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }} >
                                                     <div className="card-body">

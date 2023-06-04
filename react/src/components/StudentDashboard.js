@@ -80,7 +80,7 @@ function StudentDashboard(props) {
                                                         homework.poster.name + " - " + homework.poster.group + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                         :
                                                         (homework.poster.group === "Principal" && homework.poster.gender === "Female") ?
-                                                        homework.poster.name + " - " + "In Charge Girls Section" + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                            homework.poster.name + " - In Charge Girls Section - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                             :
                                                             homework.poster.name + " - " + homework.poster.class + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                     }
@@ -130,7 +130,7 @@ function StudentDashboard(props) {
                                                                 announcement.user.name + " - " + announcement.user.group + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                                 :
                                                                 (announcement.user.group === "Principal" && announcement.user.gender === "Female") ?
-                                                                    announcement.user.name + " - " + "In Charge Girls Section" + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                                    announcement.user.name + " - In Charge Girls Section - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                                     :
                                                                     announcement.user.name + " - " + announcement.user.class + " - " + new Date(announcement.announcementDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                             }
