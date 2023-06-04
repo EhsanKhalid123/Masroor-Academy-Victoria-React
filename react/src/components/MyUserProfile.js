@@ -269,12 +269,22 @@ function StudentStaffProfile(props) {
                                         </p>
                                         <hr />
                                         <p>
-                                            {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") || (props.user.group === "Principal" && props.user.group === "Admin") ? (
+                                            {((props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher") || (props.user.group === "Principal" || props.user.group === "Admin")) ? (
                                                 <>
-                                                    <strong>Group:</strong> {userProfile.group}</>
+                                                    {props.user.group === "Principal" && props.user.gender === "Female" ? (
+                                                        <>
+                                                            <strong>Group:</strong> In Charge Girls Section
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <strong>Group:</strong> {userProfile.group}
+                                                        </>
+                                                    )}
+                                                </>
                                             ) : (
                                                 <>
-                                                    <strong>Class:</strong> {userProfile.class}</>
+                                                    <strong>Class:</strong> {userProfile.class}
+                                                </>
                                             )}
                                         </p>
                                         <p>

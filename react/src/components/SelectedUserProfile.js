@@ -283,7 +283,15 @@ function AdminProfile(props) {
                                         </p>
                                         <hr />
                                         <p>
-                                            <strong>Group:</strong> {userProfile?.group}
+                                            {userProfile?.group === "Principal" && userProfile?.gender === "Female" ? (
+                                                <>
+                                                    <strong>Group:</strong> In Charge Girls Section
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <strong>Group:</strong> {userProfile?.group}
+                                                </>
+                                            )}
                                         </p>
                                         <p>
                                             <strong>Gender:</strong> {userProfile?.gender}
@@ -401,17 +409,19 @@ function AdminProfile(props) {
                                         {/* Group Field */}
                                         <div className="form-group">
                                             <label htmlFor="group"><b>Group:</b></label>
-                                            <select id="group" name="group" className="form-control" value={selectedDropdownValue} onChange={handleDropdownChange}>
+                                            <select id="group" name="group" className="form-control" value={selectedDropdownValue || ""} onChange={handleDropdownChange}>
                                                 <option value="" disabled hidden>Select a Group</option>
                                                 {dropdownValues.map(group => {
                                                     if (props.user.group === "Principal" && props.user.gender === "Female") {
                                                         // Only show certain options for Principal with gender Female
-                                                        if (group.group !== "Principal" && group.group !== "Admin" && group.group !== "Male Teacher") {
-                                                            return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                        if (group?.group !== "Principal" && group?.group !== "Admin" && group?.group !== "Male Teacher") {
+                                                            return <option key={group.id} value={group?.group}>{group?.group}</option>;
                                                         }
+                                                    } else if (userProfile?.group === "Principal" && userProfile?.gender === "Female") {
+                                                        return <option key={group.id} value={group?.group}>{group?.group === "Principal" ? "In Charge Girls Section" : group?.group}</option>;
                                                     } else {
                                                         // Show all options for other users or conditions
-                                                        return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                        return <option key={group.id} value={group?.group}>{group?.group}</option>;
                                                     }
                                                     return null;
                                                 })}
@@ -428,13 +438,13 @@ function AdminProfile(props) {
                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.gender}</p>
                                             )}
                                         </div>
-                                        {(userProfile.group === "Male Teacher" || userProfile.group === "Female Teacher") &&
+                                        {(userProfile?.group === "Male Teacher" || userProfile?.group === "Female Teacher") &&
                                             <div className="form-group">
                                                 <label htmlFor="class"><b>Class:</b></label>
-                                                <select id="class" name="class" className="form-control" value={selectedClassesDropdownValue} onChange={handleClassesDropdownChange}>
+                                                <select id="class" name="class" className="form-control" value={selectedClassesDropdownValue || ""} onChange={handleClassesDropdownChange}>
                                                     <option value="" disabled hidden>Select a Class</option>
                                                     {classesDropdownValues.map(classes => (
-                                                        <option key={classes.id} value={classes.group}>{classes.class}</option>
+                                                        <option key={classes.id} value={classes?.group}>{classes?.class}</option>
                                                     ))}
                                                 </select>
                                                 {errors.class && (
@@ -446,7 +456,7 @@ function AdminProfile(props) {
                                             <>
                                                 <div className="form-group">
                                                     <label htmlFor="jamaat"><b>Jama'at:</b></label>
-                                                    <input type="text" className="form-control" id="jamaat" name="jamaat" placeholder="Enter a new Jama'at" value={userProfile.jamaat} onChange={handleInputChange} />
+                                                    <input type="text" className="form-control" id="jamaat" name="jamaat" placeholder="Enter a new Jama'at" value={userProfile?.jamaat || ""} onChange={handleInputChange} />
                                                     {errors.jamaat && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
                                                     )}
@@ -454,7 +464,7 @@ function AdminProfile(props) {
                                                 {/* Student Email Field */}
                                                 <div className="form-group">
                                                     <label htmlFor="studentEmail"><b>Student Email:</b></label>
-                                                    <input type="email" className="form-control" id="studentEmail" name="studentEmail" placeholder="Enter a new student email" value={userProfile.studentEmail} onChange={handleInputChange} />
+                                                    <input type="email" className="form-control" id="studentEmail" name="studentEmail" placeholder="Enter a new student email" value={userProfile?.studentEmail || ""} onChange={handleInputChange} />
                                                     {errors.studentEmail && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentEmail}</p>
                                                     )}
@@ -464,7 +474,7 @@ function AdminProfile(props) {
                                                         {/* Fathers Name Field */}
                                                         <div className="form-group">
                                                             <label htmlFor="fathersName"><b>Fathers Name:</b></label>
-                                                            <input type="text" className="form-control" id="fathersName" name="fathersName" placeholder="Enter a new fathers name" value={userProfile.fathersName} onChange={handleInputChange} />
+                                                            <input type="text" className="form-control" id="fathersName" name="fathersName" placeholder="Enter a new fathers name" value={userProfile?.fathersName || ""} onChange={handleInputChange} />
                                                             {errors.fathersName && (
                                                                 <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersName}</p>
                                                             )}
@@ -474,7 +484,7 @@ function AdminProfile(props) {
                                                 {/* Fathers Email Field */}
                                                 <div className="form-group">
                                                     <label htmlFor="fathersEmail"><b>Fathers Email:</b></label>
-                                                    <input type="email" className="form-control" id="fathersEmail" name="fathersEmail" placeholder="Enter a new fathers email" value={userProfile.fathersEmail} onChange={handleInputChange} />
+                                                    <input type="email" className="form-control" id="fathersEmail" name="fathersEmail" placeholder="Enter a new fathers email" value={userProfile?.fathersEmail || ""} onChange={handleInputChange} />
                                                     {errors.fathersEmail && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersEmail}</p>
                                                     )}
@@ -482,7 +492,7 @@ function AdminProfile(props) {
                                                 {/* Fathers Contact Field */}
                                                 <div className="form-group">
                                                     <label htmlFor="fathersContact"><b>Fathers Contact:</b></label>
-                                                    <input type="text" className="form-control" id="fathersContact" name="fathersContact" placeholder="Enter a new fathers contact" value={userProfile.fathersContact} onChange={handleInputChange} />
+                                                    <input type="text" className="form-control" id="fathersContact" name="fathersContact" placeholder="Enter a new fathers contact" value={userProfile?.fathersContact || ""} onChange={handleInputChange} />
                                                     {errors.fathersContact && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersContact}</p>
                                                     )}
@@ -490,7 +500,7 @@ function AdminProfile(props) {
                                                 {/* Mothers Name Field */}
                                                 <div className="form-group">
                                                     <label htmlFor="mothersName"><b>Mothers Name:</b></label>
-                                                    <input type="text" className="form-control" id="mothersName" name="mothersName" placeholder="Enter a new mothers name" value={userProfile.mothersName} onChange={handleInputChange} />
+                                                    <input type="text" className="form-control" id="mothersName" name="mothersName" placeholder="Enter a new mothers name" value={userProfile?.mothersName || ""} onChange={handleInputChange} />
                                                     {errors.mothersName && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersName}</p>
                                                     )}
@@ -498,7 +508,7 @@ function AdminProfile(props) {
                                                 {/* Mothers Email Field */}
                                                 <div className="form-group">
                                                     <label htmlFor="mothersEmail"><b>Mothers Email:</b></label>
-                                                    <input type="email" className="form-control" id="mothersEmail" name="mothersEmail" placeholder="Enter a new mothers email" value={userProfile.mothersEmail} onChange={handleInputChange} />
+                                                    <input type="email" className="form-control" id="mothersEmail" name="mothersEmail" placeholder="Enter a new mothers email" value={userProfile?.mothersEmail || ""} onChange={handleInputChange} />
                                                     {errors.mothersEmail && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersEmail}</p>
                                                     )}
@@ -506,7 +516,7 @@ function AdminProfile(props) {
                                                 {/* Mothers Contact Field */}
                                                 <div className="form-group">
                                                     <label htmlFor="mothersContact"><b>Mothers Contact:</b></label>
-                                                    <input type="text" className="form-control" id="mothersContact" name="mothersContact" placeholder="Enter a new mothers contact" value={userProfile.mothersContact} onChange={handleInputChange} />
+                                                    <input type="text" className="form-control" id="mothersContact" name="mothersContact" placeholder="Enter a new mothers contact" value={userProfile?.mothersContact || ""} onChange={handleInputChange} />
                                                     {errors.mothersContact && (
                                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.mothersContact}</p>
                                                     )}

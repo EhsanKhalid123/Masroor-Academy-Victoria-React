@@ -99,7 +99,7 @@ function DisplayStaff(props) {
                                             ) ||
                                             (
                                                 (props.user.group === "Principal" && props.user.gender === "Male") &&
-                                                (userDetails.group === "Male Teacher")
+                                                (userDetails.group === "Male Teacher" || userDetails.group === "Female Teacher" || userDetails.group === "Principal")
                                             )
                                         )
                                     ) &&
@@ -109,7 +109,11 @@ function DisplayStaff(props) {
                                                 <td></td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
-                                                <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                                {(userDetails.group === "Principal" && userDetails.gender === "Female") ? (
+                                                    <td style={{ color: "#112c3f" }}>In Charge Girls Section</td>
+                                                ) : (
+                                                    <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                                )}
                                                 <td style={{ color: "#112c3f" }}>{userDetails.gender}</td>
 
                                                 <td>
