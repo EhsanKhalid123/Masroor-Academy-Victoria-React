@@ -138,19 +138,51 @@ function Announcements(props) {
                         <>
                             {announcements.map((announcement) =>
                                 <div key={announcement.announcement_id}>
-                                    <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }}>
-                                        <div className="card-body">
-                                            <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name}</h5>
-                                            <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(announcement.announcementDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
-                                            <div className="post-body">
-                                                <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(announcement.announcementText)}</pre>
+                                    {
+                                        (props.user.group === "Admin") || // Group Admin can see any announcement made by anyone
+                                        (props.user.group === "Principal" && props.user.gender === "Male") ||  // Principal (Male) can see announcements made Everyone
+                                        (props.user.group === "Male Teacher" && announcement.user.group !== "Female Teacher" && announcement.user.gender !== "Female") || // Male teachers can only see their and other Male Teachers announcement and Admin and Male Principals
+                                        (props.user.group === "Female Teacher" && announcement.user.group !== "Male Teacher" || announcement.user.group === "Principal") // Female teachers can only see their and other Female teacher and Admins and all Principals Announcements
+                                        ? (
 
-                                                <div>
-                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }} >Delete</button>
+
+                                                <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }} >
+                                                    <div className="card-body">
+                                                        <h5 style={{ float: "left", textAlign: "center" }} className="card-title">{announcement.user.name} - {announcement.user.group} </h5>
+                                                        <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(announcement.announcementDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
+                                                        <div className="post-body">
+                                                            <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(announcement.announcementText)}</pre>
+
+                                                            {
+                                                                (props.user.group === "Admin") ||  // Group Admin can delete any announcement made by anyone
+                                                                    (announcement.user.group === "Male Teacher" && props.user.group === "Principal" && props.user.gender === "Male") ||  // Principal (Male) can delete announcements made by Male Teachers
+                                                                    (announcement.user.group === "Principal" && props.user.group === "Principal" && (props.user.gender === "Male" || (props.user.gender === "Female" && announcement.user.gender === "Female"))) ||  // Principal (any gender) can delete announcements made by themselves or by Female Principals
+                                                                    (announcement.user.group === "Male Teacher" && announcement.user.id === props.user.id) ||  // Logged-in user can delete their own announcement if they are a Male Teacher
+                                                                    (announcement.user.group === "Female Teacher" && props.user.group === "Principal") ||  // Principal (any gender) can delete announcements made by Female Teachers
+                                                                    (announcement.user.group === "Female Teacher" && announcement.user.id === props.user.id) || // Logged-in user can delete their own announcement if they are a Female Teacher
+                                                                    (announcement.user.group === "Principal" && props.user.group === "Admin" && props.user.gender === "Female")  // Principal (Female) can be deleted only by Group Admin or Principal (any gender)
+                                                                    ? (
+                                                                        <div>
+                                                                            <button
+                                                                                type="submit"
+                                                                                style={{ float: "right", textAlign: "right" }}
+                                                                                className="btn btn-danger mr-sm-2"
+                                                                                onClick={async () => {
+                                                                                    await deleteAnnouncements(announcement);
+                                                                                    setAnnouncements(await getAnnouncements());
+                                                                                }}
+                                                                            >
+                                                                                Delete
+                                                                            </button>
+                                                                        </div>
+                                                                    ) : null
+                                                            }
+
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            ) : null
+                                    }
                                     <p>&nbsp;</p>
                                 </div>
                             )}
