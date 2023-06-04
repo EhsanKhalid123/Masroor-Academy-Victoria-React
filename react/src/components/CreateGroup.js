@@ -67,7 +67,7 @@ function CreateGroup(props) {
             await createGroup(trimmedValues);
 
             // Clear all errors and fields
-            setValues({ id: "", group: "" });
+            setValues({ id: "", group: "", year: "" });
             setErrors("");
             // Show success message.
             setMessage(

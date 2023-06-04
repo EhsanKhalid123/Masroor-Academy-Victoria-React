@@ -77,7 +77,9 @@ function DisplayClass(props) {
     }
 
     // Popup Toggle Switch Function
-    const togglePopup2 = async () => {
+    const togglePopup2 = async (event) => {
+        event.preventDefault(); // Prevent form submission
+
         setconfirmPopup2(!confirmPopup2);
         const currentDetails = await getClassById(getSelectedId());
         setValues(currentDetails);
@@ -190,7 +192,7 @@ function DisplayClass(props) {
                                         <td style={{ color: "#112c3f" }}>{classDetails.class}</td>
                                         <td>
                                             <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(classDetails.id); await togglePopup() }} >Delete</button>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async () => { await selectedId(classDetails.id); await togglePopup2() }} >Edit</button>
+                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(classDetails.id); await togglePopup2(event) }} >Edit</button>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -232,7 +234,7 @@ function DisplayClass(props) {
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.class}</p>
                                         )}
                                     </div>  
-                                    <button onClick={togglePopup2} className="btn btn-info" style={{ margin: "10px" }}>Cancel</button>
+                                    <button onClick={(event) => togglePopup2(event)} className="btn btn-info" style={{ margin: "10px" }}>Close</button>
                                     <button type="submit" className="btn btn-success" style={{ margin: "10px" }}>Edit</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                     {messageError && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{messageError}</div>}

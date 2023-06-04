@@ -78,7 +78,9 @@ function DisplayGroup(props) {
     }
 
     // Popup Toggle Switch Function
-    const togglePopup2 = async () => {
+    const togglePopup2 = async (event) => {
+        event.preventDefault(); // Prevent form submission
+
         setconfirmPopup2(!confirmPopup2);
         const currentDetails = await getGroupById(getSelectedId());
         setValues(currentDetails);
@@ -180,6 +182,7 @@ function DisplayGroup(props) {
                                     <th></th>
                                     <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">Year</th>
                                     <th></th>
                                     <th></th>
 
@@ -187,7 +190,7 @@ function DisplayGroup(props) {
                             </thead>
                             {/* Mapping Users state Variable to access its content easily to display in Table */}
                             {groups.filter((groupDetails) => {
-                                return search.toLowerCase() === '' ? groupDetails : groupDetails.group.toLowerCase().includes(search) || groupDetails.id.includes(search);
+                                return search.toLowerCase() === '' ? groupDetails : groupDetails.group.toLowerCase().includes(search) || groupDetails.id.includes(search) || groupDetails.year.includes(search);
                             }).map((groupDetails) =>
                                 <tbody key={groupDetails.id}>
 
@@ -195,9 +198,10 @@ function DisplayGroup(props) {
                                         <td></td>
                                         <td style={{ color: "#112c3f" }}>{groupDetails.id}</td>
                                         <td style={{ color: "#112c3f" }}>{groupDetails.group}</td>
+                                        <td style={{ color: "#112c3f" }}>{groupDetails.year}</td>
                                         <td>
                                             <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(groupDetails.id); await togglePopup() }} >Delete</button>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async () => { await selectedId(groupDetails.id); await togglePopup2() }} >Edit</button>
+                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(groupDetails.id); await togglePopup2(event) }} >Edit</button>
                                         </td>
                                         <td></td>
                                     </tr>
@@ -248,7 +252,7 @@ function DisplayGroup(props) {
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.year}</p>
                                         )}
                                     </div>
-                                    <button onClick={togglePopup2} className="btn btn-info" style={{ margin: "10px" }}>Cancel</button>
+                                    <button onClick={(event) => togglePopup2(event)} className="btn btn-info" style={{ margin: "10px" }}>Close</button>
                                     <button type="submit" className="btn btn-success" style={{ margin: "10px" }}>Edit</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
                                     {messageError && <div className="alert alert-danger" style={{ margin: "20px" }} role="alert">{messageError}</div>}
