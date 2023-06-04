@@ -144,8 +144,6 @@ function Announcements(props) {
                                             (props.user.group === "Male Teacher" && announcement.user.group !== "Female Teacher" && announcement.user.gender !== "Female") || // Male teachers can only see their and other Male Teachers announcement and Admin and Male Principals
                                             (props.user.group === "Female Teacher" && announcement.user.group !== "Male Teacher" || announcement.user.group === "Principal") // Female teachers can only see their and other Female teacher and Admins and all Principals Announcements
                                             ? (
-
-
                                                 <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }} >
                                                     <div className="card-body">
                                                         <h5 style={{ float: "left", textAlign: "center" }} className="card-title">
@@ -167,17 +165,7 @@ function Announcements(props) {
                                                                     (announcement.user.group === "Principal" && props.user.group === "Admin" && props.user.gender === "Female")  // Principal (Female) can be deleted only by Group Admin or Principal (any gender)
                                                                     ? (
                                                                         <div>
-                                                                            <button
-                                                                                type="submit"
-                                                                                style={{ float: "right", textAlign: "right" }}
-                                                                                className="btn btn-danger mr-sm-2"
-                                                                                onClick={async () => {
-                                                                                    await deleteAnnouncements(announcement);
-                                                                                    setAnnouncements(await getAnnouncements());
-                                                                                }}
-                                                                            >
-                                                                                Delete
-                                                                            </button>
+                                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteAnnouncements(announcement); setAnnouncements(await getAnnouncements()); }}> Delete </button>
                                                                         </div>
                                                                     ) : null
                                                             }

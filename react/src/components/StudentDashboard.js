@@ -76,10 +76,13 @@ function StudentDashboard(props) {
                                                     <div className="noBottomMargin"><pre className="postStyle card-text">{parse(homework.homeworkText)}</pre></div>
                                                 </div>
                                                 <div className="card-footer text-center" style={{ color: "rgb(202 42 55)" }}>
-                                                    {(homework.poster.group === "Admin" || homework.poster.group === "Principal") ?
+                                                    {(homework.poster.group === "Admin" || (homework.poster.group === "Principal" && homework.poster.gender !== "Female")) ?
                                                         homework.poster.name + " - " + homework.poster.group + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                         :
-                                                        homework.poster.name + " - " + homework.poster.class + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                        (homework.poster.group === "Principal" && homework.poster.gender === "Female") ?
+                                                        homework.poster.name + " - " + "In Charge Girls Section" + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
+                                                            :
+                                                            homework.poster.name + " - " + homework.poster.class + " - " + new Date(homework.homeworkDate).toLocaleString("en-AU", { day: "numeric", month: "short", year: "numeric" })
                                                     }
                                                 </div>
                                             </div>
@@ -114,8 +117,8 @@ function StudentDashboard(props) {
                                     <div key={announcement.announcement_id}>
                                         {
                                             (announcement.user.group === "Admin") || // Atfal Students can see Announcements made all Admins
-                                            (props.user.gender === "Atfal" && (announcement.user.group === "Male Teacher" || (announcement.user.group === "Principal" && announcement.user.gender === "Male"))) || // Atfal can see announcements made by Male Teachers and only Male Principals
-                                            (props.user.gender === "Nasirat" && (announcement.user.group === "Female Teacher" || announcement.user.group === "Principal" )) // Nasirat can see announcements made by Female Teachers and Principals
+                                                (props.user.gender === "Atfal" && (announcement.user.group === "Male Teacher" || (announcement.user.group === "Principal" && announcement.user.gender === "Male"))) || // Atfal can see announcements made by Male Teachers and only Male Principals
+                                                (props.user.gender === "Nasirat" && (announcement.user.group === "Female Teacher" || announcement.user.group === "Principal")) // Nasirat can see announcements made by Female Teachers and Principals
                                                 ? (
                                                     <div className="card mb-3">
                                                         <div className="card-body">

@@ -173,14 +173,29 @@ function AddHomework(props) {
                                 <div key={homeworkPosts.homeworkPosts_id}>
                                     <div className="postedContent card" style={{ minWidth: "50%", overflowX: "auto" }}>
                                         <div className="card-body">
-                                            <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">{homeworkPosts.poster.name}</h5>
+                                            <h5 style={{ float: "left", textAlign: "center", color: "#112c3f" }} className="card-title">
+                                                {homeworkPosts.poster.gender === "Female" && homeworkPosts.poster.group === "Principal"
+                                                    ? `${homeworkPosts.poster.name} - In Charge Girls Section` // If the homework is made by a female Principal, display "In Charge Girls Section"
+                                                    : `${homeworkPosts.poster.name} - ${homeworkPosts.poster.group}`}
+                                            </h5>
                                             <span style={{ float: "right", textAlign: "center", color: "#212121" }}>{new Date(homeworkPosts.homeworkDate).toLocaleString("en-AU", { hour12: true, hour: 'numeric', minute: 'numeric', day: "numeric", month: "short", year: "numeric" })}</span>
                                             <div className="post-body">
                                                 <pre className="postStyle card-text" style={{ whiteSpace: 'pre-wrap' }}>{parse(homeworkPosts.homeworkText)}</pre>
 
-                                                <div>
-                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
-                                                </div>
+                                                {
+                                                    (props.user.group === "Admin") ||  // Group Admin can delete any homeworks made by anyone
+                                                        (homeworkPosts.poster.group === "Male Teacher" && props.user.group === "Principal" && props.user.gender === "Male") ||  // Principal (Male) can delete homeworks made by Male Teachers
+                                                        (homeworkPosts.poster.group === "Principal" && props.user.group === "Principal" && (props.user.gender === "Male" || (props.user.gender === "Female" && homeworkPosts.poster.gender === "Female"))) ||  // Principal (any gender) can delete homeworks made by themselves or by Female Principals
+                                                        (homeworkPosts.poster.group === "Male Teacher" && homeworkPosts.poster.id === props.user.id) ||  // Logged-in user can delete their own homeworks if they are a Male Teacher
+                                                        (homeworkPosts.poster.group === "Female Teacher" && props.user.group === "Principal") ||  // Principal (any gender) can delete homeworks made by Female Teachers
+                                                        (homeworkPosts.poster.group === "Female Teacher" && homeworkPosts.poster.id === props.user.id) || // Logged-in user can delete their own announcement if they are a Female Teacher
+                                                        (homeworkPosts.poster.group === "Principal" && props.user.group === "Admin" && props.user.gender === "Female")  // Principal (Female) can be deleted only by Group Admin or Principal (any gender)
+                                                        ? (
+                                                            <div>
+                                                                <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await deleteHomeworks(homeworkPosts); setHomeworks(await getHomeworks()); }} >Delete</button>
+                                                            </div>
+                                                        ) : null
+                                                }
                                             </div>
                                         </div>
                                     </div>
