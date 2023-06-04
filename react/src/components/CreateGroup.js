@@ -7,7 +7,7 @@ import { createGroup } from "../data/repository";
 function CreateGroup(props) {
 
     // State Variables Declaration for useState and useContext Hooks
-    const [values, setValues] = useState({ id: "", group: "" });
+    const [values, setValues] = useState({ id: "", group: "", year: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [messageError, setMessageError] = useState(null);
@@ -83,7 +83,6 @@ function CreateGroup(props) {
     const handleValidation = async () => {
         const trimmedValues = trimFields();
         const formErrors = {};
-        // const GroupValidationRegex = /^\d+-\d+\s\(Group\s\d+\)$/;
 
         let key = "id";
         let value = trimmedValues[key];
@@ -95,8 +94,13 @@ function CreateGroup(props) {
         value = trimmedValues[key];
         if (value.length === 0)
             formErrors[key] = "Group cannot be empty.";
-        // else if (!GroupValidationRegex.test(value))
-        //     formErrors[key] = "Group must have an age followed by the Group and Number, the Group Number must match the ID number";
+
+        // Validation for group Field
+        key = "year";
+        value = trimmedValues[key];
+        if (value.length === 0)
+            formErrors[key] = "Year cannot be empty.";
+
 
         // Sets Errors If any Validation Fails
         setErrors(formErrors);
@@ -141,9 +145,17 @@ function CreateGroup(props) {
                                     <div className="form-group">
                                         <label htmlFor="group"><b>Group:</b></label>
                                         <input type="text" className="form-control" id="group" name="group" placeholder="Enter a Group name, must be in this format eg. 7-8 (Group 4)" value={values.group} onChange={handleInputChange} required />
-                                        <small id="studentDobHelp" className="form-text" style={{ fontWeight: "bold", color: "rgb(217 67 67)", fontSize: "15px" }}>Must be in this format eg. 7-8 (Group 4), Make sure the Group Number is the same as ID</small>
+                                        <small id="group" className="form-text" style={{ fontWeight: "bold", color: "rgb(217 67 67)", fontSize: "15px" }}>Must be in this format eg. 7-8 (Group 4), Make sure the Group Number is the same as ID</small>
                                         {errors.group && (
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.group}</p>
+                                        )}
+                                    </div>
+                                    {/* Year Field */}
+                                    <div className="form-group">
+                                        <label htmlFor="year"><b>Year:</b></label>
+                                        <input type="text" className="form-control" id="year" name="year" placeholder="Enter a year eg. 2014 or 2014-2016 " value={values.year} onChange={handleInputChange} required />
+                                        {errors.year && (
+                                            <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.year}</p>
                                         )}
                                     </div>
 

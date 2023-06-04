@@ -231,6 +231,14 @@ async function getGroupById(id) {
   return response.data;
 }
 
+// Update Group Details Request For API to DB
+async function editGroup(group, id,) {
+  const response = await axios.post(API_HOST + `/MAApi/groups/update/${id}`, group, getHeaders());
+
+  return response.data;
+
+}
+
 // Delete User Request For API from DB
 async function deleteGroup(group) {
   const response = await axios.post(API_HOST + "/MAApi/groups/delete", group, getHeaders());
@@ -255,7 +263,15 @@ async function getClassById(id) {
   return response.data;
 }
 
-// Delete User Request For API from DB
+// Update Classes Details Request For API to DB
+async function editClass(classes, id,) {
+  const response = await axios.post(API_HOST + `/MAApi/classes/update/${id}`, classes, getHeaders());
+
+  return response.data;
+
+}
+
+// Delete Classes Request For API from DB
 async function deleteClass(classes) {
   const response = await axios.post(API_HOST + "/MAApi/classes/delete", classes, getHeaders());
 
@@ -362,5 +378,5 @@ export {
   uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages,
   updateRegFormMessage, getRegFormMessage, createClass, createGroup, getClasses, getGroups,
   getGroupById, getClassById, deleteGroup, deleteClass, createSyllabus, getSyllabus,
-  getSyllabusById, deleteSyllabus, updateSyllabus
+  getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass
 }

@@ -254,12 +254,12 @@ async function addData() {
 
     // await db.users.create({ id: "", name: "", hashed_password: "student", group: "7-8 (Group 1)", gender: "Nasirat",  class: "", archived: false });
 
-    await db.users.create({ id: "MT-001", name: "Farhan Khalid", hashed_password: "mateacherboard", group: "Male Teacher", gender: "Male", class: "Holy Quran", archived: false });
-    await db.users.create({ id: "FT-001", name: "Nida Mukhtar", hashed_password: "mateacherboard", group: "Female Teacher", gender: "Female", class: "Holy Quran", archived: false });
+    await db.users.create({ id: "MT-001", name: "Farhan Khalid", hashed_password: "teacher", group: "Male Teacher", gender: "Male", class: "Holy Quran", archived: false });
+    await db.users.create({ id: "FT-001", name: "Nida Mukhtar", hashed_password: "teacher", group: "Female Teacher", gender: "Female", class: "Holy Quran", archived: false });
 
     // await db.users.create({ id: "FemaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Female" });
     // await db.users.create({ id: "MaleTeachers", name: "Teacher", hashed_password: "mateacherboard", group: "none", gender: "Male" });
-    await db.users.create({ id: "Admin", name: "SysAdmin", hashed_password: "maadminboard", group: "Admin", gender: "Admin", archived: false });
+    await db.users.create({ id: "Admin", name: "SysAdmin", hashed_password: "admin", group: "Admin", gender: "Admin", archived: false });
     // await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
 
     await db.formStatus.create(); // Creates the Default Form Status from Model

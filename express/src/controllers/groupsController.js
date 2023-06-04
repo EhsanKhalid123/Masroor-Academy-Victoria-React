@@ -33,6 +33,7 @@ exports.create = async (req, res) => {
     const group = await db.groups.create({
       id: req.body.id,
       group: req.body.group,
+      year: req.body.year
     });
 
     res.json(group);
@@ -50,6 +51,7 @@ exports.update = async (req, res) => {
     const vargroup = await db.groups.findByPk(id);
 
     vargroup.group = req.body.group;
+    vargroup.year = req.body.year;
 
     await vargroup.save();
 

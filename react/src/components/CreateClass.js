@@ -136,7 +136,7 @@ function CreateClass(props) {
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.id}</p>
                                         )}
                                     </div>
-                                    {/* Name Field */}
+                                    {/* Class Field */}
                                     <div className="form-group">
                                         <label htmlFor="class"><b>Class:</b></label>
                                         <input type="text" className="form-control" id="class" name="class" placeholder="Enter a Class name" value={values.class} onChange={handleInputChange} required />
