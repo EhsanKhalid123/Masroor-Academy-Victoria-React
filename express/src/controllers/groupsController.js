@@ -50,10 +50,22 @@ exports.update = async (req, res) => {
 
     const vargroup = await db.groups.findByPk(id);
 
+    const oldGroup = vargroup.group; // Store the old group name for comparison
+
     vargroup.group = req.body.group;
     vargroup.year = req.body.year;
 
     await vargroup.save();
+
+    // Update associated users' group information
+    if (oldGroup !== req.body.group) {
+      const users = await db.users.findAll({ where: { group: oldGroup } });
+
+      for (const user of users) {
+        user.group = req.body.group;
+        await user.save();
+      }
+    }
 
     return res.json(vargroup);
   } catch (error) {

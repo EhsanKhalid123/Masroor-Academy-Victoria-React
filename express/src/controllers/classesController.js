@@ -49,9 +49,21 @@ exports.update = async (req, res) => {
 
     const varClasses = await db.classes.findByPk(id);
 
+    const oldClass = varClasses.class; // Store the old group name for comparison
+
     varClasses.class = req.body.class;
 
     await varClasses.save();
+
+    // Update associated users' group information
+    if (oldClass !== req.body.class) {
+      const users = await db.users.findAll({ where: { class: oldClass } });
+
+      for (const user of users) {
+        user.class = req.body.class;
+        await user.save();
+      }
+    }
 
     return res.json(varClasses);
   } catch (error) {
