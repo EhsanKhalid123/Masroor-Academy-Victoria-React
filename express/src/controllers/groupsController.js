@@ -81,6 +81,12 @@ exports.delete = async (req, res) => {
 
     let removed = false;
 
+    const getSyllabus = await db.syllabus.findAll({ where: { groupId: id } });
+    if (getSyllabus !== null) {
+      await db.syllabus.destroy({ where: { groupId: id } });
+      console.log("Deleted all Syllabus asscoiated with " + id);
+    }
+
     const group = await db.groups.findByPk(id);
     if (group !== null) {
       await group.destroy();
@@ -89,6 +95,7 @@ exports.delete = async (req, res) => {
 
     return res.json(removed);
   } catch (error) {
+    console.log(error);
     // Send an error response.
     res.status(500).json({ message: "Error Deleting Data" });
   }
