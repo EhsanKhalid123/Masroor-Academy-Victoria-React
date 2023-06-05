@@ -9,7 +9,7 @@ module.exports = (express, app) => {
   const router = express.Router();
   const { validateToken } = require("../middlewares/AuthMiddleware.js");
 
-  // Select all posts.
+  // Get all posts.
   router.get("/", validateToken, controller.all);
 
   // Deletes a post from the DB.
