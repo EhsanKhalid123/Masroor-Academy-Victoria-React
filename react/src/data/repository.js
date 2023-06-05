@@ -45,6 +45,13 @@ async function getProfile(id) {
 }
 
 // Get User Details Request For API from DB
+async function getProfileRegister(id) {
+  const response = await axios.get(API_HOST + `/MAApi/users/getRegister/${id}`, getHeaders());
+
+  return response.data;
+}
+
+// Get User Details Request For API from DB
 async function getProfileUsers() {
   const response = await axios.get(API_HOST + `/MAApi/users`, getHeaders());
 
@@ -371,7 +378,7 @@ export {
   getHomeworks, createHomeworks, deleteHomeworks,
   getUser, removeUser, deleteUserDB,
   getProfile, updateUser, setUser, deleteHomeworks2,
-  createAnnouncements, getAnnouncements,
+  createAnnouncements, getAnnouncements, getProfileRegister,
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,
   getSelectedId2, removeSelectedId2, selectedId2, updateFormStatus, getFormStatus, updateFormText,

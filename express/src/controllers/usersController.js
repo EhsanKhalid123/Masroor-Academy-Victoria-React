@@ -23,8 +23,24 @@ exports.all = async (req, res) => {
 exports.one = async (req, res) => {
   try {
     const user = await db.users.findByPk(req.params.id);
-
+    
     res.json(user);
+  } catch (error) {
+    // Send an error response.
+    res.status(500).json({ message: "Error Retrieving Data" });
+  }
+};
+
+// Select one user from the database.
+exports.oneRegister = async (req, res) => {
+  try {
+    const user = await db.users.findByPk(req.params.id);
+
+    if (!user){
+      res.json(null);
+    } else {
+      res.json(true);
+    }
   } catch (error) {
     // Send an error response.
     res.status(500).json({ message: "Error Retrieving Data" });

@@ -1,7 +1,7 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { getFormStatus, getRegFormMessage, createUser, checkUserExists, getProfile } from "../data/repository";
+import { getFormStatus, getRegFormMessage, createUser, checkUserExists, getProfileRegister } from "../data/repository";
 import parse from 'html-react-parser';
 
 // Functional Component for Signup Page
@@ -73,7 +73,7 @@ function Register(props) {
 
         while (true) {
             id = `${gender[0]}-${jamaat[0]}-${suffix}`;
-            if (await getProfile(id) === null) {
+            if (await getProfileRegister(id) === null) {
                 break;
             }
             num++;
@@ -119,7 +119,7 @@ function Register(props) {
                 return;
             }
 
-            if (await getProfile(generatedID) !== null) {
+            if (await getProfileRegister(generatedID) !== null) {
                 formErrors["message"] = "User with this ID already exists, This is an issue in the backend, please immediately contact the Principal or email us at masrooracademyvic1@gmail.com";
                 setErrors(formErrors);
                 return;
