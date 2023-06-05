@@ -1,6 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
 import { fetchResources, uploadResource, deleteResources, fetchResourcesByID } from "../data/repository";
+import Toolbar from "./Toolbar";
 
 
 function Resources(props) {
@@ -11,6 +12,7 @@ function Resources(props) {
     const [resources, setResources] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const fileInputRef = useRef(null);
+    const [selectedResources, setSelectedResources] = useState([]);
 
     useEffect(() => {
         // Loads resources from DB
@@ -81,15 +83,38 @@ function Resources(props) {
         setResources(currentResources);
     }
 
+    const handleBulkUpdate = async () => {
+        const currentResources = await fetchResources();
+        setResources(currentResources);
+        setSelectedResources([]);
+    };
+
+    const handleSelectResource = (id) => {
+        if (selectedResources.includes(id)) {
+            setSelectedResources(selectedResources.filter((selectedResource) => selectedResource !== id));
+        } else {
+            setSelectedResources([...selectedResources, id]);
+        }
+    };
+
     return (
         <div>
             <br />
+            <h3 className="text-center">Resources:</h3>
+
             {(props.user.group === "Male Teacher" || props.user.group === "Female Teacher" || props.user.group === "Admin" || props.user.group === "Principal") &&
-                <div className="text-center">
-                    <input type="file" name="file" ref={fileInputRef} onChange={handleFileChange} />
-                    <button className="btn btn-info" style={{ marginLeft: "5px" }} onClick={handleUpload}>Upload</button>
-                </div>
+                <>
+                    <br />
+                    <div className="text-center">
+                        <input type="file" name="file" ref={fileInputRef} onChange={handleFileChange} />
+                        <button className="btn btn-info" style={{ marginLeft: "5px" }} onClick={handleUpload}>Upload</button>
+                    </div>
+                    <br />
+                </>
             }
+
+            {selectedResources.length > 0 && <Toolbar selectedResources={selectedResources} onUpdate={handleBulkUpdate} props={props} />}
+            <br />
 
             {/* Error Message */}
             {errorMessage !== null &&
@@ -117,6 +142,7 @@ function Resources(props) {
                             <table className="table table-striped mx-auto text-center">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th style={{ color: "#112c3f" }} scope="col">Name:</th>
                                         <th>Download:</th>
                                         <th></th>
@@ -127,6 +153,7 @@ function Resources(props) {
                                 {resources.map((resource) => (
                                     <tbody key={resource.id}>
                                         <tr>
+                                            <td><input type="checkbox" className="checkbox" checked={selectedResources.includes(resource.id)} onChange={() => handleSelectResource(resource.id)} /></td>
                                             <td>{resource.filename}</td>
                                             <td><button className="btn btn-custom" onClick={() => handleDownload(resource.id)}>Download</button></td>
                                             <td>

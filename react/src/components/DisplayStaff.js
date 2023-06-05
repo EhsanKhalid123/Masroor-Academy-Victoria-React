@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile } from "../data/repository";
+import Toolbar from "./Toolbar";
 
 function DisplayStaff(props) {
 
@@ -9,6 +10,7 @@ function DisplayStaff(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [confirmPopup, setconfirmPopup] = useState(false);
+    const [selectedIds, setSelectedIds] = useState([]);
 
     let userProfilePage = "userProfile";
     let groupNumber = 6;
@@ -51,6 +53,19 @@ function DisplayStaff(props) {
         setSearch(event.target.value.toLowerCase());
     }
 
+    const handleBulkUpdate = async () => {
+        const updatedDetails = await getProfileUsers();
+        setUsersData(updatedDetails);
+        setSelectedIds([]);
+    };
+
+    const handleSelectStaff = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    };
 
     return (
         <>
@@ -61,6 +76,13 @@ function DisplayStaff(props) {
                     <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
             </div>
+
+            {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                <>
+                    {selectedIds.length > 0 && <Toolbar selectedUser={selectedIds} onUpdate={handleBulkUpdate} props={props} />}
+                    <br />
+                </>
+            }
 
             <div className="table-responsive">
 
@@ -104,9 +126,13 @@ function DisplayStaff(props) {
                                         )
                                     ) &&
                                         <>
-
                                             <tr>
-                                                <td></td>
+                                                <td>
+                                                    {/*    Check if staff member is selected                                 Call handleSelectStaff function on selection/deselection */}
+                                                    {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                                                        <input type="checkbox" className="checkbox" checked={selectedIds.includes(userDetails.id)} onChange={() => handleSelectStaff(userDetails.id)} />
+                                                    }
+                                                </td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                 <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
                                                 {(userDetails.group === "Principal" && userDetails.gender === "Female") ? (

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2, getGroups } from "../data/repository";
+import Toolbar from "./Toolbar";
 
 function DisplayStudents(props) {
 
@@ -10,6 +11,7 @@ function DisplayStudents(props) {
     const [search, setSearch] = useState('');
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [groups, setGroupsData] = useState([]);
+    const [selectedIds, setSelectedIds] = useState([]);
     const { groupNumber } = useParams();
     let userProfilePage;
 
@@ -60,6 +62,20 @@ function DisplayStudents(props) {
         setSearch(event.target.value.toLowerCase());
     }
 
+    const handleBulkUpdate = async () => {
+        const updatedDetails = await getProfileUsers();
+        setUsersData(updatedDetails);
+        setSelectedIds([]);
+    };
+
+    const handleSelectStaff = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    };
+
     let groupDetails;
 
     const group = groups.find((group) => group.id === groupNumber);
@@ -91,6 +107,14 @@ function DisplayStudents(props) {
                     <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
             </div>
+
+            {props.group === "student" && (props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                <>
+                    {selectedIds.length > 0 && <Toolbar selectedUser={selectedIds} onUpdate={handleBulkUpdate} props={props} />}
+                    <br />
+                </>
+            }
+
             <div style={{ display: "flex", justifyContent: "center" }}>
                 <Link to={linkTo}>
                     <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
@@ -134,7 +158,14 @@ function DisplayStudents(props) {
                                                 (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
                                             ) &&
                                                 <tr>
-                                                    <td></td>
+                                                    <td>
+                                                        {props.group === "student" && (props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                                                            <>
+                                                                {/*    Check if staff member is selected                                 Call handleSelectStaff function on selection/deselection */}
+                                                                <input type="checkbox" className="checkbox" checked={selectedIds.includes(userDetails.id)} onChange={() => handleSelectStaff(userDetails.id)} />
+                                                            </>
+                                                        }
+                                                    </td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
                                                     <td style={{ color: "#112c3f" }}>{userDetails.group}</td>

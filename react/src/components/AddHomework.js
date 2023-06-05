@@ -138,7 +138,7 @@ function AddHomework(props) {
             <form onSubmit={handleSubmit} >
                 <div className="form-group">
                     <h3 className="text-center">Add Homework for Student {getSelectedId2()}</h3>
-                    <h5 className="text-center"> Make Sure to Please Delete the Previous Homework Once Done!</h5>
+                    <h5 className="text-center"> Please Delete the Previous Homework Once it is Completed!</h5>
                     <div className="richTextEditor">
                         <CKEditor editor={Editor} data={homework} onChange={handleInputChange} config={editorConfig} />
                     </div>

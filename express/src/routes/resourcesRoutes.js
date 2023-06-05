@@ -15,7 +15,7 @@ module.exports = (express, app) => {
   });
 
   // Get the uploaded resource by ID
-  router.get('/:id', validateToken, controller.getResource);
+  router.get('/:id', controller.getResource);
 
   // Get the uploaded resource
   router.get('/', validateToken, controller.all);

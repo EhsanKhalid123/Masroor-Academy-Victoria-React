@@ -108,7 +108,7 @@ function Announcements(props) {
             <form onSubmit={handleSubmit} >
                 <div className="form-group">
                     <h3 className="text-center">Add Announcements:</h3>
-                    <h5 className="text-center"> Make Sure to Please Delete the Previous Announcements when adding new ones!</h5>
+                    <h5 className="text-center"> Please Delete Announcements that are no longer valid!</h5>
                     <div className="richTextEditor">
                         <CKEditor editor={Editor} data={announcement} onChange={handleInputChange} config={editorConfig} />
                     </div>
