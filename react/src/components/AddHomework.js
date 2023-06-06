@@ -4,7 +4,7 @@ import Editor from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import parse from 'html-react-parser';
 import { Link, useLocation } from "react-router-dom";
-import { deleteHomeworks, getSelectedId, createHomeworks, getHomeworks, getSelectedId2, removeSelectedId, removeSelectedId2 } from "../data/repository";
+import { deleteHomeworks, getSelectedId, createHomeworks, getHomeworks, getSelectedId2, removeSelectedId, removeSelectedId2, getGroups } from "../data/repository";
 
 // Functional Component for Navigation Bar
 function AddHomework(props) {
@@ -13,31 +13,22 @@ function AddHomework(props) {
     const [homework, setHomework] = useState("");
     const [homeworks, setHomeworks] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const [groups, setGroupsData] = useState([]);
     const location = useLocation();
     const groupNumber = location?.state?.groupNumber;
 
     let groupDetails;
 
-    switch (groupNumber) {
-        case "1":
-            groupDetails = "7-8 (Group 1)";
-            break;
-        case "2":
-            groupDetails = "9-11 (Group 2)";
-            break;
-        case "3":
-            groupDetails = "12-13 (Group 3)";
-            break;
-        case "4":
-            groupDetails = "14-15 (Group 4)";
-            break;
-        case "5":
-            groupDetails = "All Students";
-            break;
-        default:
-            groupDetails = "Invalid group number";
+    const group = groups.find((group) => group.id === groupNumber);
+    
+    if (group) {
+        groupDetails = group.group;
+    } else if (groupNumber === "5") {
+        groupDetails = "All Students";
+    } else {
+        groupDetails = "Invalid group number";
     }
+
 
     var IFRAME_SRC = '//cdn.iframe.ly/api/iframe';
     var API_KEY = 'ec1627000e306b7c55174b';
@@ -53,8 +44,15 @@ function AddHomework(props) {
             setIsLoading(false);
         }
 
+         // Loads User Details from DB
+         async function loadGroupDetails() {
+            const currentGroups = await getGroups();
+            setGroupsData(currentGroups)
+        }
+
         // Calls the functions above
         loadHomeworks();
+        loadGroupDetails();
     }, []);
 
     // Handler for when textbox value changes
