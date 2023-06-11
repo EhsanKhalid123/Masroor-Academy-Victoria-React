@@ -222,7 +222,7 @@ async function fetchImages() {
 
 async function createGroup(group) {
   const response = await axios.post(API_HOST + "/MAApi/groups", group, getHeaders());
-  
+
   return response.data;
 }
 
@@ -255,7 +255,7 @@ async function deleteGroup(group) {
 
 async function createClass(classes) {
   const response = await axios.post(API_HOST + "/MAApi/classes", classes, getHeaders());
-  
+
   return response.data;
 }
 
@@ -288,8 +288,8 @@ async function deleteClass(classes) {
 // ---------- Syllabus --------------------------------------------
 
 async function createSyllabus(groupId, syllabus) {
-  const response = await axios.post(API_HOST + "/MAApi/syllabus", {groupId, syllabus}, getHeaders());
-  
+  const response = await axios.post(API_HOST + "/MAApi/syllabus", { groupId, syllabus }, getHeaders());
+
   return response.data;
 }
 
@@ -313,10 +313,32 @@ async function deleteSyllabus(syllabus) {
 
 // Update Registration Message Request For API from DB
 async function updateSyllabus(groupId, syllabus) {
-  const response = await axios.post(API_HOST + "/MAApi/syllabus/update", {groupId, syllabus}, getHeaders());
+  const response = await axios.post(API_HOST + "/MAApi/syllabus/update", { groupId, syllabus }, getHeaders());
 
   return response.data;
 }
+
+// ---------- Attendance --------------------------------------------
+async function createAttendance(date, students) {
+  const response = await axios.post(API_HOST + "/MAApi/attendance", { date, students }, getHeaders());
+
+  return response.data;
+}
+
+async function getAttendance(date) {
+  const encodedDate = encodeURIComponent(date);
+  const response = await axios.get(API_HOST + `/MAApi/attendance/${encodedDate}`, getHeaders());
+
+  return response.data;
+}
+
+async function updateAttendance(date, students) {
+  const encodedDate = encodeURIComponent(date);
+  const response = await axios.post(API_HOST + `/MAApi/attendance/update/${encodedDate}`, {students}, getHeaders());
+
+  return response.data;
+}
+
 
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
@@ -385,5 +407,6 @@ export {
   uploadResource, fetchResources, deleteResources, fetchResourcesByID, fetchImages,
   updateRegFormMessage, getRegFormMessage, createClass, createGroup, getClasses, getGroups,
   getGroupById, getClassById, deleteGroup, deleteClass, createSyllabus, getSyllabus,
-  getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass
+  getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass,
+  createAttendance, getAttendance, updateAttendance
 }
