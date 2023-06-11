@@ -175,42 +175,52 @@ function DisplayGroup(props) {
                         <span className="text-muted">Loading Groups...</span>
                     </div>
                     :
-                    <div>
-                        <table className="table table-striped" style={{ margin: "0" }}>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th style={{ color: "#112c3f" }} scope="col">ID</th>
-                                    <th style={{ color: "#112c3f" }} scope="col">Group</th>
-                                    <th style={{ color: "#112c3f" }} scope="col">Year</th>
-                                    <th></th>
-                                    <th></th>
+                    <>
+                        {groups.length === 0 ?
+                            <div className="text-center">
+                                <p>&nbsp;</p>
+                                <span className="text-muted">There are no groups!</span>
+                                <p>&nbsp;</p>
+                            </div>
+                            :
+                            <div>
+                                <table className="table table-striped" style={{ margin: "0" }}>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th style={{ color: "#112c3f" }} scope="col">ID</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Group</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Year</th>
+                                            <th></th>
+                                            <th></th>
 
-                                </tr>
-                            </thead>
-                            {/* Mapping Users state Variable to access its content easily to display in Table */}
-                            {groups.filter((groupDetails) => {
-                                return search.toLowerCase() === '' ? groupDetails : (groupDetails.group && groupDetails.group.toLowerCase().includes(search)) || (groupDetails.id && groupDetails.id.includes(search)) || (groupDetails.year && groupDetails.year.includes(search));
-                            }).map((groupDetails) =>
-                                <tbody key={groupDetails.id}>
+                                        </tr>
+                                    </thead>
+                                    {/* Mapping Users state Variable to access its content easily to display in Table */}
+                                    {groups.filter((groupDetails) => {
+                                        return search.toLowerCase() === '' ? groupDetails : (groupDetails.group && groupDetails.group.toLowerCase().includes(search)) || (groupDetails.id && groupDetails.id.includes(search)) || (groupDetails.year && groupDetails.year.includes(search));
+                                    }).map((groupDetails) =>
+                                        <tbody key={groupDetails.id}>
 
-                                    <tr>
-                                        <td></td>
-                                        <td style={{ color: "#112c3f" }}>{groupDetails.id}</td>
-                                        <td style={{ color: "#112c3f" }}>{groupDetails.group}</td>
-                                        <td style={{ color: "#112c3f" }}>{groupDetails.year}</td>
-                                        <td>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(groupDetails.id); await togglePopup() }} >Delete</button>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(groupDetails.id); await togglePopup2(event) }} >Edit</button>
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td style={{ color: "#112c3f" }}>{groupDetails.id}</td>
+                                                <td style={{ color: "#112c3f" }}>{groupDetails.group}</td>
+                                                <td style={{ color: "#112c3f" }}>{groupDetails.year}</td>
+                                                <td>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(groupDetails.id); await togglePopup() }} >Delete</button>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(groupDetails.id); await togglePopup2(event) }} >Edit</button>
+                                                </td>
+                                                <td></td>
+                                            </tr>
 
 
-                                </tbody>
-                            )}
-                        </table>
-                    </div>
+                                        </tbody>
+                                    )}
+                                </table>
+                            </div>
+                        }
+                    </>
                 }
             </div>
 

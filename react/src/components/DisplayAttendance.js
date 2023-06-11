@@ -1,6 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { selectedId, getSelectedId, deleteAttendance, getAllAttendance, getAttendance  } from "../data/repository";
+import { selectedId, getSelectedId, deleteAttendance, getAllAttendance, getAttendance } from "../data/repository";
 
 function DisplayAttendance(props) {
 
@@ -34,12 +34,12 @@ function DisplayAttendance(props) {
         const currentDetails = await getAttendance(getSelectedId());
 
         await deleteAttendance(currentDetails);
-      
+
         // Update Page/Refresh the Data
         const updatedDetails = await getAllAttendance();
         setAttendanceData(updatedDetails);
-      
-        togglePopup();  
+
+        togglePopup();
     }
 
     const handleSearch = async (event) => {
@@ -60,38 +60,48 @@ function DisplayAttendance(props) {
 
                 {isLoading ?
                     <div className="card-body text-center">
-                        <span className="text-muted">Loading Classes...</span>
+                        <span className="text-muted">Loading Attendance...</span>
                     </div>
                     :
-                    <div>
-                        <table className="table table-striped" style={{ margin: "0" }}>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th style={{ color: "#112c3f" }} scope="col">Date</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            {/* Mapping Users state Variable to access its content easily to display in Table */}
-                            {attendanceData.filter((attendance) => {
-                                return search.toLowerCase() === '' ? attendance : (attendance.date && attendance.date.toLowerCase().includes(search));
-                            }).map((attendance) =>
-                                <tbody key={attendance.date}>
+                    <>
+                        {attendanceData.length === 0 ?
+                            <div className="text-center">
+                                <p>&nbsp;</p>
+                                <span className="text-muted">No attendance has been marked!</span>
+                                <p>&nbsp;</p>
+                            </div>
+                            :
+                            <div>
+                                <table className="table table-striped" style={{ margin: "0" }}>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Date</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    {/* Mapping Users state Variable to access its content easily to display in Table */}
+                                    {attendanceData.filter((attendance) => {
+                                        return search.toLowerCase() === '' ? attendance : (attendance.date && attendance.date.toLowerCase().includes(search));
+                                    }).map((attendance) =>
+                                        <tbody key={attendance.date}>
 
-                                    <tr>
-                                        <td></td>
-                                        <td style={{ color: "#112c3f" }}>{new Date(attendance.date).toLocaleDateString()}</td>
-                                        <td>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(attendance.date); await togglePopup() }} >Delete</button>
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td style={{ color: "#112c3f" }}>{new Date(attendance.date).toLocaleDateString()}</td>
+                                                <td>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(attendance.date); await togglePopup() }} >Delete</button>
+                                                </td>
+                                                <td></td>
+                                            </tr>
 
 
-                                </tbody>
-                            )}
-                        </table>
-                    </div>
+                                        </tbody>
+                                    )}
+                                </table>
+                            </div>
+                        }
+                    </>
                 }
             </div>
 

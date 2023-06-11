@@ -169,39 +169,49 @@ function DisplayClass(props) {
                         <span className="text-muted">Loading Classes...</span>
                     </div>
                     :
-                    <div>
-                        <table className="table table-striped" style={{ margin: "0" }}>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th style={{ color: "#112c3f" }} scope="col">ID</th>
-                                    <th style={{ color: "#112c3f" }} scope="col">Class</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            {/* Mapping Users state Variable to access its content easily to display in Table */}
-                            {classes.filter((classDetails) => {
-                                return search.toLowerCase() === '' ? classDetails : (classDetails.class && classDetails.class.toLowerCase().includes(search)) || (classDetails.id && classDetails.id.includes(search));
-                            }).map((classDetails) =>
-                                <tbody key={classDetails.id}>
+                    <>
+                        {classes.length === 0 ?
+                            <div className="text-center">
+                                <p>&nbsp;</p>
+                                <span className="text-muted">There are no classes!</span>
+                                <p>&nbsp;</p>
+                            </div>
+                            :
+                            <div>
+                                <table className="table table-striped" style={{ margin: "0" }}>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th style={{ color: "#112c3f" }} scope="col">ID</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Class</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    {/* Mapping Users state Variable to access its content easily to display in Table */}
+                                    {classes.filter((classDetails) => {
+                                        return search.toLowerCase() === '' ? classDetails : (classDetails.class && classDetails.class.toLowerCase().includes(search)) || (classDetails.id && classDetails.id.includes(search));
+                                    }).map((classDetails) =>
+                                        <tbody key={classDetails.id}>
 
-                                    <tr>
-                                        <td></td>
-                                        <td style={{ color: "#112c3f" }}>{classDetails.id}</td>
-                                        <td style={{ color: "#112c3f" }}>{classDetails.class}</td>
-                                        <td>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(classDetails.id); await togglePopup() }} >Delete</button>
-                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(classDetails.id); await togglePopup2(event) }} >Edit</button>
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td style={{ color: "#112c3f" }}>{classDetails.id}</td>
+                                                <td style={{ color: "#112c3f" }}>{classDetails.class}</td>
+                                                <td>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(classDetails.id); await togglePopup() }} >Delete</button>
+                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(classDetails.id); await togglePopup2(event) }} >Edit</button>
+                                                </td>
+                                                <td></td>
+                                            </tr>
 
 
-                                </tbody>
-                            )}
-                        </table>
-                    </div>
+                                        </tbody>
+                                    )}
+                                </table>
+                            </div>
+                        }
+                    </>
                 }
             </div>
 
@@ -233,7 +243,7 @@ function DisplayClass(props) {
                                         {errors.class && (
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.class}</p>
                                         )}
-                                    </div>  
+                                    </div>
                                     <button onClick={(event) => togglePopup2(event)} className="btn btn-info" style={{ margin: "10px" }}>Close</button>
                                     <button type="submit" className="btn btn-success" style={{ margin: "10px" }}>Edit</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}
