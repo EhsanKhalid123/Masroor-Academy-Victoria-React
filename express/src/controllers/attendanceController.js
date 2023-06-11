@@ -3,6 +3,20 @@ const db = require("../database");
 
 // Endpoint for selecting attendance for a specific date
 exports.all = async (req, res) => {
+
+  try {
+
+    const attendance = await db.attendance.findAll();
+
+    res.json(attendance);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Endpoint for selecting attendance for a specific date
+exports.selected = async (req, res) => {
   const dateParam = req.params.date;
 
   try {
@@ -16,66 +30,68 @@ exports.all = async (req, res) => {
 
     res.json(attendance);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
 
 // Create a new attendance record
 exports.create = async (req, res) => {
-    const { date, students } = req.body;
-  
-    try {
-      const attendance = await db.attendance.create({
-        date: date,
-        students: students,
-      });
+  const { date, students } = req.body;
+
+  try {
+    const attendance = await db.attendance.create({
+      date: date,
+      students: students,
+    });
+    res.json(attendance);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Update the attendance record for a specific date
+exports.update = async (req, res) => {
+  const date = req.params.date;
+  const { students } = req.body;
+
+  try {
+    const attendance = await db.attendance.findOne({
+      where: { date: date },
+    });
+    if (attendance) {
+      attendance.students = students;
+      await attendance.save();
       res.json(attendance);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.status(404).json({ error: 'Attendance not found' });
     }
-  };
-  
-  // Update the attendance record for a specific date
-  exports.update = async (req, res) => {
-    const date = req.params.date;
-    const { students } = req.body;
-  
-    try {
-      const attendance = await db.attendance.findOne({
-        where: { date: date },
-      });
-      if (attendance) {
-        attendance.students = students;
-        await attendance.save();
-        res.json(attendance);
-      } else {
-        res.status(404).json({ error: 'Attendance not found' });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Delete the attendance record for a specific date
+exports.delete = async (req, res) => {
+  try {
+
+    const date = req.body.date;
+
+    let removed = false;
+
+    const attendance = await db.attendance.findByPk(date);
+    if (attendance !== null) {
+      await attendance.destroy();
+      removed = true;
     }
-  };
-  
-  // Delete the attendance record for a specific date
-  exports.delete = async (req, res) => {
-    const { date } = req.params;
-  
-    try {
-      const attendance = await db.attendance.findOne({
-        where: { date: date },
-      });
-      if (attendance) {
-        await attendance.destroy();
-        res.json({ message: 'Attendance deleted successfully' });
-      } else {
-        res.status(404).json({ error: 'Attendance not found' });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
+
+    return res.json(removed);
+  } catch (error) {
+    console.log(error);
+    // Send an error response.
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 

@@ -31,6 +31,7 @@ import CreateGroup from './CreateGroup';
 import DisplayGroup from './DisplayGroup';
 import DisplayClass from './DisplayClass';
 import Attendance from './Attendance';
+import DisplayAttendance from './DisplayAttendance';
 
 // Functional Component for App
 function App() {
@@ -146,6 +147,7 @@ function App() {
                       <Route path="/ViewGroup" element={<DisplayGroup user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/CreateClass" element={<CreateClass user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/ViewClass" element={<DisplayClass user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/ViewAttendance" element={<DisplayAttendance user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                     </>
                   }
 

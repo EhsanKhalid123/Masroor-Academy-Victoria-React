@@ -332,9 +332,22 @@ async function getAttendance(date) {
   return response.data;
 }
 
+async function getAllAttendance() {
+  const response = await axios.get(API_HOST + "/MAApi/attendance", getHeaders());
+
+  return response.data;
+}
+
 async function updateAttendance(date, students) {
   const encodedDate = encodeURIComponent(date);
   const response = await axios.post(API_HOST + `/MAApi/attendance/update/${encodedDate}`, {students}, getHeaders());
+
+  return response.data;
+}
+
+async function deleteAttendance(date) {
+  // const encodedDate = encodeURIComponent(date);
+  const response = await axios.post(API_HOST + "/MAApi/attendance/delete", date, getHeaders());
 
   return response.data;
 }
@@ -408,5 +421,5 @@ export {
   updateRegFormMessage, getRegFormMessage, createClass, createGroup, getClasses, getGroups,
   getGroupById, getClassById, deleteGroup, deleteClass, createSyllabus, getSyllabus,
   getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass,
-  createAttendance, getAttendance, updateAttendance
+  createAttendance, getAttendance, updateAttendance, deleteAttendance, getAllAttendance
 }
