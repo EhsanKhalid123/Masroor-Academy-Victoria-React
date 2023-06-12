@@ -1,6 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { getProfileUsers, getGroups, getAttendance, createAttendance, updateAttendance, getAllAttendance } from "../data/repository";
 
 
@@ -124,6 +124,12 @@ function Attendance(props) {
                     <span className="fa fa-search form-control-feedback"></span>
                     <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <Link to="/SelectGroupAttendance">
+                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
+                </Link>
             </div>
 
             <div className="table-responsive">
