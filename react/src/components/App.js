@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { getUser, removeUser, loggedInUser, removeLoggedInUser, removeSelectedId, removeSelectedId2 } from "../data/repository";
 import jwtDecode from 'jwt-decode'
+import '../assets/css/App.css';
 
 // Importing the components
 import Navigation from './Navigation';

@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ReactSwitch from 'react-switch';
 import { deleteUserDB, getProfile, updateUser, getGroups } from "../data/repository";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import profileImageLogo from "../assets/images/profileImage.png"
 
 // Functional Component for MyProfile
 function StudentStaffProfile(props) {
@@ -257,7 +258,7 @@ function StudentStaffProfile(props) {
                                     <div className="col-md-3">
                                         <img
                                             className="rounded-circle profileImage"
-                                            src={process.env.PUBLIC_URL + "assets/images/profileImage.png"}
+                                            src={profileImageLogo}
                                             alt="Account Icon"
                                         />
                                     </div>

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { getClasses } from "../data/repository";
+import MANavLogo from "../assets/images/Masroor Academy Logo.png";
 
 // Functional Component for Navigation Bar
 function Navigation(props) {
@@ -51,7 +52,7 @@ function Navigation(props) {
     <nav className="navbar navbar-expand-xl navbar-light" style={{ backgroundColor: "#f0f0f0" }}>
       <div className="container-fluid">
         <NavLink className="navbar-brand" to="/">
-          <img className="navbar-brand" src={process.env.PUBLIC_URL + 'assets/images/Masroor Academy Logo.png'} width="50px" alt="Logo for Masroor Academy" />
+          <img className="navbar-brand" src={MANavLogo} width="50px" alt="Logo for Masroor Academy" />
         </NavLink>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>

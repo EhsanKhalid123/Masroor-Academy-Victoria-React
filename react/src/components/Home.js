@@ -2,7 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import logo from "../Masroor Academy Logo 2.png";
+import logo from "../assets/images/Masroor Academy Logo 2.png";
 
 function Home() {
 

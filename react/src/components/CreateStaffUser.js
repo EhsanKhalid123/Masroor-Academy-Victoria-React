@@ -2,6 +2,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
 import { createUser, getProfile, getGroups, getClasses } from "../data/repository";
+import profileImageLogo from "../assets/images/profileImage.png"
 
 // Functional Component for Create Staff User Page
 function CreateStaffUser(props) {
@@ -213,7 +214,7 @@ function CreateStaffUser(props) {
                                 <div className="col-md-3" style={{ display: "block", margin: "auto" }}>
                                     <img
                                         className="rounded-circle profileImage"
-                                        src={process.env.PUBLIC_URL + "assets/images/profileImage.png"}
+                                        src={profileImageLogo}
                                         alt="Account Icon"
                                     />
                                     <br />

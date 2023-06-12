@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { getFormStatus, getRegFormMessage, createUser, checkUserExists, getProfileRegister } from "../data/repository";
 import parse from 'html-react-parser';
+import registrationFormBanner from "../assets/images/Registration Form Banner.png"
 
 // Functional Component for Signup Page
 function Register(props) {
@@ -298,7 +299,7 @@ function Register(props) {
         // Signup Form Code using normal HTML elements
         <>
             <br />
-            <img className="img-fluid d-block mx-auto" style={{ textAlign: "center", margin: "auto", display: "block", maxWidth: "100%" }} src={"/assets/images/Registration Form Banner.png"} alt="Registration Banner" />
+            <img className="img-fluid d-block mx-auto" style={{ textAlign: "center", margin: "auto", display: "block", maxWidth: "100%" }} src={registrationFormBanner} alt="Registration Banner" />
             <h1 className="text-center mb-3" style={{ padding: "50px 20px 0 20px" }}>Masroor Academy Registration {currentYear}</h1>
             <hr style={{ width: "50%", marginBottom: "20px", borderWidth: "1px", backgroundColor: "#5dc7d8" }} />
 

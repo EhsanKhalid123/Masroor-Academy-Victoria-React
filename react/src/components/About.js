@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React from "react";
 
-import logo from "../Masroor Academy Logo 2.png";
+import logo from "../assets/images/Masroor Academy Logo 2.png";
 
 function About() {
 

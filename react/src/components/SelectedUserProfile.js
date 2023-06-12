@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import ReactSwitch from 'react-switch';
 import { deleteUserDB, getSelectedId, getProfile, updateUser, getGroups, getClasses } from "../data/repository";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import profileImageLogo from "../assets/images/profileImage.png"
 
 // Functional Component for MyProfile
 function AdminProfile(props) {
@@ -271,7 +272,7 @@ function AdminProfile(props) {
                                     <div className="col-md-3">
                                         <img
                                             className="rounded-circle profileImage"
-                                            src={process.env.PUBLIC_URL + "assets/images/profileImage.png"}
+                                            src={profileImageLogo}
                                             alt="Account Icon"
                                         />
                                     </div>

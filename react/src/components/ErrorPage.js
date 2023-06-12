@@ -6,7 +6,7 @@ function ErrorPage() {
   return (
     <div>
       <br />
-      <div className="container">
+      <div className="errorPageContainer">
         <h1 className="text-center">ERROR</h1>
         <div className="error-container">
           <div className="error-number">4</div>
