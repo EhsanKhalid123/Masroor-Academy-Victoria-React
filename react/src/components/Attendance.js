@@ -14,8 +14,6 @@ function Attendance(props) {
     const [groups, setGroupsData] = useState([]);
     const { groupNumber } = useParams();
     const [attendanceRecords, setAttendanceRecords] = useState([]);
-    const [absencePercentage, setAbsencePercentage] = useState(0);
-    const [presentPercentage, setPresentPercentage] = useState(0);
     const [attendanceData, setAttendanceData] = useState([]);
     const currentDate = new Date().toLocaleDateString();
 
@@ -112,6 +110,38 @@ function Attendance(props) {
         groupDetails = "Invalid group number";
     }
 
+    // Calculate present and absent percentages
+    const calculatePercentages = (studentId) => {
+        let totalAttendance = attendanceRecords.length;
+        let presentCount = 0;
+        let absenceCount = 0;
+        let approvedLeaveCount = 0;
+    
+        attendanceRecords.forEach((record) => {
+            record.students.forEach((student) => {
+                if (student.id === studentId) {
+                    // totalAttendance++;
+                    if (student.status === "Present") {
+                        presentCount++;
+                    } else if (student.status === "Absent") {
+                        absenceCount++;
+                    } else if (student.status === "Approved Leave") {
+                        approvedLeaveCount++;
+                    }
+                }
+            });
+        });
+    
+        // Add 15% to the present count for approved leave
+        presentCount += approvedLeaveCount * 0.15;
+    
+        return {
+            presentPercentage: totalAttendance > 0 ? (presentCount / totalAttendance) * 100 : 0,
+            absencePercentage: totalAttendance > 0 ? (absenceCount / totalAttendance) * 100 : 0,
+        };
+    };
+    
+
     return (
 
         <div>
@@ -184,6 +214,9 @@ function Attendance(props) {
                                     // .reverse()
                                     .join("");
 
+                                const percentages = calculatePercentages(userDetails.id);
+                                const { presentPercentage, absencePercentage } = percentages;
+
                                 return (
                                     <tbody key={userDetails.id}>
                                         {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
@@ -216,8 +249,8 @@ function Attendance(props) {
                                                                 <span>{attendanceStatus}</span>
                                                             </div>
                                                         </td>
-                                                        <td style={{ color: "#112c3f" }}>{presentPercentage}</td>
-                                                        <td style={{ color: "#112c3f" }}>{absencePercentage}</td>
+                                                        <td style={{ color: "#112c3f" }}>{absencePercentage.toFixed(2)}%</td>
+                                                        <td style={{ color: "#112c3f" }}>{presentPercentage.toFixed(2)}%</td>
 
                                                     </tr>
                                                 }
@@ -238,30 +271,3 @@ function Attendance(props) {
 
 // Export the Attendance Function
 export default Attendance;
-
-
-// <h2>Last 7 Days Attendance</h2>
-// <table>
-//     <thead>
-//         <tr>
-//             <th>Date</th>
-//             <th>Status</th>
-//         </tr>
-//     </thead>
-//     <tbody>
-//         {attendanceRecords.map((record) => (
-//             <tr key={record.id}>
-//                 <td>{record.date}</td>
-//                 <td>
-//                     {record.attendanceData.map((data) => (
-//                         data.studentId === selectedStudent && <span key={data.studentId}>{data.status}</span>
-//                     ))}
-//                 </td>
-//             </tr>
-//         ))}
-//     </tbody>
-// </table>
-
-// <h2>Attendance Percentage</h2>
-// <p>Absence Percentage: {absencePercentage}%</p>
-// <p>Present Percentage: {presentPercentage}%</p>
