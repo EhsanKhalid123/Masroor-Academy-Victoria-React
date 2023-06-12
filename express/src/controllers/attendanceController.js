@@ -37,12 +37,12 @@ exports.selected = async (req, res) => {
 
 // Create a new attendance record
 exports.create = async (req, res) => {
-  const { date, students } = req.body;
+  const { date, markedAttendance } = req.body;
 
   try {
     const attendance = await db.attendance.create({
       date: date,
-      students: students,
+      attendance: markedAttendance,
     });
     res.json(attendance);
   } catch (error) {
@@ -54,14 +54,14 @@ exports.create = async (req, res) => {
 // Update the attendance record for a specific date
 exports.update = async (req, res) => {
   const date = req.params.date;
-  const { students } = req.body;
+  const { markedAttendance } = req.body;
 
   try {
     const attendance = await db.attendance.findOne({
       where: { date: date },
     });
     if (attendance) {
-      attendance.students = students;
+      attendance.attendance = markedAttendance;
       await attendance.save();
       res.json(attendance);
     } else {

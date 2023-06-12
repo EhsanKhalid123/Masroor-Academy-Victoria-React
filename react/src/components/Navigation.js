@@ -85,14 +85,15 @@ function Navigation(props) {
                       <NavLink className="nav-link2 nav-link" to="/Announcements">Annoucements</NavLink>
                     </li>
 
-                    {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) ?
+                    {(props.user.group === "Admin" || props.user.group === "Principal" ) ?
                       <>
                       <li className="nav-item dropdown">
                           <div className="nav-link nav-link2 dropdown-toggle exclude" style={{ color: "#112c3f" }} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Attendance
                           </div>
                           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <Link className="dropdown-item" to="/SelectGroupAttendance">Mark Attendance</Link>
+                            <Link className="dropdown-item" to="/SelectGroupAttendance">Mark Student Attendance</Link>
+                            <Link className="dropdown-item" to="/AttendanceStaff">Mark Staff Attendance</Link>
                             <Link className="dropdown-item" to="/ViewAttendance">View Attendance</Link>
                           </div>
                         </li>

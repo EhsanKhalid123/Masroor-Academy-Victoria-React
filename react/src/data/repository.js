@@ -319,8 +319,8 @@ async function updateSyllabus(groupId, syllabus) {
 }
 
 // ---------- Attendance --------------------------------------------
-async function createAttendance(date, students) {
-  const response = await axios.post(API_HOST + "/MAApi/attendance", { date, students }, getHeaders());
+async function createAttendance(date, markedAttendance) {
+  const response = await axios.post(API_HOST + "/MAApi/attendance", { date, markedAttendance }, getHeaders());
 
   return response.data;
 }
@@ -338,9 +338,9 @@ async function getAllAttendance() {
   return response.data;
 }
 
-async function updateAttendance(date, students) {
+async function updateAttendance(date, markedAttendance) {
   const encodedDate = encodeURIComponent(date);
-  const response = await axios.post(API_HOST + `/MAApi/attendance/update/${encodedDate}`, {students}, getHeaders());
+  const response = await axios.post(API_HOST + `/MAApi/attendance/update/${encodedDate}`, {markedAttendance}, getHeaders());
 
   return response.data;
 }

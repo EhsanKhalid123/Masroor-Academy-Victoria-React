@@ -30,8 +30,9 @@ import CreateClass from './CreateClass';
 import CreateGroup from './CreateGroup';
 import DisplayGroup from './DisplayGroup';
 import DisplayClass from './DisplayClass';
-import Attendance from './Attendance';
+import AttendanceStudents from './AttendanceStudents';
 import DisplayAttendance from './DisplayAttendance';
+import AttendanceStaff from './AttendanceStaff';
 
 // Functional Component for App
 function App() {
@@ -133,7 +134,8 @@ function App() {
                       <Route path="/SelectGroupAttendance" element={<SelectGroup user={decodedUser} selectGroup={"attendance"} />} />
                       <Route path="/HomeworkGroup/:groupNumber" element={<DisplayStudents user={decodedUser} group={"homework"} />} />
                       <Route path="/StudentGroup/:groupNumber" element={<DisplayStudents user={decodedUser} group={"student"} />} />
-                      <Route path="/Attendance/:groupNumber" element={<Attendance user={decodedUser} />} />
+                      <Route path="/Attendance/:groupNumber" element={<AttendanceStudents user={decodedUser} />} />
+                      <Route path="/AttendanceStaff" element={<AttendanceStaff user={decodedUser} />} />
                     </>
                   }
 

@@ -90,7 +90,9 @@ function DisplayAttendance(props) {
                                                 <td></td>
                                                 <td style={{ color: "#112c3f" }}>{new Date(attendance.date).toLocaleDateString()}</td>
                                                 <td>
-                                                    <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(attendance.date); await togglePopup() }} >Delete</button>
+                                                    {props.user.group === "Admin" &&
+                                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(attendance.date); await togglePopup() }} >Delete</button>
+                                                    }
                                                 </td>
                                                 <td></td>
                                             </tr>

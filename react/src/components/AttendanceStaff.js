@@ -1,7 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { getProfileUsers, getGroups, getAttendance, createAttendance, updateAttendance, getAllAttendance } from "../data/repository";
+import { getProfileUsers, getAttendance, createAttendance, updateAttendance, getAllAttendance } from "../data/repository";
 
 
 // Functional Component for Login Page
@@ -11,8 +10,6 @@ function Attendance(props) {
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
-    const [groups, setGroupsData] = useState([]);
-    const { groupNumber } = useParams();
     const [attendanceRecords, setAttendanceRecords] = useState([]);
     const [attendanceData, setAttendanceData] = useState([]);
     const currentDate = new Date().toLocaleDateString();
@@ -26,15 +23,9 @@ function Attendance(props) {
             setIsLoading(false);
         }
 
-        // // Loads User Details from DB
-        async function loadGroupDetails() {
-            const currentGroups = await getGroups();
-            setGroupsData(currentGroups)
-        }
-
         const loadAttendanceData = async () => {
             const attendance = await getAttendance(currentDate);
-            setAttendanceData(attendance?.students || []);
+            setAttendanceData(attendance?.attendance || []);
 
         }
 
@@ -46,7 +37,6 @@ function Attendance(props) {
 
         // Calls the functions above
         loadUserDetails();
-        loadGroupDetails();
         loadAttendanceData();
         loadAllAttendanceData();
 
@@ -57,24 +47,24 @@ function Attendance(props) {
         setSearch(event.target.value.toLowerCase());
     }
 
-    const handleAttendanceChange = async (studentId, status, studentGroup) => {
+    const handleAttendanceChange = async (staffId, status, staffGroup) => {
 
         const existingAttendance = await getAttendance(currentDate);;
         let updatedAttendanceData = [];
 
         if (existingAttendance) {
-            updatedAttendanceData = attendanceData.map((student) => {
-                if (student && student.id === studentId) {
-                    return { ...student, status };
+            updatedAttendanceData = attendanceData.map((staff) => {
+                if (staff && staff.id === staffId) {
+                    return { ...staff, status };
                 }
-                return student;
+                return staff;
             });
 
-            const existingStudent = updatedAttendanceData.find((student) => student?.id === studentId);
-            if (!existingStudent) {
+            const existingstaff = updatedAttendanceData.find((staff) => staff?.id === staffId);
+            if (!existingstaff) {
                 updatedAttendanceData.push({
-                    id: studentId,
-                    group: studentGroup,
+                    id: staffId,
+                    group: staffGroup,
                     status: status,
                     // Add other properties based on the model schema
                 });
@@ -83,8 +73,8 @@ function Attendance(props) {
             updatedAttendanceData = [
                 ...attendanceData,
                 {
-                    id: studentId,
-                    group: studentGroup,
+                    id: staffId,
+                    group: staffGroup,
                     status: status,
                     // Add other properties based on the model schema
                 },
@@ -100,47 +90,37 @@ function Attendance(props) {
         setAttendanceData(updatedAttendanceData);
     };
 
-    let groupDetails;
-
-    const group = groups.find((group) => group.id === groupNumber);
-
-    if (group) {
-        groupDetails = group.group;
-    } else {
-        groupDetails = "Invalid group number";
-    }
-
     // Calculate present and absent percentages
-    const calculatePercentages = (studentId) => {
+    const calculatePercentages = (staffId) => {
         let totalAttendance = attendanceRecords.length;
         let presentCount = 0;
         let absenceCount = 0;
         let approvedLeaveCount = 0;
-    
+
         attendanceRecords.forEach((record) => {
-            record.students.forEach((student) => {
-                if (student.id === studentId) {
+            record.attendance.forEach((staff) => {
+                if (staff.id === staffId) {
                     // totalAttendance++;
-                    if (student.status === "Present") {
+                    if (staff.status === "Present") {
                         presentCount++;
-                    } else if (student.status === "Absent") {
+                    } else if (staff.status === "Absent") {
                         absenceCount++;
-                    } else if (student.status === "Approved Leave") {
+                    } else if (staff.status === "Approved Leave") {
                         approvedLeaveCount++;
                     }
                 }
             });
         });
-    
+
         // Add 15% to the present count for approved leave
         presentCount += approvedLeaveCount * 0.15;
-    
+
         return {
             presentPercentage: totalAttendance > 0 ? (presentCount / totalAttendance) * 100 : 0,
             absencePercentage: totalAttendance > 0 ? (absenceCount / totalAttendance) * 100 : 0,
         };
     };
-    
+
 
     return (
 
@@ -156,17 +136,11 @@ function Attendance(props) {
                 </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "center" }}>
-                <Link to="/SelectGroupAttendance">
-                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
-                </Link>
-            </div>
-
             <div className="table-responsive">
 
                 {isLoading ?
                     <div className="card-body text-center">
-                        <span className="text-muted">Loading Students...</span>
+                        <span className="text-muted">Loading Staff...</span>
                     </div>
                     :
                     <div>
@@ -188,16 +162,16 @@ function Attendance(props) {
                             {users.filter((userDetails) => {
                                 return search.toLowerCase() === '' ? userDetails : (userDetails.name && userDetails.name.toLowerCase().includes(search)) || (userDetails.group && userDetails.group.toLowerCase().includes(search)) || (userDetails.id && userDetails.id.toLowerCase().includes(search)) || (userDetails.gender && userDetails.gender.toLowerCase().includes(search));
                             }).map((userDetails) => {
-                                // Check if the student ID exists in the attendanceData array
-                                const attendanceStudent = attendanceData.find(
-                                    (student) => student.id === userDetails.id
+                                // Check if the staff ID exists in the attendanceData array
+                                const attendancestaff = attendanceData.find(
+                                    (staff) => staff.id === userDetails.id
 
                                 );
 
-                                // Get the status if the student exists in the attendanceData array
-                                const status = attendanceStudent ? attendanceStudent.status : "";
+                                // Get the status if the staff exists in the attendanceData array
+                                const status = attendancestaff ? attendancestaff.status : "";
 
-                                const lastFiveAttendances = attendanceRecords.map(record => record.students.find(student => student.id === userDetails.id));
+                                const lastFiveAttendances = attendanceRecords.map(record => record.attendance.find(staff => staff.id === userDetails.id));
                                 const attendanceStatus = lastFiveAttendances
                                     .map((record) => {
                                         if (record) {
@@ -219,45 +193,52 @@ function Attendance(props) {
 
                                 return (
                                     <tbody key={userDetails.id}>
-                                        {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
-                                        {(userDetails.name !== props.user.name && userDetails.group !== "Admin" && userDetails.group !== "Male Teacher" && userDetails.group !== "Female Teacher" && userDetails.group !== "Principal") &&
+                                        {/* Dont display the name of the logged in user and the System Admin but the rest of the staff */}
+                                        {((userDetails.id !== "Admin") &&
+                                            (
+                                                (props.user.group === "Admin" &&
+                                                    (userDetails.group === "Male Teacher" || userDetails.group === "Female Teacher" || userDetails.group === "Principal" || userDetails.group === "Admin")
+                                                ) ||
+                                                (
+                                                    (props.user.group === "Principal" && props.user.gender === "Female") &&
+                                                    (userDetails.group === "Female Teacher" || userDetails.id === props.user.id)
+                                                ) ||
+                                                (
+                                                    (props.user.group === "Principal" && props.user.gender === "Male") &&
+                                                    (userDetails.group === "Male Teacher" || userDetails.id === props.user.id)
+                                                )
+                                            ) 
+                                        ) &&
                                             <>
-                                                {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                                {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                    (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                    (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                    (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                    (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                    (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
-                                                ) &&
-                                                    <tr>
-                                                        <td></td>
-                                                        <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
-                                                        <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                <tr>
+                                                    <td></td>
+                                                    <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
+                                                    <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                    {(userDetails.group === "Principal" && userDetails.gender === "Female") ? (
+                                                        <td style={{ color: "#112c3f" }}>In Charge Girls Section</td>
+                                                    ) : (
                                                         <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
-                                                        <td style={{ color: "#112c3f" }}>
-                                                            <div className="attendance-buttons">
-                                                                <button className={`attendance-button ${status === "Present" ? "selected present" : "present"}`} onClick={() => handleAttendanceChange(userDetails.id, "Present", userDetails.group)}>Present</button>
-                                                                <button className={`attendance-button ${status === "Absent" ? "selected absent" : "absent"}`} onClick={() => handleAttendanceChange(userDetails.id, "Absent", userDetails.group)}>Absent</button>
-                                                                <button className={`attendance-button ${status === "Approved Leave" ? "selected approved" : "approved"}`} onClick={() => handleAttendanceChange(userDetails.id, "Approved Leave", userDetails.group)}>Approved Leave</button>
-                                                            </div>
-                                                        </td>
-                                                        {/* <td style={{ color: "#112c3f" }}>➡{attendanceStatus}</td> */}
-                                                        <td style={{ color: "#112c3f", verticalAlign: "top" }}>
-                                                            <div style={{ display: "flex", flexDirection: "column" }}>
-                                                                <span>➡</span>
-                                                                <span>{attendanceStatus}</span>
-                                                            </div>
-                                                        </td>
-                                                        <td style={{ color: "#112c3f" }}>{absencePercentage.toFixed(2)}%</td>
-                                                        <td style={{ color: "#112c3f" }}>{presentPercentage.toFixed(2)}%</td>
+                                                    )}
+                                                    <td style={{ color: "#112c3f" }}>
+                                                        <div className="attendance-buttons">
+                                                            <button className={`attendance-button ${status === "Present" ? "selected present" : "present"}`} onClick={() => handleAttendanceChange(userDetails.id, "Present", userDetails.group)}>Present</button>
+                                                            <button className={`attendance-button ${status === "Absent" ? "selected absent" : "absent"}`} onClick={() => handleAttendanceChange(userDetails.id, "Absent", userDetails.group)}>Absent</button>
+                                                            <button className={`attendance-button ${status === "Approved Leave" ? "selected approved" : "approved"}`} onClick={() => handleAttendanceChange(userDetails.id, "Approved Leave", userDetails.group)}>Approved Leave</button>
+                                                        </div>
+                                                    </td>
+                                                    {/* <td style={{ color: "#112c3f" }}>➡{attendanceStatus}</td> */}
+                                                    <td style={{ color: "#112c3f", verticalAlign: "top" }}>
+                                                        <div style={{ display: "flex", flexDirection: "column" }}>
+                                                            <span>➡</span>
+                                                            <span>{attendanceStatus}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ color: "#112c3f" }}>{absencePercentage.toFixed(2)}%</td>
+                                                    <td style={{ color: "#112c3f" }}>{presentPercentage.toFixed(2)}%</td>
 
-                                                    </tr>
-                                                }
+                                                </tr>
                                             </>
                                         }
-
-
                                     </tbody>
                                 )
                             })}

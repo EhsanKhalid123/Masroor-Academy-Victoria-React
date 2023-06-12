@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.DATE,
             primaryKey: true,
           },
-          students: {
+          attendance: {
             type: DataTypes.JSON, // or DataTypes.ARRAY(DataTypes.JSON)
             allowNull: false,
           }
