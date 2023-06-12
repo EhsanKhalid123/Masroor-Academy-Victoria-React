@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getProfileUsers, getGroups, getAttendance, createAttendance, updateAttendance } from "../data/repository";
+import { getProfileUsers, getGroups, getAttendance, createAttendance, updateAttendance, getAllAttendance } from "../data/repository";
 
 
 // Functional Component for Login Page
@@ -40,10 +40,17 @@ function Attendance(props) {
 
         }
 
+        const loadAllAttendanceData = async () => {
+            const attendance = await getAllAttendance();
+            const lastFiveRecords = attendance.slice(-5); // Get the last 5 records
+            setAttendanceRecords(lastFiveRecords);
+        }
+
         // Calls the functions above
         loadUserDetails();
         loadGroupDetails();
         loadAttendanceData();
+        loadAllAttendanceData();
 
     }, [currentDate]);
 
@@ -135,7 +142,7 @@ function Attendance(props) {
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                     <th className="text-center" style={{ color: "#112c3f" }} scope="col">Mark Attendance</th>
-                                    <th style={{ color: "#112c3f" }} scope="col">Last 7 Attendance</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">Last 5 Attendances</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Total Absences</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Total Presents</th>
 
@@ -148,49 +155,73 @@ function Attendance(props) {
                                 // Check if the student ID exists in the attendanceData array
                                 const attendanceStudent = attendanceData.find(
                                     (student) => student.id === userDetails.id
-                                    
+
                                 );
 
                                 // Get the status if the student exists in the attendanceData array
                                 const status = attendanceStudent ? attendanceStudent.status : "";
 
-                                return (
-                                <tbody key={userDetails.id}>
-                                    {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
-                                    {(userDetails.name !== props.user.name && userDetails.group !== "Admin" && userDetails.group !== "Male Teacher" && userDetails.group !== "Female Teacher" && userDetails.group !== "Principal") &&
-                                        <>
-                                            {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
-                                            {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
-                                            ) &&
-                                                <tr>
-                                                    <td></td>
-                                                    <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
-                                                    <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
-                                                    <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
-                                                    <td style={{ color: "#112c3f" }}>
-                                                        <div className="attendance-buttons">
-                                                            <button className={`attendance-button ${status === "Present" ? "selected present" : "present"}`} onClick={() => handleAttendanceChange(userDetails.id, "Present", userDetails.group)}>Present</button>
-                                                            <button className={`attendance-button ${status === "Absent" ? "selected absent" : "absent"}`} onClick={() => handleAttendanceChange(userDetails.id, "Absent", userDetails.group)}>Absent</button>
-                                                            <button className={`attendance-button ${status === "Approved Leave" ? "selected approved" : "approved"}`} onClick={() => handleAttendanceChange(userDetails.id, "Approved Leave", userDetails.group)}>Approved Leave</button>
-                                                        </div>
-                                                    </td>
-                                                    <td style={{ color: "#112c3f" }}>{attendanceRecords}</td>
-                                                    <td style={{ color: "#112c3f" }}>{presentPercentage}</td>
-                                                    <td style={{ color: "#112c3f" }}>{absencePercentage}</td>
-
-                                                </tr>
+                                const lastFiveAttendances = attendanceRecords.map(record => record.students.find(student => student.id === userDetails.id));
+                                const attendanceStatus = lastFiveAttendances
+                                    .map((record) => {
+                                        if (record) {
+                                            if (record.status === "Present") {
+                                                return "✔️";
+                                            } else if (record.status === "Absent") {
+                                                return "❌";
+                                            } else if (record.status === "Approved Leave") {
+                                                return "🟠";
                                             }
-                                        </>
-                                    }
+                                        }
+                                        return "🚫";
+                                    })
+                                    // .reverse()
+                                    .join("");
+
+                                return (
+                                    <tbody key={userDetails.id}>
+                                        {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
+                                        {(userDetails.name !== props.user.name && userDetails.group !== "Admin" && userDetails.group !== "Male Teacher" && userDetails.group !== "Female Teacher" && userDetails.group !== "Principal") &&
+                                            <>
+                                                {/* If logged in user is FemaleTeachers then Display only Nasirat List and If MaleTeahers are logged in show only Atfal list or if Admin is logged in show full list*/}
+                                                {((props.user.group === "Female Teacher" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
+                                                    (props.user.group === "Male Teacher" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
+                                                    (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
+                                                    (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails)) ||
+                                                    (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
+                                                    (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
+                                                ) &&
+                                                    <tr>
+                                                        <td></td>
+                                                        <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
+                                                        <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                        <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                                        <td style={{ color: "#112c3f" }}>
+                                                            <div className="attendance-buttons">
+                                                                <button className={`attendance-button ${status === "Present" ? "selected present" : "present"}`} onClick={() => handleAttendanceChange(userDetails.id, "Present", userDetails.group)}>Present</button>
+                                                                <button className={`attendance-button ${status === "Absent" ? "selected absent" : "absent"}`} onClick={() => handleAttendanceChange(userDetails.id, "Absent", userDetails.group)}>Absent</button>
+                                                                <button className={`attendance-button ${status === "Approved Leave" ? "selected approved" : "approved"}`} onClick={() => handleAttendanceChange(userDetails.id, "Approved Leave", userDetails.group)}>Approved Leave</button>
+                                                            </div>
+                                                        </td>
+                                                        {/* <td style={{ color: "#112c3f" }}>➡{attendanceStatus}</td> */}
+                                                        <td style={{ color: "#112c3f", verticalAlign: "top" }}>
+                                                            <div style={{ display: "flex", flexDirection: "column" }}>
+                                                                <span>➡</span>
+                                                                <span>{attendanceStatus}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td style={{ color: "#112c3f" }}>{presentPercentage}</td>
+                                                        <td style={{ color: "#112c3f" }}>{absencePercentage}</td>
+
+                                                    </tr>
+                                                }
+                                            </>
+                                        }
 
 
-                                </tbody>
-                            )})}
+                                    </tbody>
+                                )
+                            })}
                         </table>
                     </div>
                 }
