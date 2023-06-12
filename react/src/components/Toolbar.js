@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faDownload, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
 import { getProfileUsers, deleteUserDB, getGroups, updateUser, fetchResourcesByID, fetchResources } from "../data/repository";
 import { useLocation } from "react-router-dom";
+import ReactSwitch from 'react-switch';
 
 
 function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
@@ -15,6 +16,7 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
     const location = useLocation();
     const isOnResourcesPage = location.pathname.includes("/Resources");
     const [resources, setResources] = useState([]);
+    const [selectedUserStatus, setSelectedUserStatus] = useState(false);
 
 
     // Load users from DB.
@@ -23,7 +25,8 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
         // Loads User Details from DB
         async function loadUserDetails() {
             const currentDetails = await getProfileUsers();
-            setUsersData(currentDetails)
+            setUsersData(currentDetails);
+
         }
 
         async function loadGroups() {
@@ -41,7 +44,7 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
         loadGroups();
         loadResources();
 
-    }, []);
+    }, [selectedUser]);
 
     useEffect(() => {
         // Check if the screen size is 500px or smaller
@@ -77,6 +80,25 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
         onUpdate();
 
     };
+
+    const handleToggleChange = async (event) => {
+        setSelectedUserStatus(event);
+
+        // Delete the selected users by their IDs
+        for (const id of selectedUser) {
+
+            const userToArchive = users.find((user) => { return user.id === id });
+
+            if (userToArchive) {
+                userToArchive.archived = event;
+                await updateUser(userToArchive, userToArchive.id, props.user.id);
+            }
+        }
+
+        // onUpdate();
+
+        // togglePopup();
+    }
 
     const deleteSelectedUser = async (event) => {
 
@@ -153,11 +175,16 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
                 {!isOnResourcesPage && (
                     <>
                         {props.user.group === "Admin" &&
-                            <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
-                                <button className="btn btn-danger" onClick={async () => { await togglePopup() }}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                            </div>
+                            <>
+                                <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
+                                    <ReactSwitch checked={selectedUserStatus} onChange={handleToggleChange} />
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
+                                    <button className="btn btn-danger" onClick={async () => { await togglePopup() }}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                </div>
+                            </>
                         }
                     </>
                 )}

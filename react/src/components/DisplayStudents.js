@@ -12,6 +12,7 @@ function DisplayStudents(props) {
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [groups, setGroupsData] = useState([]);
     const [selectedIds, setSelectedIds] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
     const { groupNumber } = useParams();
     let userProfilePage;
 
@@ -74,6 +75,18 @@ function DisplayStudents(props) {
         } else {
             setSelectedIds([...selectedIds, id]);
         }
+    };
+
+    const handleSelectAll = () => {
+        if (!selectAll) {
+            const groupUsers = users
+                .filter(user => user.group === groupDetails)
+                .map(user => user.id);
+            setSelectedIds(groupUsers);
+        } else {
+            setSelectedIds([]);
+        }
+        setSelectAll(!selectAll);
     };
 
     let groupDetails;
@@ -140,7 +153,11 @@ function DisplayStudents(props) {
                                 <table className="table table-striped" style={{ margin: "0" }}>
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            {groupNumber !== "5" ?
+                                                <th><input type="checkbox" className="checkbox" checked={selectAll} onChange={handleSelectAll} /></th>
+                                                :
+                                                <th></th>
+                                            }
                                             <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Name</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Group</th>
