@@ -275,7 +275,6 @@ function Register(props) {
     // Trim Fields Function to trim all spaces from the trimmedValues constant recieved from other function.
     const trimFields = () => {
         const trimmedValues = {};
-        // Object.keys(values).map(key => trimmedValues[key] = values[key].trim());
         Object.keys(values).map(key => {
             const value = values[key];
             if (typeof value === 'string') {

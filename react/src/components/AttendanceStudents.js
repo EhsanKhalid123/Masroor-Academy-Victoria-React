@@ -26,7 +26,7 @@ function Attendance(props) {
             setIsLoading(false);
         }
 
-        // // Loads User Details from DB
+        // Loads User Details from DB
         async function loadGroupDetails() {
             const currentGroups = await getGroups();
             setGroupsData(currentGroups)

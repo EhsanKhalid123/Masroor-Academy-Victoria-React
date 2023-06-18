@@ -253,6 +253,11 @@ html {
   overflow-x: auto;
 }
 
+.raw-html-embed P {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 p {
   margin-top: 1rem !important;
 }

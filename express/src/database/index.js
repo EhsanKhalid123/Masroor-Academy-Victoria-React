@@ -31,6 +31,7 @@ db.groups = require("./models/groups.js")(db.sequelize, DataTypes);
 db.classes = require("./models/classes.js")(db.sequelize, DataTypes);
 db.syllabus = require("./models/syllabus.js")(db.sequelize, DataTypes);
 db.attendance = require("./models/attendance.js")(db.sequelize, DataTypes);
+db.homework = require("./models/homework.js")(db.sequelize, DataTypes);
 
 // Relate homework posts and user through foreign key.
 // Relating homework table to the Users table with a foreign key.

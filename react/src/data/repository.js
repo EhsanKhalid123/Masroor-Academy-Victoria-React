@@ -353,6 +353,40 @@ async function deleteAttendance(date) {
 }
 
 
+// ---------- Homework --------------------------------------------
+async function createHomework(homework) {
+  const response = await axios.post(API_HOST + "/MAApi/homework", homework, getHeaders());
+
+  return response.data;
+}
+
+async function getHomework() {
+  const response = await axios.get(API_HOST + "/MAApi/homework", getHeaders());
+  return response.data;
+}
+
+async function getHomeworkById(id) {
+  const response = await axios.get(API_HOST + `/MAApi/homework/get/${id}`, getHeaders());
+
+  return response.data;
+}
+
+// Update Classes Details Request For API to DB
+async function editHomework(homework, id) {
+  const response = await axios.post(API_HOST + `/MAApi/homework/update/${id}`, homework, getHeaders());
+
+  return response.data;
+
+}
+
+// Delete Classes Request For API from DB
+async function deleteHomework(homework) {
+  const response = await axios.post(API_HOST + "/MAApi/homework/delete", homework, getHeaders());
+
+  return response.data;
+}
+
+
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
 function setUser(user) {
@@ -421,5 +455,6 @@ export {
   updateRegFormMessage, getRegFormMessage, createClass, createGroup, getClasses, getGroups,
   getGroupById, getClassById, deleteGroup, deleteClass, createSyllabus, getSyllabus,
   getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass,
-  createAttendance, getAttendance, updateAttendance, deleteAttendance, getAllAttendance
+  createAttendance, getAttendance, updateAttendance, deleteAttendance, getAllAttendance,
+  createHomework, getHomework, getHomeworkById, editHomework, deleteHomework
 }

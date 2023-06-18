@@ -139,7 +139,7 @@ function Resources(props) {
                         </div>
                         :
                         <div className="table-responsive">
-                            <table className="table table-striped mx-auto text-center">
+                            <table className="table table-striped mx-auto text-center" style={{margin: 0}}>
                                 <thead>
                                     <tr>
                                         <th></th>

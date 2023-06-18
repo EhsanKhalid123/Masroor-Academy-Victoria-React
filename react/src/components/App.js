@@ -34,6 +34,9 @@ import DisplayClass from './DisplayClass';
 import AttendanceStudents from './AttendanceStudents';
 import DisplayAttendance from './DisplayAttendance';
 import AttendanceStaff from './AttendanceStaff';
+import Homework from './Homework';
+import DisplayHomework from './DisplayHomework';
+import CreateHomework from './CreateHomework';
 
 // Functional Component for App
 function App() {
@@ -131,12 +134,14 @@ function App() {
                       <Route path="/Announcements" element={<Announcements user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/AddHomework" element={<AddHomework user={decodedUser} />} />
                       <Route path="/SelectGroupHomework" element={<SelectGroup user={decodedUser} selectGroup={"homework"} />} />
+                      <Route path="/SelectGroupMarkHomework" element={<SelectGroup user={decodedUser} selectGroup={"markhomework"} />} />
                       <Route path="/SelectGroupStudent" element={<SelectGroup user={decodedUser} selectGroup={"student"} />} />
                       <Route path="/SelectGroupAttendance" element={<SelectGroup user={decodedUser} selectGroup={"attendance"} />} />
                       <Route path="/HomeworkGroup/:groupNumber" element={<DisplayStudents user={decodedUser} group={"homework"} />} />
                       <Route path="/StudentGroup/:groupNumber" element={<DisplayStudents user={decodedUser} group={"student"} />} />
                       <Route path="/Attendance/:groupNumber" element={<AttendanceStudents user={decodedUser} />} />
                       <Route path="/AttendanceStaff" element={<AttendanceStaff user={decodedUser} />} />
+                      <Route path="/Homework/:groupNumber/:className" element={<Homework user={decodedUser} />} />
                     </>
                   }
 
@@ -151,6 +156,8 @@ function App() {
                       <Route path="/CreateClass" element={<CreateClass user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/ViewClass" element={<DisplayClass user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/ViewAttendance" element={<DisplayAttendance user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/DisplayHomework" element={<DisplayHomework user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/CreateHomework" element={<CreateHomework user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                     </>
                   }
 

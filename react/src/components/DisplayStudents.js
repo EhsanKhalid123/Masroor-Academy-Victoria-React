@@ -77,6 +77,16 @@ function DisplayStudents(props) {
         }
     };
 
+    let groupDetails;
+
+    const group = groups.find((group) => group.id === groupNumber);
+
+    if (group) {
+        groupDetails = group.group;
+    } else {
+        groupDetails = "Invalid group number";
+    }
+
     const handleSelectAll = () => {
         if (!selectAll) {
             const groupUsers = users
@@ -89,15 +99,6 @@ function DisplayStudents(props) {
         setSelectAll(!selectAll);
     };
 
-    let groupDetails;
-
-    const group = groups.find((group) => group.id === groupNumber);
-
-    if (group) {
-        groupDetails = group.group;
-    } else {
-        groupDetails = "Invalid group number";
-    }
 
     let linkTo;
     let selectLink;
@@ -153,7 +154,7 @@ function DisplayStudents(props) {
                                 <table className="table table-striped" style={{ margin: "0" }}>
                                     <thead>
                                         <tr>
-                                            {groupNumber !== "5" ?
+                                            {props.group === "student" && (props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) ?
                                                 <th><input type="checkbox" className="checkbox" checked={selectAll} onChange={handleSelectAll} /></th>
                                                 :
                                                 <th></th>

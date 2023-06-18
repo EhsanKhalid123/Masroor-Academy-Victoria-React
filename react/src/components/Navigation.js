@@ -86,9 +86,9 @@ function Navigation(props) {
                       <NavLink className="nav-link2 nav-link" to="/Announcements">Annoucements</NavLink>
                     </li>
 
-                    {(props.user.group === "Admin" || props.user.group === "Principal" ) ?
+                    {(props.user.group === "Admin" || props.user.group === "Principal") ?
                       <>
-                      <li className="nav-item dropdown">
+                        <li className="nav-item dropdown">
                           <div className="nav-link nav-link2 dropdown-toggle exclude" style={{ color: "#112c3f" }} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Attendance
                           </div>
@@ -102,7 +102,7 @@ function Navigation(props) {
                       :
                       <li className="nav-item">
                         <NavLink className="nav-link2 nav-link" to="/SelectGroupAttendance">Attendance</NavLink>
-                      </li> 
+                      </li>
                     }
 
                     <li className="nav-item dropdown">
@@ -110,14 +110,20 @@ function Navigation(props) {
                         Homework
                       </div>
                       <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                          <>
+                            <Link className="dropdown-item" to="/CreateHomework">Create Homework</Link>
+                            <Link className="dropdown-item" to="/DisplayHomework">Display Homework</Link>
+                          </>
+                        }
                         <Link className="dropdown-item" to="/SelectGroupHomework">Post Homework</Link>
                         {props.user.class ? (
                           // Display class name as a link
-                          <Link className="dropdown-item" to={`/class/${props.user.class}`}>{props.user.class}</Link>
+                          <Link className="dropdown-item" to="/SelectGroupMarkHomework" state={{ homeworkClasses: props.user.class }}>{props.user.class}</Link>
                         ) : (
                           // Display groups with links to each group
                           classes.map(classes => (
-                            <Link key={classes.id} className="dropdown-item" to={`/class/${classes.class}`}>{classes.class}</Link>
+                            <Link key={classes.id} className="dropdown-item" to="SelectGroupMarkHomework" state={{ homeworkClasses: classes.class }} >{classes.class}</Link>
                           ))
                         )}
                       </div>
@@ -128,8 +134,8 @@ function Navigation(props) {
                         Students
                       </div>
                       <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <Link className="dropdown-item" to="/SelectGroupStudent">Individual Student Profile & Results</Link>
-                        <Link className="dropdown-item" to="/">All Student Results</Link>
+                        <Link className="dropdown-item" to="/SelectGroupStudent">Student Profiles </Link>
+                        <Link className="dropdown-item" to="/">Student Results</Link>
                         <Link className="dropdown-item" to="/Syllabus">Syllabus</Link>
                       </div>
                     </li>
