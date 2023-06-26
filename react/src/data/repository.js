@@ -346,7 +346,6 @@ async function updateAttendance(date, markedAttendance) {
 }
 
 async function deleteAttendance(date) {
-  // const encodedDate = encodeURIComponent(date);
   const response = await axios.post(API_HOST + "/MAApi/attendance/delete", date, getHeaders());
 
   return response.data;
@@ -385,6 +384,38 @@ async function deleteHomework(homework) {
 
   return response.data;
 }
+
+// ---------- Results --------------------------------------------
+async function createResults(classname, results, studentID) {
+  const response = await axios.post(API_HOST + "/MAApi/results", { classname, results, studentID }, getHeaders());
+
+  return response.data;
+}
+
+async function getResults(classname, studentID) {
+  const response = await axios.get(API_HOST + `/MAApi/results/get/${classname}/${studentID}`, getHeaders());
+
+  return response.data;
+}
+
+async function getAllResults() {
+  const response = await axios.get(API_HOST + "/MAApi/results", getHeaders());
+
+  return response.data;
+}
+
+async function updateResults(classname, results, studentID) {
+  const response = await axios.post(API_HOST + `/MAApi/results/update/${classname}/${studentID}`, {results}, getHeaders());
+
+  return response.data;
+}
+
+async function deleteResults(classname) {
+  const response = await axios.post(API_HOST + "/MAApi/results/delete", classname, getHeaders());
+
+  return response.data;
+}
+
 
 
 // --- Helper functions to interact with local storage --------------------------------------------
@@ -456,5 +487,6 @@ export {
   getGroupById, getClassById, deleteGroup, deleteClass, createSyllabus, getSyllabus,
   getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass,
   createAttendance, getAttendance, updateAttendance, deleteAttendance, getAllAttendance,
-  createHomework, getHomework, getHomeworkById, editHomework, deleteHomework
+  createHomework, getHomework, getHomeworkById, editHomework, deleteHomework,
+  createResults, updateResults, deleteResults, getAllResults, getResults,
 }

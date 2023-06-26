@@ -1,10 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProfileUsers, getGroups, getSyllabus } from "../data/repository";
-import parse from 'html-react-parser';
-// import sanitizeHtml from 'sanitize-html';
-
+import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults } from "../data/repository";
 
 // Functional Component for Login Page
 function Homework(props) {
@@ -17,6 +14,7 @@ function Homework(props) {
     const [homeworks, setHomeworks] = useState([]);
     const { className } = useParams();
     const { groupNumber } = useParams();
+    const [results, setResults] = useState([]);
 
     useEffect(() => {
 
@@ -33,32 +31,19 @@ function Homework(props) {
             setGroupsData(currentGroups)
         }
 
-        // // Mock function to get homework data
-        // async function loadHomeworks() {
-        //     // Replace this with your actual function to fetch homework data
-        //     // Example: const homeworkData = await fetchHomeworks();
-        //     const homeworkData = [
-        //         { id: 1, name: "Homework 1" },
-        //         { id: 2, name: "Homework 2" },
-        //         { id: 3, name: "Homework 3" },
-        //     ];
-        //     setHomeworks(homeworkData);
-        // }
-
         // Loads Syllabus Details from DB
-        async function loadSyllabusDetails() {
-            const currentSyllabus = await getSyllabus();
-            setHomeworks(currentSyllabus);
+        async function loadHomeworkDetails() {
+            const currentHomework = await getHomework();
+            setHomeworks(currentHomework);
         }
 
 
         // Calls the functions above
         loadUserDetails();
         loadGroupDetails();
-        loadSyllabusDetails();
+        loadHomeworkDetails();
 
-
-    }, []);
+    }, [className]);
 
 
     const handleSearch = async (event) => {
@@ -75,10 +60,33 @@ function Homework(props) {
         groupDetails = "Invalid group number";
     }
 
-    const handleCheckboxChange = (userId, homeworkId) => {
-        // Implement your logic here to handle checkbox change for each student and homework
-        console.log(`User ID: ${userId}, Homework ID: ${homeworkId}`);
-    };
+
+
+    const handleCheckboxChange = async (studentID, homeworkID, checked) => {
+        const existingResult = await getResults(className, studentID);
+      
+        if (existingResult) {
+          // Update the existing result in the database
+          const updatedResult = {
+            ...existingResult,
+            result: {
+              ...existingResult.result,
+              [homeworkID]: checked,
+            },
+          };
+      
+          const updatedRecord = await updateResults(className, updatedResult.result, studentID);
+          setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
+        } else {
+          // Create a new result in the database
+          const newResult = {
+            [homeworkID]: checked,
+          };
+          const createdResult = await createResults(className, newResult, studentID);
+          setResults([...results, createdResult]);
+        }
+      };
+
 
 
     return (
@@ -105,7 +113,7 @@ function Homework(props) {
 
                 {isLoading ?
                     <div className="card-body text-center">
-                        <span className="text-muted">Loading Staff...</span>
+                        <span className="text-muted">Loading student...</span>
                     </div>
                     :
                     <div>
@@ -114,6 +122,15 @@ function Homework(props) {
                                 <tr>
                                     <th></th>
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                    {/* Render homework columns */}
+                                    {homeworks
+                                        .filter((homework) => homework.classname === className) // Filter homeworks based on className
+                                        .map((homework) => (
+                                            <th key={homework.id}>{homework.homework}</th>
+                                        ))}
+                                    {homeworks.some((homework) => homework.classname === className) && (
+                                        <th style={{ color: "#112c3f" }} scope="col">Results</th>
+                                    )}
 
                                 </tr>
                             </thead>
@@ -137,15 +154,30 @@ function Homework(props) {
                                                         <tr>
                                                             <td></td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
-                                                            {homeworks.map((homework) => (
-                                                                <td key={homework.id}>
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="checkbox"
-                                                                        onChange={() => handleCheckboxChange(userDetails.id, homework.id)}
-                                                                    />
-                                                                </td>
-                                                            ))}
+                                                            {homeworks
+                                                                .filter((homework) => homework.classname === className)
+                                                                .map((homework) => {
+
+                                                                    const checkboxID = `${userDetails.id}-${homework.id}`;
+                                                                    const checkboxValue =
+                                                                        results.find(
+                                                                            (result) =>
+                                                                                result.studentID === userDetails.id &&
+                                                                                result.class === className
+                                                                        )?.results?.[checkboxID] || false;
+
+                                                                    return (
+                                                                        <td key={homework.id}>
+                                                                            <input type="checkbox" className="checkbox"
+                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked)}
+                                                                            />
+                                                                        </td>
+                                                                    );
+                                                                })}
+                                                            {homeworks.some((homework) => homework.classname === className) && (
+                                                                <td style={{ color: "#112c3f" }}>results</td>
+                                                            )}
+
                                                         </tr>
                                                     </>
                                                 }

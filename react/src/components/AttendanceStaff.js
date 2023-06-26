@@ -163,10 +163,7 @@ function Attendance(props) {
                                 return search.toLowerCase() === '' ? userDetails : (userDetails.name && userDetails.name.toLowerCase().includes(search)) || (userDetails.group && userDetails.group.toLowerCase().includes(search)) || (userDetails.id && userDetails.id.toLowerCase().includes(search)) || (userDetails.gender && userDetails.gender.toLowerCase().includes(search));
                             }).map((userDetails) => {
                                 // Check if the staff ID exists in the attendanceData array
-                                const attendancestaff = attendanceData.find(
-                                    (staff) => staff.id === userDetails.id
-
-                                );
+                                const attendancestaff = attendanceData.find((staff) => staff.id === userDetails.id);
 
                                 // Get the status if the staff exists in the attendanceData array
                                 const status = attendancestaff ? attendancestaff.status : "";
