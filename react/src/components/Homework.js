@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults } from "../data/repository";
+import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults } from "../data/repository";
 
 // Functional Component for Login Page
 function Homework(props) {
@@ -37,11 +37,17 @@ function Homework(props) {
             setHomeworks(currentHomework);
         }
 
+        async function loadResultsDetails() {
+            // Load the results for the current class and set the results state
+            const currentResults = await getAllResults();
+            setResults(currentResults);
+        }
 
         // Calls the functions above
         loadUserDetails();
         loadGroupDetails();
         loadHomeworkDetails();
+        loadResultsDetails();
 
     }, [className]);
 
@@ -64,29 +70,28 @@ function Homework(props) {
 
     const handleCheckboxChange = async (studentID, homeworkID, checked) => {
         const existingResult = await getResults(className, studentID);
-      
-        if (existingResult) {
-          // Update the existing result in the database
-          const updatedResult = {
-            ...existingResult,
-            result: {
-              ...existingResult.result,
-              [homeworkID]: checked,
-            },
-          };
-      
-          const updatedRecord = await updateResults(className, updatedResult.result, studentID);
-          setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
-        } else {
-          // Create a new result in the database
-          const newResult = {
-            [homeworkID]: checked,
-          };
-          const createdResult = await createResults(className, newResult, studentID);
-          setResults([...results, createdResult]);
-        }
-      };
 
+        if (existingResult) {
+            // Update the existing result in the database
+            const updatedResult = {
+                ...existingResult,
+                result: {
+                    ...existingResult.result,
+                    [homeworkID]: checked,
+                },
+            };
+
+            const updatedRecord = await updateResults(className, updatedResult.result, studentID);
+            setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
+        } else {
+            // Create a new result in the database
+            const newResult = {
+                [homeworkID]: checked,
+            };
+            const createdResult = await createResults(className, newResult, studentID);
+            setResults([...results, createdResult]);
+        }
+    };
 
 
     return (
@@ -159,16 +164,13 @@ function Homework(props) {
                                                                 .map((homework) => {
 
                                                                     const checkboxID = `${userDetails.id}-${homework.id}`;
-                                                                    const checkboxValue =
-                                                                        results.find(
-                                                                            (result) =>
-                                                                                result.studentID === userDetails.id &&
-                                                                                result.class === className
-                                                                        )?.results?.[checkboxID] || false;
+                                                                    // Check if any result exists for the student and homework
+                                                                    const isChecked = results.some((result) => result.studentID === userDetails.id && result.result[checkboxID] === true && result.class === className);
 
                                                                     return (
                                                                         <td key={homework.id}>
                                                                             <input type="checkbox" className="checkbox"
+                                                                                checked={isChecked}
                                                                                 onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked)}
                                                                             />
                                                                         </td>
