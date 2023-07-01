@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false
     },
     group: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(45),
       allowNull: false
     }
   }, {

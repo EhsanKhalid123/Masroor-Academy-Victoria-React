@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) =>
 
         // Defining Table Fields/Data with properties.
         id: {
-            type: DataTypes.STRING(20),
+            type: DataTypes.STRING,
             primaryKey: true,
             allowNull: false
         },

@@ -172,7 +172,8 @@ function Homework(props) {
                                                                 .filter((homework) => homework.classname === className)
                                                                 .map((homework) => {
 
-                                                                    const checkboxID = `${userDetails.id}-${homework.id}`;
+                                                                    // const checkboxID = `${userDetails.id}-${homework.id}`;
+                                                                    const checkboxID = `${homework.id}`;
                                                                     // Check if any result exists for the student and homework
                                                                     const isChecked = results.some((result) => result.studentID === userDetails.id && result.markedHomework[checkboxID] === true && result.class === className);
 

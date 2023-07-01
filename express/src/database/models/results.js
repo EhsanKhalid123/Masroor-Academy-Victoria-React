@@ -12,15 +12,15 @@ module.exports = (sequelize, DataTypes) =>
       primaryKey: true
     },
     studentID: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING,
       allowNull: false,
     },
     studentGroup: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(45),
       allowNull: false,
     },
     class: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(45),
       allowNull: false,
     },
     markedHomework: {
@@ -28,11 +28,11 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false,
     },
     result: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(45),
       allowNull: true
     },
     attendanceResult: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING(45),
       allowNull: true
     }
   }, {

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) =>
 
         // Defining Table Fields/Data with properties.
         id: {
-            type: DataTypes.STRING(15),
+            type: DataTypes.STRING(35),
             defaultValue: "formStatus",
             primaryKey: true
         },
