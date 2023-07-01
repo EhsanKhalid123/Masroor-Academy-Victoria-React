@@ -1,6 +1,6 @@
 // Importing React class and functions from node modules
 import React, { useState, useEffect } from "react";
-import { getHomeworkById, getHomework, selectedId, getSelectedId, deleteHomework, editHomework, getClasses } from "../data/repository";
+import { getHomeworkById, getHomework, selectedId, getSelectedId, deleteHomework, editHomework, getClasses, getGroups } from "../data/repository";
 
 function DisplayHomework(props) {
 
@@ -9,12 +9,14 @@ function DisplayHomework(props) {
     const [search, setSearch] = useState('');
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [confirmPopup2, setconfirmPopup2] = useState(false);
-    const [values, setValues] = useState({ homework: "", classname: "" });
+    const [values, setValues] = useState({ homework: "", classname: "", group: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [messageError, setMessageError] = useState(null);
     const [classesDropdownValues, setClassesDropdownValues] = useState([]);
     const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState("");
+    const [groupDropdownValues, setGroupDropdownValues] = useState([]);
+    const [selectedGroupDropdownValue, setSelectedGroupDropdownValue] = useState("");
 
 
     // Load users from DB.
@@ -32,9 +34,15 @@ function DisplayHomework(props) {
             setClassesDropdownValues(currentClasses);
         }
 
+        async function loadGroups() {
+            const currentGroups = await getGroups();
+            setGroupDropdownValues(currentGroups);
+        }
+
         // Calls the functions above
         loadHomeworkDetails();
         loadClasses();
+        loadGroups();
 
         if (message === null) {
             return;
@@ -92,6 +100,7 @@ function DisplayHomework(props) {
         const currentDetails = await getHomeworkById(getSelectedId());
         setValues(currentDetails);
         setSelectedClassesDropdownValue(currentDetails.classname);
+        setSelectedGroupDropdownValue(currentDetails.group);
 
     }
 
@@ -106,6 +115,11 @@ function DisplayHomework(props) {
         setSelectedClassesDropdownValue(event.target.value);
     };
 
+    // Handle the groups dropdown selection
+    const handleGroupsDropdownChange = event => {
+        setSelectedGroupDropdownValue(event.target.value);
+    };
+
     // Handler for form Submission
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -115,13 +129,13 @@ function DisplayHomework(props) {
         if (!isValid) {
             return;
         }
-        
+
         try {
             // Create user.
             trimmedValues.classname = selectedClassesDropdownValue;
-            console.log(trimmedValues);
+            trimmedValues.group = selectedGroupDropdownValue;
+
             await editHomework(trimmedValues, getSelectedId());
-            
 
             setErrors("");
             // Show success message.
@@ -209,6 +223,7 @@ function DisplayHomework(props) {
                                             <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Homework</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Class</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -216,7 +231,7 @@ function DisplayHomework(props) {
                                     {/* Mapping Users state Variable to access its content easily to display in Table */}
                                     {homework.filter((homeworks) => {
                                         const homeworkId = homeworks.id ? homeworks.id.toString() : ''; // Convert homeworks.id to a string
-                                        return search.toLowerCase() === '' ? homeworks : (homeworks.classname && homeworks.classname.toLowerCase().includes(search)) || (homeworks.homework && homeworks.homework.toLowerCase().includes(search)) || homeworkId.includes(search);
+                                        return search.toLowerCase() === '' ? homeworks : (homeworks.classname && homeworks.classname.toLowerCase().includes(search)) || (homeworks.homework && homeworks.homework.toLowerCase().includes(search)) || (homeworks.group && homeworks.group.toLowerCase().includes(search)) || homeworkId.includes(search);
                                     }).map((homeworks) =>
                                         <tbody key={homeworks.id}>
                                             <tr>
@@ -224,6 +239,7 @@ function DisplayHomework(props) {
                                                 <td style={{ color: "#112c3f" }}>{homeworks.id}</td>
                                                 <td style={{ color: "#112c3f" }}>{homeworks.homework}</td>
                                                 <td style={{ color: "#112c3f" }}>{homeworks.classname}</td>
+                                                <td style={{ color: "#112c3f" }}>{homeworks.group}</td>
                                                 <td>
                                                     <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(homeworks.id); await togglePopup() }} >Delete</button>
                                                     <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-custom mr-sm-2" onClick={async (event) => { await selectedId(homeworks.id); await togglePopup2(event) }} >Edit</button>
@@ -275,9 +291,24 @@ function DisplayHomework(props) {
                                         <select id="classname" name="classname" className="form-control" value={selectedClassesDropdownValue || ""} onChange={handleClassesDropdownChange}>
                                             <option value="" disabled hidden>Select a Class</option>
                                             {classesDropdownValues.map(classes => (
-                                                <option key={classes.id} value={classes?.group}>{classes?.class}</option>
+                                                <option key={classes.id} value={classes?.class}>{classes?.class}</option>
                                             ))}
                                         </select>
+
+                                        {/* Group Field */}
+                                        <div className="form-group">
+                                            <label htmlFor="group"><b>Group:</b></label>
+                                            <select id="group" name="group" className="form-control" value={selectedGroupDropdownValue || ""} onChange={handleGroupsDropdownChange}>
+                                                <option value="" disabled hidden>Select a Group</option>
+                                                {groupDropdownValues.map(groups => {
+                                                    // Exclude specific group values
+                                                    if (groups.group !== "Female Teacher" && groups.group !== "Male Teacher" && groups.group !== "Admin" && groups.group !== "Principal") {
+                                                        return (<option key={groups.id} value={groups?.group}>{groups?.group}</option>);
+                                                    }
+                                                    return null;
+                                                })}
+                                            </select>
+                                        </div>
 
                                     </div>
                                     <button onClick={(event) => togglePopup2(event)} className="btn btn-info" style={{ margin: "10px" }}>Close</button>

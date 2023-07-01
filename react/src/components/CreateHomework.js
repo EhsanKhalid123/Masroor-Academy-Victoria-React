@@ -1,18 +1,20 @@
 
 // Importing React classes and functions from node modules
 import React, { useState, useEffect, useRef } from "react";
-import { createHomework, getClasses } from "../data/repository";
+import { createHomework, getClasses, getGroups } from "../data/repository";
 
 // Functional Component for Create Staff User Page
 function CreateHomework(props) {
 
     // State Variables Declaration for useState and useContext Hooks
-    const [values, setValues] = useState({ homework: "", classname: "" });
+    const [values, setValues] = useState({ homework: "", classname: "", group: "" });
     const [errors, setErrors] = useState({});
     const [message, setMessage] = useState(null);
     const [messageError, setMessageError] = useState(null);
     const [classesDropdownValues, setClassesDropdownValues] = useState([]);
     const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState("");
+    const [groupDropdownValues, setGroupDropdownValues] = useState([]);
+    const [selectedGroupDropdownValue, setSelectedGroupDropdownValue] = useState("");
     const userInputRef = useRef(null);
 
     // Set message to null automatically after a period of time.
@@ -23,7 +25,13 @@ function CreateHomework(props) {
             setClassesDropdownValues(currentClasses);
         }
 
+        async function loadGroups() {
+            const currentGroups = await getGroups();
+            setGroupDropdownValues(currentGroups);
+        }
+
         loadClasses();
+        loadGroups();
 
         if (message === null) {
             return;
@@ -60,6 +68,11 @@ function CreateHomework(props) {
         setSelectedClassesDropdownValue(event.target.value);
     };
 
+    // Handle the groups dropdown selection
+    const handleGroupsDropdownChange = event => {
+        setSelectedGroupDropdownValue(event.target.value);
+    };
+
     // Handler for form Submission
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -77,14 +90,16 @@ function CreateHomework(props) {
         }
 
         try {
-            
+
             trimmedValues.classname = selectedClassesDropdownValue;
+            trimmedValues.group = selectedGroupDropdownValue;
             // Create user.
             await createHomework(trimmedValues);
 
             // Clear all errors and fields
-            setValues({ homework: "", classname: "" });
+            setValues({ homework: "", classname: "", group: "" });
             setSelectedClassesDropdownValue(""); // Clear the dropdown value
+            setSelectedGroupDropdownValue(""); // Clear the dropdown value
             setErrors("");
             // Show success message.
             setMessage(
@@ -142,7 +157,7 @@ function CreateHomework(props) {
                                 <form onSubmit={handleSubmit} noValidate>
                                     <div className="form-group">
                                         <label htmlFor="homework"><b>Homework:</b></label>
-                                        <input type="text" className="form-control" id="homework" name="homework" placeholder="Enter an Homework" ref={userInputRef} value={values.homework} onChange={handleInputChange} required />
+                                        <input type="text" className="form-control" id="homework" name="homework" placeholder="Enter a Homework" ref={userInputRef} value={values.homework} onChange={handleInputChange} required />
                                         {errors.homework && (
                                             <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.homework}</p>
                                         )}
@@ -154,11 +169,26 @@ function CreateHomework(props) {
                                         <select id="classname" name="classname" className="form-control" value={selectedClassesDropdownValue || ""} onChange={handleClassesDropdownChange}>
                                             <option value="" disabled hidden>Select a Class</option>
                                             {classesDropdownValues.map(classes => (
-                                                <option key={classes.id} value={classes?.group}>{classes?.class}</option>
+                                                <option key={classes.id} value={classes?.class}>{classes?.class}</option>
                                             ))}
                                         </select>
-
                                     </div>
+
+                                    {/* Group Field */}
+                                    <div className="form-group">
+                                        <label htmlFor="group"><b>Group:</b></label>
+                                        <select id="group" name="group" className="form-control" value={selectedGroupDropdownValue || ""} onChange={handleGroupsDropdownChange}>
+                                            <option value="" disabled hidden>Select a Group</option>
+                                            {groupDropdownValues.map(groups => {
+                                                // Exclude specific group values
+                                                if (groups.group !== "Female Teacher" && groups.group !== "Male Teacher" && groups.group !== "Admin" && groups.group !== "Principal") {
+                                                    return (<option key={groups.id} value={groups.group}>{groups.group}</option>);
+                                                }
+                                                return null;
+                                            })}
+                                        </select>
+                                    </div>
+
 
                                     <button type="submit" className="btn btn-custom" style={{ margin: "10px", textAlign: "center" }}>Create Homework</button>
                                     {message && <div className="alert alert-success" style={{ margin: "20px" }} role="alert">{message}</div>}

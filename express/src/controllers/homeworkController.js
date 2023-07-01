@@ -33,6 +33,7 @@ exports.create = async (req, res) => {
     const varHomework = await db.homework.create({
       homework: req.body.homework,
       classname: req.body.classname,
+      group: req.body.group
     });
 
     res.json(varHomework);
@@ -51,6 +52,7 @@ exports.update = async (req, res) => {
 
     varHomework.homework = req.body.homework;
     varHomework.classname = req.body.classname;
+    varHomework.group = req.body.group;
 
     await varHomework.save();
 
