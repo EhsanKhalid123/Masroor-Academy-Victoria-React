@@ -93,12 +93,21 @@ function Homework(props) {
         }
     };
 
+    const calculateStudentResults = (studentID) => {
+        const studentResults = results.filter((result) => result.studentID === studentID && result.class === className);
+        const totalHomeworks = homeworks.filter((homework) => homework.classname === className).length;
+        const checkedHomeworks = studentResults.reduce((count, result) => {
+            return count + Object.values(result.result).filter(Boolean).length;
+        }, 0);
+        const percentage = (checkedHomeworks / totalHomeworks) * 100;
+        return isNaN(percentage) ? '0%' : percentage.toFixed(2) + '%';
+    };
 
     return (
 
         <div>
             <p>&nbsp;</p>
-            <h3 className="text-center">Mark Homework:</h3>
+            <h3 className="text-center">Mark Homework {className}:</h3>
 
             <br />
             <div className="searchCenter">
@@ -177,7 +186,9 @@ function Homework(props) {
                                                                     );
                                                                 })}
                                                             {homeworks.some((homework) => homework.classname === className) && (
-                                                                <td style={{ color: "#112c3f" }}>results</td>
+                                                                <td style={{ color: "#112c3f" }}>
+                                                                    {calculateStudentResults(userDetails.id)}
+                                                                </td>
                                                             )}
 
                                                         </tr>
