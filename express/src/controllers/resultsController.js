@@ -6,9 +6,9 @@ exports.all = async (req, res) => {
 
   try {
 
-    const result = await db.results.findAll();
+    const results = await db.results.findAll();
 
-    res.json(result);
+    res.json(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -22,11 +22,11 @@ exports.selected = async (req, res) => {
 
   try {
     // Query the database using the provided classname and studentID
-    const result = await db.results.findOne({
+    const results = await db.results.findOne({
       where: { class: classname, studentID: studentID },
     });
 
-    res.json(result);
+    res.json(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -36,15 +36,16 @@ exports.selected = async (req, res) => {
 
 // Create a new attendance record
 exports.create = async (req, res) => {
-  const { classname, results, studentID } = req.body;
+  const { classname, markedHomeworks, studentID, studentGroup } = req.body;
 
   try {
-    const result = await db.results.create({
+    const results = await db.results.create({
       studentID: studentID,
+      studentGroup: studentGroup,
       class: classname,
-      result: results,
+      markedHomework: markedHomeworks,
     });
-    res.json(result);
+    res.json(results);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -55,16 +56,17 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const classname = req.params.classname;
   const studentID = req.params.studentID;
-  const { results } = req.body;
+  const { markedHomeworks, studentGroup } = req.body;
 
   try {
-    const result = await db.results.findOne({
+    const results = await db.results.findOne({
       where: { class: classname, studentID: studentID },
     });
-    if (result) {
-      result.result = results;
-      await result.save();
-      res.json(result);
+    if (results) {
+      results.markedHomework = markedHomeworks;
+      results.studentGroup = studentGroup;
+      await results.save();
+      res.json(results);
     } else {
       res.status(404).json({ error: 'Attendance not found' });
     }

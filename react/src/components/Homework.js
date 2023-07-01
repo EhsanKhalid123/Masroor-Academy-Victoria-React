@@ -68,27 +68,27 @@ function Homework(props) {
 
 
 
-    const handleCheckboxChange = async (studentID, homeworkID, checked) => {
+    const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup) => {
         const existingResult = await getResults(className, studentID);
 
         if (existingResult) {
             // Update the existing result in the database
             const updatedResult = {
                 ...existingResult,
-                result: {
-                    ...existingResult.result,
+                markedHomework: {
+                    ...existingResult.markedHomework,
                     [homeworkID]: checked,
                 },
             };
 
-            const updatedRecord = await updateResults(className, updatedResult.result, studentID);
+            const updatedRecord = await updateResults(className, updatedResult.markedHomework, studentID, studentGroup);
             setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
         } else {
             // Create a new result in the database
             const newResult = {
                 [homeworkID]: checked,
             };
-            const createdResult = await createResults(className, newResult, studentID);
+            const createdResult = await createResults(className, newResult, studentID, studentGroup);
             setResults([...results, createdResult]);
         }
     };
@@ -97,7 +97,7 @@ function Homework(props) {
         const studentResults = results.filter((result) => result.studentID === studentID && result.class === className);
         const totalHomeworks = homeworks.filter((homework) => homework.classname === className).length;
         const checkedHomeworks = studentResults.reduce((count, result) => {
-            return count + Object.values(result.result).filter(Boolean).length;
+            return count + Object.values(result.markedHomework).filter(Boolean).length;
         }, 0);
         const percentage = (checkedHomeworks / totalHomeworks) * 100;
         return isNaN(percentage) ? '0%' : percentage.toFixed(2) + '%';
@@ -174,13 +174,13 @@ function Homework(props) {
 
                                                                     const checkboxID = `${userDetails.id}-${homework.id}`;
                                                                     // Check if any result exists for the student and homework
-                                                                    const isChecked = results.some((result) => result.studentID === userDetails.id && result.result[checkboxID] === true && result.class === className);
+                                                                    const isChecked = results.some((result) => result.studentID === userDetails.id && result.markedHomework[checkboxID] === true && result.class === className);
 
                                                                     return (
                                                                         <td key={homework.id}>
                                                                             <input type="checkbox" className="checkbox"
                                                                                 checked={isChecked}
-                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked)}
+                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked, userDetails.group)}
                                                                             />
                                                                         </td>
                                                                     );

@@ -15,13 +15,25 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(32),
       allowNull: false,
     },
+    studentGroup: {
+      type: DataTypes.STRING(32),
+      allowNull: false,
+    },
     class: {
       type: DataTypes.STRING(32),
       allowNull: false,
     },
-    result: {
+    markedHomework: {
       type: DataTypes.JSON,
       allowNull: false,
+    },
+    result: {
+      type: DataTypes.STRING(32),
+      allowNull: true
+    },
+    attendanceResult: {
+      type: DataTypes.STRING(32),
+      allowNull: true
     }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).
