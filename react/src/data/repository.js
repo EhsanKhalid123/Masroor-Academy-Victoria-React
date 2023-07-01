@@ -345,8 +345,8 @@ async function updateAttendance(date, markedAttendance) {
   return response.data;
 }
 
-async function deleteAttendance(date) {
-  const response = await axios.post(API_HOST + "/MAApi/attendance/delete", date, getHeaders());
+async function deleteAttendance(attendance) {
+  const response = await axios.post(API_HOST + "/MAApi/attendance/delete", attendance, getHeaders());
 
   return response.data;
 }
@@ -398,6 +398,12 @@ async function getResults(classname, studentID) {
   return response.data;
 }
 
+async function getResultsByID(id) {
+  const response = await axios.get(API_HOST + `/MAApi/results/get/${id}`, getHeaders());
+
+  return response.data;
+}
+
 async function getAllResults() {
   const response = await axios.get(API_HOST + "/MAApi/results", getHeaders());
 
@@ -410,8 +416,8 @@ async function updateResults(classname, markedHomeworks, studentID, studentGroup
   return response.data;
 }
 
-async function deleteResults(classname) {
-  const response = await axios.post(API_HOST + "/MAApi/results/delete", classname, getHeaders());
+async function deleteResults(result) {
+  const response = await axios.post(API_HOST + "/MAApi/results/delete", result, getHeaders());
 
   return response.data;
 }
@@ -488,5 +494,5 @@ export {
   getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass,
   createAttendance, getAttendance, updateAttendance, deleteAttendance, getAllAttendance,
   createHomework, getHomework, getHomeworkById, editHomework, deleteHomework,
-  createResults, updateResults, deleteResults, getAllResults, getResults,
+  createResults, updateResults, deleteResults, getAllResults, getResults, getResultsByID
 }

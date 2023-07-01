@@ -33,6 +33,21 @@ exports.selected = async (req, res) => {
   }
 };
 
+// Endpoint for selecting attendance for a specific date
+exports.getByID = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Query the database using the provided classname and studentID
+    const results = await db.results.findByPk(id);
+
+    res.json(results);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 // Create a new attendance record
 exports.create = async (req, res) => {
@@ -80,11 +95,11 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
 
-    const classname = req.body.classname;
+    const id = req.body.resultID;
 
     let removed = false;
 
-    const result = await db.results.findByPk(classname);
+    const result = await db.results.findByPk(id);
     if (result !== null) {
       await result.destroy();
       removed = true;

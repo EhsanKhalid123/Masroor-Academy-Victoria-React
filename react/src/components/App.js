@@ -37,6 +37,7 @@ import AttendanceStaff from './AttendanceStaff';
 import Homework from './Homework';
 import DisplayHomework from './DisplayHomework';
 import CreateHomework from './CreateHomework';
+import DisplayMarkedHomework from './DisplayMarkedHomework';
 
 // Functional Component for App
 function App() {
@@ -158,6 +159,7 @@ function App() {
                       <Route path="/ViewAttendance" element={<DisplayAttendance user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/DisplayHomework" element={<DisplayHomework user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                       <Route path="/CreateHomework" element={<CreateHomework user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/DisplayResults" element={<DisplayMarkedHomework user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
                     </>
                   }
 

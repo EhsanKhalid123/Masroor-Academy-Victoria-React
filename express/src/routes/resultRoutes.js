@@ -12,6 +12,9 @@ module.exports = (express, app) => {
   // Get selected Attendance.
   router.get("/get/:classname/:studentID", validateToken, controller.selected);
 
+  // Get selected Attendance.
+  router.get("/get/:id", validateToken, controller.getByID);
+
   // Update Attendance.
   router.post("/update/:classname/:studentID", validateToken, controller.update);
 

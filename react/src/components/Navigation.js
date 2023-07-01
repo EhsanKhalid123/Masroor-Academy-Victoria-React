@@ -137,7 +137,7 @@ function Navigation(props) {
                         <Link className="dropdown-item" to="/SelectGroupStudent">Student Profiles </Link>
                         <Link className="dropdown-item" to="/">Student Results</Link>
                         {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
-                          <Link className="dropdown-item" to="/ViewResults">Results Data</Link>
+                          <Link className="dropdown-item" to="/DisplayResults">Results Data</Link>
                         }
                         <Link className="dropdown-item" to="/Syllabus">Syllabus</Link>
                       </div>

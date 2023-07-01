@@ -77,11 +77,11 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
 
-    const date = req.body.date;
+    const attendanceData = req.body.date;
 
     let removed = false;
 
-    const attendance = await db.attendance.findByPk(date);
+    const attendance = await db.attendance.findByPk(attendanceData);
     if (attendance !== null) {
       await attendance.destroy();
       removed = true;
