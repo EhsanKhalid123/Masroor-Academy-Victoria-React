@@ -14,8 +14,9 @@ function CreateHomework(props) {
     const [classesDropdownValues, setClassesDropdownValues] = useState([]);
     const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState("");
     const [groupDropdownValues, setGroupDropdownValues] = useState([]);
-    const [selectedGroupDropdownValue, setSelectedGroupDropdownValue] = useState("");
+    const [selectedGroups, setSelectedGroups] = useState([]);
     const userInputRef = useRef(null);
+
 
     // Set message to null automatically after a period of time.
     useEffect(() => {
@@ -68,10 +69,18 @@ function CreateHomework(props) {
         setSelectedClassesDropdownValue(event.target.value);
     };
 
-    // Handle the groups dropdown selection
-    const handleGroupsDropdownChange = event => {
-        setSelectedGroupDropdownValue(event.target.value);
+    // Event handler for group checkbox change
+    const handleGroupCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        if (checked) {
+            setSelectedGroups((prevSelectedGroups) => [...prevSelectedGroups, name]);
+        } else {
+            setSelectedGroups((prevSelectedGroups) =>
+                prevSelectedGroups.filter((group) => group !== name)
+            );
+        }
     };
+
 
     // Handler for form Submission
     const handleSubmit = async (event) => {
@@ -92,14 +101,15 @@ function CreateHomework(props) {
         try {
 
             trimmedValues.classname = selectedClassesDropdownValue;
-            trimmedValues.group = selectedGroupDropdownValue;
-            // Create user.
+            trimmedValues.group = selectedGroups; // Assign the selected groups
+
+            // Create Homework
             await createHomework(trimmedValues);
 
             // Clear all errors and fields
             setValues({ homework: "", classname: "", group: "" });
             setSelectedClassesDropdownValue(""); // Clear the dropdown value
-            setSelectedGroupDropdownValue(""); // Clear the dropdown value
+            setSelectedGroups(""); // Clear the dropdown value
             setErrors("");
             // Show success message.
             setMessage(
@@ -176,17 +186,21 @@ function CreateHomework(props) {
 
                                     {/* Group Field */}
                                     <div className="form-group">
-                                        <label htmlFor="group"><b>Group:</b></label>
-                                        <select id="group" name="group" className="form-control" value={selectedGroupDropdownValue || ""} onChange={handleGroupsDropdownChange}>
-                                            <option value="" disabled hidden>Select a Group</option>
-                                            {groupDropdownValues.map(groups => {
-                                                // Exclude specific group values
-                                                if (groups.group !== "Female Teacher" && groups.group !== "Male Teacher" && groups.group !== "Admin" && groups.group !== "Principal") {
-                                                    return (<option key={groups.id} value={groups.group}>{groups.group}</option>);
-                                                }
-                                                return null;
-                                            })}
-                                        </select>
+                                        <label><b>Group:</b></label>
+                                        {groupDropdownValues.map((group) => {
+                                            // Exclude specific group values
+                                            if (group.group !== "Female Teacher" && group.group !== "Male Teacher" && group.group !== "Admin" && group.group !== "Principal") {
+                                                return (
+                                                    <div key={group.id} className="form-check">
+                                                        <input type="checkbox" id={group.group} name={group.group} className="form-check-input" checked={selectedGroups.includes(group.group)} onChange={handleGroupCheckboxChange} />
+                                                        <label htmlFor={group.group} className="form-check-label">
+                                                            {group.group}
+                                                        </label>
+                                                    </div>
+                                                );
+                                            }
+                                            return null;
+                                        })}
                                     </div>
 
 

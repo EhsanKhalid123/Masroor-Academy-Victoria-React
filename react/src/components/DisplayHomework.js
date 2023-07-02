@@ -16,7 +16,7 @@ function DisplayHomework(props) {
     const [classesDropdownValues, setClassesDropdownValues] = useState([]);
     const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState("");
     const [groupDropdownValues, setGroupDropdownValues] = useState([]);
-    const [selectedGroupDropdownValue, setSelectedGroupDropdownValue] = useState("");
+    const [selectedGroups, setSelectedGroups] = useState([]);
 
 
     // Load users from DB.
@@ -100,7 +100,7 @@ function DisplayHomework(props) {
         const currentDetails = await getHomeworkById(getSelectedId());
         setValues(currentDetails);
         setSelectedClassesDropdownValue(currentDetails.classname);
-        setSelectedGroupDropdownValue(currentDetails.group);
+        setSelectedGroups(currentDetails.group);
 
     }
 
@@ -115,9 +115,16 @@ function DisplayHomework(props) {
         setSelectedClassesDropdownValue(event.target.value);
     };
 
-    // Handle the groups dropdown selection
-    const handleGroupsDropdownChange = event => {
-        setSelectedGroupDropdownValue(event.target.value);
+    // Event handler for group checkbox change
+    const handleGroupCheckboxChange = (event) => {
+        const { name, checked } = event.target;
+        if (checked) {
+            setSelectedGroups((prevSelectedGroups) => [...prevSelectedGroups, name]);
+        } else {
+            setSelectedGroups((prevSelectedGroups) =>
+                prevSelectedGroups.filter((group) => group !== name)
+            );
+        }
     };
 
     // Handler for form Submission
@@ -133,7 +140,7 @@ function DisplayHomework(props) {
         try {
             // Create user.
             trimmedValues.classname = selectedClassesDropdownValue;
-            trimmedValues.group = selectedGroupDropdownValue;
+            trimmedValues.group = selectedGroups;
 
             await editHomework(trimmedValues, getSelectedId());
 
@@ -297,17 +304,21 @@ function DisplayHomework(props) {
 
                                         {/* Group Field */}
                                         <div className="form-group">
-                                            <label htmlFor="group"><b>Group:</b></label>
-                                            <select id="group" name="group" className="form-control" value={selectedGroupDropdownValue || ""} onChange={handleGroupsDropdownChange}>
-                                                <option value="" disabled hidden>Select a Group</option>
-                                                {groupDropdownValues.map(groups => {
-                                                    // Exclude specific group values
-                                                    if (groups.group !== "Female Teacher" && groups.group !== "Male Teacher" && groups.group !== "Admin" && groups.group !== "Principal") {
-                                                        return (<option key={groups.id} value={groups?.group}>{groups?.group}</option>);
-                                                    }
-                                                    return null;
-                                                })}
-                                            </select>
+                                            <label><b>Group:</b></label>
+                                            {groupDropdownValues.map((group) => {
+                                                // Exclude specific group values
+                                                if (group.group !== "Female Teacher" && group.group !== "Male Teacher" && group.group !== "Admin" && group.group !== "Principal") {
+                                                    return (
+                                                        <div key={group.id} className="form-check">
+                                                            <input type="checkbox" id={group.group} name={group.group} className="form-check-input" checked={selectedGroups.includes(group.group)} onChange={handleGroupCheckboxChange} />
+                                                            <label htmlFor={group.group} className="form-check-label">
+                                                                {group.group}
+                                                            </label>
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
+                                            })}
                                         </div>
 
                                     </div>

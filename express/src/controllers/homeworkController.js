@@ -67,6 +67,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     const id = req.body.id;
+    const className = req.body.classname;
 
     let removed = false;
 

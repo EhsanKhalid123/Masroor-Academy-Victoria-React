@@ -93,15 +93,64 @@ function Homework(props) {
         }
     };
 
-    const calculateStudentResults = (studentID) => {
-        const studentResults = results.filter((result) => result.studentID === studentID && result.class === className);
-        const totalHomeworks = homeworks.filter((homework) => homework.classname === className).length;
+    // totalHomeworks here is based on total Homework items added for the class, so not group based calculations
+    // const calculateStudentResults = (studentID, userGroup) => {
+    //     const studentResults = results.filter((result) => result.studentID === studentID && result.class === className);
+    //     const totalHomeworks = homeworks.filter((homework) => homework.classname === className).length;
+    //     const checkedHomeworks = studentResults.reduce((count, result) => {
+    //         return count + Object.values(result.markedHomework).filter(Boolean).length;
+    //     }, 0);
+    //     const percentage = (checkedHomeworks / totalHomeworks) * 100;
+    //     return isNaN(percentage) ? '0%' : percentage.toFixed(2) + '%';
+    // };
+
+    // Group Based Calculations Depending on what group student belongs they get marked accordingly
+    const calculateStudentResults = (studentID, userGroup) => {
+        const studentResults = results.filter(
+          (result) =>
+            result.studentID === studentID &&
+            result.studentGroup === userGroup &&
+            result.class === className
+        );
+      
+        if (studentResults.length === 0) {
+          return "0%";
+        }
+      
+        // const homeworkIds = Object.keys(studentResults[0].markedHomework);
+      
+        const totalHomeworks = homeworks.filter(
+          (homework) =>
+            homework.classname === className &&
+            homework.group.includes(userGroup) 
+            // &&
+            // homeworkIds.includes(homework.id.toString())
+        ).length;
+      
         const checkedHomeworks = studentResults.reduce((count, result) => {
-            return count + Object.values(result.markedHomework).filter(Boolean).length;
+          return count + Object.entries(result.markedHomework).reduce((marks, [homeworkId, isChecked]) => {
+            const homework = homeworks.find((item) => item.id.toString() === homeworkId);
+            if (isChecked && homework && homework.group.includes(userGroup)) {
+              marks++;
+            }
+            return marks;
+          }, 0);
         }, 0);
-        const percentage = (checkedHomeworks / totalHomeworks) * 100;
-        return isNaN(percentage) ? '0%' : percentage.toFixed(2) + '%';
-    };
+      
+        let percentage = (checkedHomeworks / totalHomeworks) * 100;
+      
+        if (totalHomeworks === 0) {
+          return "0%";
+        }
+      
+        if (percentage > 100) {
+          percentage = 100;
+        }
+      
+        return percentage.toFixed(2) + "%";
+      };
+      
+        
 
     return (
 
@@ -188,7 +237,7 @@ function Homework(props) {
                                                                 })}
                                                             {homeworks.some((homework) => homework.classname === className) && (
                                                                 <td style={{ color: "#112c3f" }}>
-                                                                    {calculateStudentResults(userDetails.id)}
+                                                                    {calculateStudentResults(userDetails.id, userDetails.group)}
                                                                 </td>
                                                             )}
 
