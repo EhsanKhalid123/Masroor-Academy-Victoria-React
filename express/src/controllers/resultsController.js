@@ -51,7 +51,7 @@ exports.getByID = async (req, res) => {
 
 // Create a new attendance record
 exports.create = async (req, res) => {
-  const { classname, markedHomeworks, studentID, studentGroup } = req.body;
+  const { classname, markedHomeworks, studentID, studentGroup, studentResult } = req.body;
 
   try {
     const results = await db.results.create({
@@ -59,6 +59,7 @@ exports.create = async (req, res) => {
       studentGroup: studentGroup,
       class: classname,
       markedHomework: markedHomeworks,
+      result: studentResult
     });
     res.json(results);
   } catch (error) {
@@ -71,7 +72,8 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   const classname = req.params.classname;
   const studentID = req.params.studentID;
-  const { markedHomeworks, studentGroup } = req.body;
+
+  const { markedHomeworks, studentGroup, studentResult } = req.body;
 
   try {
     const results = await db.results.findOne({
@@ -80,6 +82,7 @@ exports.update = async (req, res) => {
     if (results) {
       results.markedHomework = markedHomeworks;
       results.studentGroup = studentGroup;
+      results.result = studentResult;
       await results.save();
       res.json(results);
     } else {

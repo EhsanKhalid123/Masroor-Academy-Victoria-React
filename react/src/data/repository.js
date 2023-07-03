@@ -410,8 +410,8 @@ async function getAllResults() {
   return response.data;
 }
 
-async function updateResults(classname, markedHomeworks, studentID, studentGroup) {
-  const response = await axios.post(API_HOST + `/MAApi/results/update/${classname}/${studentID}`, {markedHomeworks, studentGroup}, getHeaders());
+async function updateResults(classname, markedHomeworks, studentID, studentGroup, studentResult) {
+  const response = await axios.post(API_HOST + `/MAApi/results/update/${classname}/${studentID}`, {markedHomeworks, studentGroup, studentResult}, getHeaders());
 
   return response.data;
 }
