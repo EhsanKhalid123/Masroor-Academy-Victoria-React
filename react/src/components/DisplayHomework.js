@@ -1,6 +1,7 @@
 // Importing React class and functions from node modules
 import React, { useState, useEffect } from "react";
 import { getHomeworkById, getHomework, selectedId, getSelectedId, deleteHomework, editHomework, getClasses, getGroups } from "../data/repository";
+import Toolbar from "./Toolbar";
 
 function DisplayHomework(props) {
 
@@ -17,6 +18,8 @@ function DisplayHomework(props) {
     const [selectedClassesDropdownValue, setSelectedClassesDropdownValue] = useState("");
     const [groupDropdownValues, setGroupDropdownValues] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
 
 
     // Load users from DB.
@@ -195,6 +198,30 @@ function DisplayHomework(props) {
         return trimmedValues;
     };
 
+    const handleBulkUpdate = async () => {
+        const updatedDetails = await getHomework();
+        setHomework(updatedDetails);
+        setSelectedIds([]);
+    };
+
+    const handleSelectHomework = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        if (!selectAll) {
+            const groupUsers = homework
+                .map(homeworks => homeworks.id);
+            setSelectedIds(groupUsers);
+        } else {
+            setSelectedIds([]);
+        }
+        setSelectAll(!selectAll);
+    };
 
 
     return (
@@ -206,6 +233,13 @@ function DisplayHomework(props) {
                     <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
             </div>
+
+            {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                <>
+                    {selectedIds.length > 0 && <Toolbar selectedUser={selectedIds} onUpdate={handleBulkUpdate} props={props} />}
+                    <br />
+                </>
+            }
 
             <div className="table-responsive">
 
@@ -226,7 +260,11 @@ function DisplayHomework(props) {
                                 <table className="table table-striped" style={{ margin: "0" }}>
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) ?
+                                                <th><input type="checkbox" className="checkbox" checked={selectAll} onChange={handleSelectAll} /></th>
+                                                :
+                                                <th></th>
+                                            }
                                             <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Homework</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Class</th>
@@ -242,7 +280,12 @@ function DisplayHomework(props) {
                                     }).map((homeworks) =>
                                         <tbody key={homeworks.id}>
                                             <tr>
-                                                <td></td>
+                                                <td>
+                                                    {/*    Check if staff member is selected                                 Call handleSelectStaff function on selection/deselection */}
+                                                    {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                                                        <input type="checkbox" className="checkbox" checked={selectedIds.includes(homeworks.id)} onChange={() => handleSelectHomework(homeworks.id)} />
+                                                    }
+                                                </td>
                                                 <td style={{ color: "#112c3f" }}>{homeworks.id}</td>
                                                 <td style={{ color: "#112c3f" }}>{homeworks.homework}</td>
                                                 <td style={{ color: "#112c3f" }}>{homeworks.classname}</td>

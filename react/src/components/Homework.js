@@ -95,7 +95,7 @@ function Homework(props) {
             setResults([...results, createdResult]);
         }
     };
-    
+
     // Group Based Calculations Depending on what group student belongs they get marked accordingly
     const calculateStudentResults = (studentID, userGroup) => {
         const studentResults = results.filter(
@@ -134,7 +134,7 @@ function Homework(props) {
         if (percentage > 100) {
             percentage = 100;
         }
-   
+
         return percentage.toFixed(2) + "%";
 
     };
