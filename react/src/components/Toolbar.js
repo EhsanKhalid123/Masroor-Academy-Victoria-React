@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faDownload, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { getProfileUsers, deleteUserDB, getGroups, updateUser, fetchResourcesByID, fetchResources, getHomework, deleteHomework, getAllResults, deleteResults } from "../data/repository";
+import { getProfileUsers, deleteUserDB, getGroups, updateUser, fetchResourcesByID, fetchResources, getHomework, deleteHomework, getAllResults, deleteResults, editHomework } from "../data/repository";
 import { useLocation } from "react-router-dom";
 import ReactSwitch from 'react-switch';
 
@@ -23,6 +23,7 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
     const [selectedUserStatus, setSelectedUserStatus] = useState(false);
     const [homework, setHomework] = useState([]);
     const [resultsData, setResultsData] = useState([]);
+    const [selectedGroups, setSelectedGroups] = useState([]);
 
 
     // Load users from DB.
@@ -205,6 +206,34 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
 
     };
 
+    // Event handler for group checkbox change
+    const handleGroupCheckboxChange = async (event) => {
+        const { name, checked } = event.target;
+        if (checked) {
+            setSelectedGroups((prevSelectedGroups) => [...prevSelectedGroups, name]);
+        } else {
+            setSelectedGroups((prevSelectedGroups) =>
+                prevSelectedGroups.filter((group) => group !== name)
+            );
+        }
+    };
+
+    const handleGroupCheckboxUpdate = async (event) => {
+
+        for (const id of selectedUser) {
+
+            const homeworkToEdit = homework.find((homeworks) => { return homeworks.id === id });
+            if (homeworkToEdit) {
+                homeworkToEdit.group = selectedGroups;
+                await editHomework(homeworkToEdit, homeworkToEdit.id);
+            }
+        }
+
+        onUpdate();
+
+        togglePopup();
+    };
+
     return (
         <>
             <div className="toolbar text-center" style={{ display: "flex", justifyContent: "center" }}>
@@ -256,12 +285,32 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
                 {isOnDisplayHomeworkPage && (
                     <>
                         {props.user.group === "Admin" &&
+                            <>
 
-                            <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
-                                <button className="btn btn-danger" onClick={async () => { await togglePopup2() }}>
-                                    <FontAwesomeIcon icon={faTrash} />
+                                {dropdownValues.map((group) => {
+                                    // Exclude specific group values
+                                    if (group.group !== "Female Teacher" && group.group !== "Male Teacher" && group.group !== "Admin" && group.group !== "Principal") {
+                                        return (
+                                            <div key={group.id} className="form-check">
+                                                <input type="checkbox" id={group.group} name={group.group} className="form-check-input" checked={selectedGroups.includes(group.group)} onChange={handleGroupCheckboxChange} />
+                                                <label htmlFor={group.group} className="form-check-label">
+                                                    {group.group}
+                                                </label>
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                })}
+                                <button className="btn btn-success" style={{ marginRight: "10px" }} onClick={handleGroupCheckboxUpdate}>
+                                    <FontAwesomeIcon icon={faSyncAlt} />
                                 </button>
-                            </div>
+
+                                <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
+                                    <button className="btn btn-danger" onClick={async () => { await togglePopup2() }}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                </div>
+                            </>
                         }
                     </>
                 )}
