@@ -214,9 +214,9 @@ function DisplayHomework(props) {
 
     const handleSelectAll = () => {
         if (!selectAll) {
-            const groupUsers = homework
+            const homeworkItem = homework
                 .map(homeworks => homeworks.id);
-            setSelectedIds(groupUsers);
+            setSelectedIds(homeworkItem);
         } else {
             setSelectedIds([]);
         }

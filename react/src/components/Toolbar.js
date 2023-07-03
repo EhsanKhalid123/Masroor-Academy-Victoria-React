@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faDownload, faSyncAlt } from "@fortawesome/free-solid-svg-icons";
-import { getProfileUsers, deleteUserDB, getGroups, updateUser, fetchResourcesByID, fetchResources, getHomework, deleteHomework } from "../data/repository";
+import { getProfileUsers, deleteUserDB, getGroups, updateUser, fetchResourcesByID, fetchResources, getHomework, deleteHomework, getAllResults, deleteResults } from "../data/repository";
 import { useLocation } from "react-router-dom";
 import ReactSwitch from 'react-switch';
 
@@ -10,6 +10,7 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
 
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [confirmPopup2, setconfirmPopup2] = useState(false);
+    const [confirmPopup3, setconfirmPopup3] = useState(false);
     const [users, setUsersData] = useState([]);
     const [dropdownValues, setDropdownValues] = useState([]);
     const [selectedDropdownValue, setSelectedDropdownValue] = useState("");
@@ -17,9 +18,11 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
     const location = useLocation();
     const isOnResourcesPage = location.pathname.includes("/Resources");
     const isOnDisplayHomeworkPage = location.pathname.includes("/DisplayHomework");
+    const isOnDisplayResultPage = location.pathname.includes("/DisplayResults");
     const [resources, setResources] = useState([]);
     const [selectedUserStatus, setSelectedUserStatus] = useState(false);
     const [homework, setHomework] = useState([]);
+    const [resultsData, setResultsData] = useState([]);
 
 
     // Load users from DB.
@@ -47,11 +50,17 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
             setHomework(currentHomework)
         }
 
+        const loadResultsData = async () => {
+            const results = await getAllResults();
+            setResultsData(results);
+        }
+
         // Calls the functions above
         loadUserDetails();
         loadGroups();
         loadResources();
         loadHomeworkDetails();
+        loadResultsData();
 
     }, [selectedUser]);
 
@@ -73,6 +82,11 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
     // Popup Toggle Switch Function
     const togglePopup2 = () => {
         setconfirmPopup2(!confirmPopup2);
+    }
+
+    // Popup Toggle Switch Function
+    const togglePopup3 = () => {
+        setconfirmPopup3(!confirmPopup3);
     }
 
     const handleDropdownChange = event => {
@@ -150,6 +164,24 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
 
     }
 
+    const deleteSelectedResult = async (event) => {
+
+        // Delete the selected users by their IDs
+        for (const id of selectedUser) {
+
+            const resultToDelete = resultsData.find((result) => { return result.resultID === id });
+
+            if (resultToDelete) {
+                await deleteResults(resultToDelete);
+            }
+        }
+
+        onUpdate();
+
+        togglePopup();
+
+    }
+
     const handleDownload = async (resourceID) => {
 
         for (const id of selectedResources) {
@@ -176,7 +208,7 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
     return (
         <>
             <div className="toolbar text-center" style={{ display: "flex", justifyContent: "center" }}>
-                {!isOnResourcesPage && !isOnDisplayHomeworkPage && (
+                {!isOnResourcesPage && !isOnDisplayHomeworkPage && !isOnDisplayResultPage && (
                     <>
                         <div style={{ flex: "1", marginRight: "10px" }}>
                             <select id="group" name="group" className="form-control" style={{ width: "100%" }} value={selectedDropdownValue} onChange={handleDropdownChange}>
@@ -204,7 +236,7 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
                         </button>
                     </div>
                 )}
-                {!isOnResourcesPage && !isOnDisplayHomeworkPage && (
+                {!isOnResourcesPage && !isOnDisplayHomeworkPage && !isOnDisplayResultPage && (
                     <>
                         {props.user.group === "Admin" &&
                             <>
@@ -227,6 +259,18 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
 
                             <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
                                 <button className="btn btn-danger" onClick={async () => { await togglePopup2() }}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                            </div>
+                        }
+                    </>
+                )}
+                {isOnDisplayResultPage && (
+                    <>
+                        {props.user.group === "Admin" &&
+
+                            <div style={{ display: "flex", justifyContent: "flex-start", marginRight: "10px" }}>
+                                <button className="btn btn-danger" onClick={async () => { await togglePopup3() }}>
                                     <FontAwesomeIcon icon={faTrash} />
                                 </button>
                             </div>
@@ -258,9 +302,25 @@ function Toolbar({ selectedUser, onUpdate, props, selectedResources }) {
                         <div className="box">
                             <h5 className="card-header bg-warning text-center" style={{ color: "white" }}><b>Confirm!</b></h5>
                             <div style={{ margin: "0 auto", textAlign: "center" }}>
-                                <p style={{ padding: "15px", textAlign: "center", color: "red" }}>Are you sure you want delete the homework <br /> This action cannot be undone!</p>
+                                <p style={{ padding: "15px", textAlign: "center", color: "red" }}>Are you sure you want delete the Homework <br /> This action cannot be undone!</p>
                                 <button onClick={togglePopup2} className="btn btn-info" style={{ margin: "10px" }}>Cancel</button>
                                 <button onClick={async () => { await deleteSelectedHomework() }} className="btn btn-danger" style={{ margin: "10px" }}>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div>
+                {/* Popup box only opens if state variable is set to true for deleting account */}
+                {confirmPopup3 &&
+                    <div className="popup-box" style={{ zIndex: "1" }}>
+                        <div className="box">
+                            <h5 className="card-header bg-warning text-center" style={{ color: "white" }}><b>Confirm!</b></h5>
+                            <div style={{ margin: "0 auto", textAlign: "center" }}>
+                                <p style={{ padding: "15px", textAlign: "center", color: "red" }}>Are you sure you want delete the Result <br /> This action cannot be undone!</p>
+                                <button onClick={togglePopup3} className="btn btn-info" style={{ margin: "10px" }}>Cancel</button>
+                                <button onClick={async () => { await deleteSelectedResult() }} className="btn btn-danger" style={{ margin: "10px" }}>Delete</button>
                             </div>
                         </div>
                     </div>
