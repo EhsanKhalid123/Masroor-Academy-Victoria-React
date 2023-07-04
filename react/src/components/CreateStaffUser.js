@@ -252,12 +252,18 @@ function CreateStaffUser(props) {
                                             {dropdownValues.map(group => {
                                                 if (props.user.group === "Principal" && props.user.gender === "Female") {
                                                     // Only show certain options for Principal with gender Female
-                                                    if (group.group !== "Principal" && group.group !== "Admin" && group.group !== "Male Teacher") {
+                                                    if (group.group === "Female Teacher" || group.group === "Admin Staff") {
                                                         return <option key={group.id} value={group.group}>{group.group}</option>;
                                                     }
                                                 } else {
-                                                    // Show all options for other users or conditions
-                                                    return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                    // Show all options but exclude "Admin" option for Principal with gender "Male"
+                                                    if (props.user.group === "Principal" && props.user.gender === "Male") {
+                                                        if (group.group !== "Admin") {
+                                                            return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                        }
+                                                    } else {
+                                                        return <option key={group.id} value={group.group}>{group.group}</option>;
+                                                    }
                                                 }
                                                 return null;
                                             })}
