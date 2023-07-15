@@ -147,9 +147,14 @@ function Navigation(props) {
                 }
 
                 {(props.user.group !== "Male Teacher" && props.user.group !== "Female Teacher" && props.user.group !== "Admin" && props.user.group !== "Principal") &&
-                  <li className="nav-item">
-                    <NavLink className="nav-link2 nav-link" to="/Syllabus">Syllabus</NavLink>
-                  </li>
+                  <>
+                    <li className="nav-item">
+                      <NavLink className="nav-link2 nav-link" to="/Syllabus">Syllabus</NavLink>
+                    </li>
+                    <li className="nav-item">
+                      <NavLink className="nav-link2 nav-link" to="/StudentResults">Results</NavLink>
+                    </li>
+                  </>
                 }
 
                 <li className="nav-item">

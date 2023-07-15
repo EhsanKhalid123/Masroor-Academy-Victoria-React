@@ -162,6 +162,7 @@ function DisplayStudents(props) {
                                             <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Name</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Group</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">DOB</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Gender</th>
                                             <th></th>
 
@@ -169,7 +170,7 @@ function DisplayStudents(props) {
                                     </thead>
                                     {/* Mapping Users state Variable to access its content easily to display in Table */}
                                     {users.filter((userDetails) => {
-                                        return search.toLowerCase() === '' ? userDetails : (userDetails.name && userDetails.name.toLowerCase().includes(search)) || (userDetails.group && userDetails.group.toLowerCase().includes(search)) || (userDetails.id && userDetails.id.toLowerCase().includes(search)) || (userDetails.gender && userDetails.gender.toLowerCase().includes(search));
+                                        return search.toLowerCase() === '' ? userDetails : (userDetails.name && userDetails.name.toLowerCase().includes(search)) || (userDetails.group && userDetails.group.toLowerCase().includes(search)) || (userDetails.id && userDetails.id.toLowerCase().includes(search)) || (userDetails.gender && userDetails.gender.toLowerCase().includes(search)) || (userDetails.studentDob && userDetails.studentDob.includes(search));
                                     }).map((userDetails) =>
                                         <tbody key={userDetails.id}>
                                             {/* Dont display the name of the logged in user but the rest, And dont show Admin for teachers */}
@@ -195,6 +196,7 @@ function DisplayStudents(props) {
                                                             <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
+                                                            <td style={{ color: "#112c3f" }}>{userDetails.studentDob}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.gender}</td>
 
                                                             <td>

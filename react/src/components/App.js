@@ -38,6 +38,7 @@ import Homework from './Homework';
 import DisplayHomework from './DisplayHomework';
 import CreateHomework from './CreateHomework';
 import DisplayMarkedHomework from './DisplayMarkedHomework';
+import StudentResults from './StudentResults';
 
 // Functional Component for App
 function App() {
@@ -166,6 +167,7 @@ function App() {
                   {(decodedUser.group !== "Male Teacher" && decodedUser.group !== "Female Teacher" && decodedUser.group !== "Admin" && decodedUser.group !== "Principal") &&
                     <>
                       <Route path="/Dashboard" element={<StudentDashboard user={decodedUser} loginUser={loginUser} logoutUser={logoutUser} />} />
+                      <Route path="/StudentResults" element={<StudentResults user={decodedUser} />} />
                     </>
                   }
 
