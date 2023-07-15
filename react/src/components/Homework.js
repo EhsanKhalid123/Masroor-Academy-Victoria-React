@@ -68,7 +68,7 @@ function Homework(props) {
 
 
 
-    const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup) => {
+    const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup, studentResult) => {
 
         const existingResult = await getResults(className, studentID);
 
@@ -82,7 +82,7 @@ function Homework(props) {
                 },
             };
 
-            const studentResult = calculateStudentResults(studentID, studentGroup);
+            // const studentResult = calculateStudentResults(studentID, studentGroup);
             const updatedRecord = await updateResults(className, updatedResult.markedHomework, studentID, studentGroup, studentResult);
             setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
         } else {
@@ -90,7 +90,7 @@ function Homework(props) {
             const newResult = {
                 [homeworkID]: checked,
             };
-            const studentResult = calculateStudentResults(studentID, studentGroup);
+            // const studentResult = calculateStudentResults(studentID, studentGroup);
             const createdResult = await createResults(className, newResult, studentID, studentGroup, studentResult);
             setResults([...results, createdResult]);
         }
@@ -218,7 +218,7 @@ function Homework(props) {
                                                                         <td key={homework.id}>
                                                                             <input type="checkbox" className="checkbox"
                                                                                 checked={isChecked}
-                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked, userDetails.group)}
+                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked, userDetails.group, calculateStudentResults(userDetails.id, userDetails.group))}
                                                                             />
                                                                         </td>
                                                                     );

@@ -23,7 +23,7 @@ exports.all = async (req, res) => {
 exports.one = async (req, res) => {
   try {
     const user = await db.users.findByPk(req.params.id);
-    
+
     res.json(user);
   } catch (error) {
     // Send an error response.
@@ -36,7 +36,7 @@ exports.oneRegister = async (req, res) => {
   try {
     const user = await db.users.findByPk(req.params.id);
 
-    if (!user){
+    if (!user) {
       res.json(null);
     } else {
       res.json(true);
@@ -119,8 +119,12 @@ exports.create = async (req, res) => {
     }
 
     // Fetch groups from the database
-    const groups = await db.groups.findAll();
-    assignedGroup = assignGroup(groups, req.body.studentDob);
+    if (group !== "Admin" && group !== "Male Teacher" && group !== "Female Teacher" && group !== "Principal") {
+      const groups = await db.groups.findAll();
+      assignedGroup = assignGroup(groups, req.body.studentDob);
+    } else {
+      assignedGroup = null;
+    }
 
     // Following properties are required for user to be created in DB
     const user = await db.users.create({
@@ -145,6 +149,7 @@ exports.create = async (req, res) => {
 
     res.json(user);
   } catch (error) {
+    console.log(error);
     // Send an error response.
     res.status(500).json({ message: "Error Creating Data" });
   }
