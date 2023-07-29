@@ -135,8 +135,8 @@ async function deleteHomeworks2(id) {
 }
 
 // Delete specific Homework Request For API from DB
-async function deleteHomeworksByID(classname, studentID, student) {
-  const response = await axios.post(API_HOST + `/MAApi/homeworks/delete3/${classname}/${studentID}`, student, getHeaders());
+async function deleteHomeworksByID(classname, studentID, unused) {
+  const response = await axios.post(API_HOST + `/MAApi/homeworks/delete3/${classname}/${studentID}`, unused, getHeaders());
 
   return response.data;
 }

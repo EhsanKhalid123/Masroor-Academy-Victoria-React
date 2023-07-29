@@ -80,27 +80,6 @@ function Homework(props) {
         return null;
     };
 
-    const areAllCheckboxesChecked = (studentID) => {
-        const studentResult = results.find(
-          (result) => result.studentID === studentID && result.class === className
-        );
-      
-        if (!studentResult) return false;
-      
-        const homeworksForClass = homeworks.filter(
-          (homework) => homework.classname === className
-        );
-      
-        for (const homework of homeworksForClass) {
-          const checkboxID = `${homework.id}`;
-          if (!studentResult.markedHomework[checkboxID]) {
-            return false;
-          }
-        }
-      
-        return true;
-      };
-
     const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup, studentResult) => {
 
         const existingResult = await getResults(className, studentID);
@@ -114,8 +93,6 @@ function Homework(props) {
                     [homeworkID]: checked,
                 },
             };
-
-            // const studentResult = calculateStudentResults(studentID, studentGroup);
 
             // ==========================
 
@@ -145,6 +122,12 @@ function Homework(props) {
                     };
                     await createHomeworks(homeworkData);
                 }
+            } else {
+                // If no unchecked homework is found, delete the existing homework item
+                const existingHomework = await getHomeworksByID(className, studentID);
+                if (existingHomework) {
+                    await deleteHomeworksByID(className, studentID, existingHomework);
+                }
             }
             //==============================
 
@@ -156,7 +139,6 @@ function Homework(props) {
             const newResult = {
                 [homeworkID]: checked,
             };
-            // const studentResult = calculateStudentResults(studentID, studentGroup);
 
             // =================
             // Get the next homework item ID in the column
@@ -253,6 +235,11 @@ function Homework(props) {
                 <Link to="/SelectGroupMarkHomework" state={{ homeworkClasses: className }}>
                     <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group For {className}</button>
                 </Link>
+            </div>
+
+            <div className="text-center">
+                <p style={{color: "#de0300"}}>Please double click, so tick and then untick the checkbox to automatically create the Homework for that student</p>
+                <p style={{color: "#de0300"}}>Please note only the homework after the first ticked checkbox will be displayed as the homework for that Student</p>
             </div>
 
             <div className="table-responsive">
