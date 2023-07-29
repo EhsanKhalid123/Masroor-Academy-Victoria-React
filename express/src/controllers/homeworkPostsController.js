@@ -30,13 +30,33 @@ exports.create = async (req, res) => {
     const post = await db.homeworkPosts.create({
       homeworkText: req.body.homeworkText,
       id: req.body.id,
-      student: req.body.student
+      student: req.body.student,
+      class: req.body.class
     });
 
     res.json(post);
   } catch (error) {
+    console.log(error);
     // Send an error response.
     res.status(500).json({ message: "Error Creating Data" });
+  }
+};
+
+// Endpoint for selecting attendance for a specific date
+exports.selected = async (req, res) => {
+  const classname = req.params.classname;
+  const studentID = req.params.studentID;
+
+  try {
+    // Query the database using the provided classname and studentID
+    const post = await db.homeworkPosts.findOne({
+      where: { class: classname, student: studentID },
+    });
+
+    res.json(post);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -55,8 +75,34 @@ exports.delete = async (req, res) => {
 
     return res.json(removed);
   } catch (error) {
+    console.log(error);
     // Send an error response.
     res.status(500).json({ message: "Error Deleting Data" });
+  }
+};
+
+// Update the attendance record for a specific date
+exports.update = async (req, res) => {
+  const classname = req.params.classname;
+  const studentID = req.params.studentID;
+
+  const { homework } = req.body;
+
+  try {
+    const post = await db.homeworkPosts.findOne({
+      where: { class: classname, student: studentID },
+    });
+    if (post) {
+      post.homeworkText = homework.homeworkText;
+      post.id = homework.id;
+      await post.save();
+      res.json(post);
+    } else {
+      res.status(404).json({ error: 'Homework Post was not updated' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
@@ -66,13 +112,6 @@ exports.delete2 = async (req, res) => {
     const id = req.body.id;
 
     let removed = false;
-
-    // const post2 = await db.homeworkPosts.findAll({ where: { id: id } });
-
-    // if(post2 !== null) {
-    //   await post2.destroy();
-    //   removed = true;
-    // }
 
     const post = await db.homeworkPosts.destroy({ where: { id: id } });
 
@@ -84,3 +123,25 @@ exports.delete2 = async (req, res) => {
 };
 
 
+// Remove a specific users posts from the database to avoid foreign Key Constraint Fail.
+exports.deleteByID = async (req, res) => {
+  try {
+    const classname = req.params.classname;
+    const studentID = req.params.studentID;
+    console.log("FUCKKKK");
+    let removed = false;
+
+    const post = await db.homeworkPosts.findOne({ where: { student: studentID, class: classname } });
+    if (post !== null) {
+      console.log(post);
+      await post.destroy();
+      removed = true;
+    }
+
+    return res.json(removed);
+  } catch (error) {
+    console.log(error);
+    // Send an error response.
+    res.status(500).json({ message: "Error Deleting Data" });
+  }
+};

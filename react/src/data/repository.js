@@ -100,9 +100,22 @@ async function getHomeworks() {
   return response.data;
 }
 
+async function getHomeworksByID(classname, studentID) {
+  const response = await axios.get(API_HOST + `/MAApi/homeworks/get/${classname}/${studentID}`, getHeaders());
+
+  return response.data;
+}
+
 // Create Homework Request For API from DB
 async function createHomeworks(homework) {
   const response = await axios.post(API_HOST + "/MAApi/homeworks/create", homework, getHeaders());
+
+  return response.data;
+}
+
+async function editHomeworks(classname, studentID, homework) {
+  console.log("hi");
+  const response = await axios.post(API_HOST + `/MAApi/homeworks/update/${classname}/${studentID}`, {homework}, getHeaders());
 
   return response.data;
 }
@@ -117,6 +130,13 @@ async function deleteHomeworks(homeworkID) {
 // Delete All Homework associated with User Request For API from DB
 async function deleteHomeworks2(id) {
   const response = await axios.post(API_HOST + "/MAApi/homeworks/delete2", id, getHeaders());
+
+  return response.data;
+}
+
+// Delete specific Homework Request For API from DB
+async function deleteHomeworksByID(classname, studentID, student) {
+  const response = await axios.post(API_HOST + `/MAApi/homeworks/delete3/${classname}/${studentID}`, student, getHeaders());
 
   return response.data;
 }
@@ -481,9 +501,9 @@ function removeSelectedId2() {
 // Exports all these functions to be used by other componenets
 export {
   verifyUser, createUser, checkUserExists,
-  getHomeworks, createHomeworks, deleteHomeworks,
+  getHomeworks, createHomeworks, deleteHomeworks, editHomeworks,
   getUser, removeUser, deleteUserDB,
-  getProfile, updateUser, setUser, deleteHomeworks2,
+  getProfile, updateUser, setUser, deleteHomeworks2, getHomeworksByID, deleteHomeworksByID,
   createAnnouncements, getAnnouncements, getProfileRegister,
   getProfileUsers, deleteAnnouncements, selectedId, getSelectedId,
   getloggedInUser, loggedInUser, removeLoggedInUser, removeSelectedId,

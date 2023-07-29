@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults } from "../data/repository";
+import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults, getHomeworksByID, createHomeworks, editHomeworks, deleteHomeworksByID } from "../data/repository";
 
 // Functional Component for Login Page
 function Homework(props) {
@@ -67,6 +67,39 @@ function Homework(props) {
     }
 
 
+    const findNextUncheckedHomeworkID = (homeworksForClass, existingResult) => {
+        for (let i = 0; i < homeworksForClass.length; i++) {
+            const nextHomeworkID = homeworksForClass[i].id;
+            const nextCheckboxID = `${nextHomeworkID}`;
+
+            // Check if the next homework is unchecked for the student
+            if (!existingResult || !(nextCheckboxID in existingResult.markedHomework) || !existingResult.markedHomework[nextCheckboxID]) {
+                return nextHomeworkID;
+            }
+        }
+        return null;
+    };
+
+    const areAllCheckboxesChecked = (studentID) => {
+        const studentResult = results.find(
+          (result) => result.studentID === studentID && result.class === className
+        );
+      
+        if (!studentResult) return false;
+      
+        const homeworksForClass = homeworks.filter(
+          (homework) => homework.classname === className
+        );
+      
+        for (const homework of homeworksForClass) {
+          const checkboxID = `${homework.id}`;
+          if (!studentResult.markedHomework[checkboxID]) {
+            return false;
+          }
+        }
+      
+        return true;
+      };
 
     const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup, studentResult) => {
 
@@ -83,6 +116,39 @@ function Homework(props) {
             };
 
             // const studentResult = calculateStudentResults(studentID, studentGroup);
+
+            // ==========================
+
+            const nextUncheckedHomeworkID = findNextUncheckedHomeworkID(
+                homeworks.filter((homework) => homework.classname === className),
+                updatedResult
+            );
+
+            if (nextUncheckedHomeworkID) {
+                // Find the next homework text for the unchecked checkbox
+                const nextHomeworkText = homeworks.find(homework => homework.id === nextUncheckedHomeworkID).homework;
+
+                // Check if homework exists for the student and classname
+                const existingHomework = await getHomeworksByID(className, studentID);
+
+
+                if (existingHomework) {
+                    // Homework already exists, edit the homework text in the database
+                    await editHomeworks(className, studentID, { id: props.user.id, homeworkText: nextHomeworkText });
+                } else {
+                    // Homework doesn't exist, create new homework in the database
+                    const homeworkData = {
+                        class: className,
+                        student: studentID,
+                        id: props.user.id,
+                        homeworkText: nextHomeworkText,
+                    };
+                    await createHomeworks(homeworkData);
+                }
+            }
+            //==============================
+
+
             const updatedRecord = await updateResults(className, updatedResult.markedHomework, studentID, studentGroup, studentResult);
             setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
         } else {
@@ -91,6 +157,34 @@ function Homework(props) {
                 [homeworkID]: checked,
             };
             // const studentResult = calculateStudentResults(studentID, studentGroup);
+
+            // =================
+            // Get the next homework item ID in the column
+            const homeworksForClass = homeworks.filter(homework => homework.classname === className);
+            const currentIndex = homeworksForClass.findIndex(homework => homework.id === parseInt(homeworkID));
+            const nextIndex = currentIndex + 1;
+            const nextHomeworkID = nextIndex < homeworksForClass.length ? homeworksForClass[nextIndex].id : null;
+
+            // Check if homework exists for the student and classname
+            const existingHomework = await getHomeworksByID(className, studentID);
+
+            if (existingHomework && nextHomeworkID) {
+                // Homework already exists, edit the homework text in the database
+                const nextHomeworkText = homeworks.find(homework => homework.id === nextHomeworkID).homework;
+                await editHomeworks(className, studentID, { id: props.user.id, homeworkText: nextHomeworkText });
+            } else if (!existingHomework && nextHomeworkID) {
+                // Homework doesn't exist, create new homework in the database
+                const nextHomeworkText = homeworks.find(homework => homework.id === nextHomeworkID).homework;
+                const homeworkData = {
+                    class: className,
+                    student: studentID,
+                    id: props.user.id,
+                    homeworkText: nextHomeworkText,
+                };
+                await createHomeworks(homeworkData);
+            }
+            // ========================
+
             const createdResult = await createResults(className, newResult, studentID, studentGroup, studentResult);
             setResults([...results, createdResult]);
         }

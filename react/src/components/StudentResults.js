@@ -48,10 +48,10 @@ function StudentResults(props) {
                     <>
                         {classes.map((classItem) => (
                             <div key={classItem}>
-                                
+
                                 <p>&nbsp;</p>
-                                <h3 className="text-center" style={{color: "#ac0100"}}>{classItem}</h3>
-                                
+                                <h3 className="text-center" style={{ color: "#ac0100" }}>{classItem}</h3>
+
                                 <table className="table table-striped" style={{ margin: "0" }}>
                                     <thead>
                                         <tr>

@@ -21,7 +21,11 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.DATE(),
             allowNull: false,
             defaultValue: Sequelize.NOW
-        }
+        },
+        class: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).
         timestamps: false

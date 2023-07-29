@@ -12,11 +12,20 @@ module.exports = (express, app) => {
   // Get all posts.
   router.get("/", validateToken, controller.all);
 
+  // Get selected Homework Posts.
+  router.get("/get/:classname/:studentID", validateToken, controller.selected);
+
+  // Updates homework details.
+  router.post("/update/:classname/:studentID", validateToken, controller.update);
+
   // Deletes a post from the DB.
   router.post("/delete", validateToken, controller.delete);
 
   // Deletes all posts of a specific user from DB.
   router.post("/delete2", validateToken, controller.delete2);
+
+  // Deletes homework details.
+  router.post("/delete3/:classname/:studentID", validateToken, controller.deleteByID);
 
   // Create a new post.
   router.post("/create", validateToken, controller.create);
