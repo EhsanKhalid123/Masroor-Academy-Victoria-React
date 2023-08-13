@@ -80,7 +80,24 @@ function Homework(props) {
         return null;
     };
 
-    const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup, studentResult) => {
+    const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup) => {
+
+        // Calculate the updated results locally first
+        const updatedResults = results.map((result) => {
+            if (result.studentID === studentID && result.studentGroup === studentGroup && result.class === className) {
+                return {
+                    ...result,
+                    markedHomework: {
+                        ...result.markedHomework,
+                        [homeworkID]: checked,
+                    },
+                };
+            }
+            return result;
+        });
+
+        // Calculate the student result based on the updated results
+        const studentResult = calculateStudentResults(studentID, studentGroup, updatedResults, true);
 
         const existingResult = await getResults(className, studentID);
 
@@ -93,8 +110,6 @@ function Homework(props) {
                     [homeworkID]: checked,
                 },
             };
-
-            // ==========================
 
             const nextUncheckedHomeworkID = findNextUncheckedHomeworkID(
                 homeworks.filter((homework) => homework.classname === className),
@@ -129,18 +144,32 @@ function Homework(props) {
                     await deleteHomeworksByID(className, studentID, existingHomework);
                 }
             }
-            //==============================
-
 
             const updatedRecord = await updateResults(className, updatedResult.markedHomework, studentID, studentGroup, studentResult);
             setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
         } else {
+            
+            // Result to Calculate the Correct Initial Local Score for Student being marked for first time
+            const newResult2 = [
+                {
+                    studentID,
+                    studentGroup,
+                    class: className,
+                    markedHomework: {
+                        [homeworkID]: checked,
+                    },
+                },
+            ];
+
             // Create a new result in the database
             const newResult = {
                 [homeworkID]: checked,
             };
 
-            // =================
+
+            const studentResult = calculateStudentResults(studentID, studentGroup, newResult2, true);
+            console.log(studentResult);
+
             // Get the next homework item ID in the column
             const homeworksForClass = homeworks.filter(homework => homework.classname === className);
             const currentIndex = homeworksForClass.findIndex(homework => homework.id === parseInt(homeworkID));
@@ -165,16 +194,69 @@ function Homework(props) {
                 };
                 await createHomeworks(homeworkData);
             }
-            // ========================
 
             const createdResult = await createResults(className, newResult, studentID, studentGroup, studentResult);
+            console.log(createdResult)
             setResults([...results, createdResult]);
         }
     };
 
+    // // Function to calculate the student result based on the updated results
+    // const calculateRecentStudentResults = (studentID, studentGroup, updatedResults) => {
+    //     const studentResults = updatedResults.filter(
+    //         (result) =>
+    //             result.studentID === studentID &&
+    //             result.studentGroup === studentGroup &&
+    //             result.class === className
+    //     );
+
+    //     if (studentResults.length === 0) {
+    //         return "0%";
+    //     }
+
+    //     const totalHomeworks = homeworks.filter(
+    //         (homework) =>
+    //             homework.classname === className &&
+    //             homework.group.includes(studentGroup)
+    //     ).length;
+
+    //     const checkedHomeworks = studentResults.reduce((count, result) => {
+    //         return count + Object.entries(result.markedHomework).reduce((marks, [homeworkId, isChecked]) => {
+    //             const homework = homeworks.find((item) => item.id.toString() === homeworkId);
+    //             if (isChecked && homework && homework.group.includes(studentGroup)) {
+    //                 marks++;
+    //             }
+    //             return marks;
+    //         }, 0);
+    //     }, 0);
+
+    //     let percentage = (checkedHomeworks / totalHomeworks) * 100;
+
+    //     if (totalHomeworks === 0) {
+    //         return "0%";
+    //     }
+
+    //     if (percentage > 100) {
+    //         percentage = 100;
+    //     }
+
+    //     return percentage.toFixed(2) + "%";
+    // };
+
     // Group Based Calculations Depending on what group student belongs they get marked accordingly
-    const calculateStudentResults = (studentID, userGroup) => {
-        const studentResults = results.filter(
+    const calculateStudentResults = (studentID, userGroup, updatedResult, flag) => {
+
+        let filteredResult;
+
+        if (flag) {
+            filteredResult = updatedResult;
+        } else {
+            filteredResult = results;
+        }
+
+
+
+        const studentResults = filteredResult.filter(
             (result) =>
                 result.studentID === studentID &&
                 result.studentGroup === userGroup &&
@@ -238,8 +320,8 @@ function Homework(props) {
             </div>
 
             <div className="text-center">
-                <p style={{color: "#de0300"}}>Please double click, so tick and then untick the checkbox to automatically create the Homework for that student</p>
-                <p style={{color: "#de0300"}}>Please note only the homework after the first ticked checkbox will be displayed as the homework for that Student</p>
+                <p style={{ color: "#de0300" }}>Please double click, so tick and then untick the checkbox to automatically create the Homework for that student</p>
+                <p style={{ color: "#de0300" }}>Please note only the homework after the first ticked checkbox will be displayed as the homework for that Student</p>
             </div>
 
             <div className="table-responsive">
@@ -299,7 +381,7 @@ function Homework(props) {
                                                                         <td key={homework.id}>
                                                                             <input type="checkbox" className="checkbox"
                                                                                 checked={isChecked}
-                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked, userDetails.group, calculateStudentResults(userDetails.id, userDetails.group))}
+                                                                                onChange={(e) => handleCheckboxChange(userDetails.id, checkboxID, e.target.checked, userDetails.group)}
                                                                             />
                                                                         </td>
                                                                     );

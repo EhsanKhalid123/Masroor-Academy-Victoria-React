@@ -30,10 +30,6 @@ module.exports = (sequelize, DataTypes) =>
     result: {
       type: DataTypes.STRING(45),
       allowNull: true
-    },
-    attendanceResult: {
-      type: DataTypes.STRING(45),
-      allowNull: true
     }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).

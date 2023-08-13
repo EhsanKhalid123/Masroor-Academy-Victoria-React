@@ -128,7 +128,6 @@ exports.deleteByID = async (req, res) => {
   try {
     const classname = req.params.classname;
     const studentID = req.params.studentID;
-    console.log("FUCKKKK");
     let removed = false;
 
     const post = await db.homeworkPosts.findOne({ where: { student: studentID, class: classname } });

@@ -114,7 +114,6 @@ async function createHomeworks(homework) {
 }
 
 async function editHomeworks(classname, studentID, homework) {
-  console.log("hi");
   const response = await axios.post(API_HOST + `/MAApi/homeworks/update/${classname}/${studentID}`, {homework}, getHeaders());
 
   return response.data;
@@ -406,8 +405,8 @@ async function deleteHomework(homework) {
 }
 
 // ---------- Results --------------------------------------------
-async function createResults(classname, markedHomeworks, studentID, studentGroup) {
-  const response = await axios.post(API_HOST + "/MAApi/results", { classname, markedHomeworks, studentID, studentGroup }, getHeaders());
+async function createResults(classname, markedHomeworks, studentID, studentGroup, studentResult) {
+  const response = await axios.post(API_HOST + "/MAApi/results", { classname, markedHomeworks, studentID, studentGroup, studentResult }, getHeaders());
 
   return response.data;
 }
