@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { getProfileUsers, getHomework, getAllResults } from "../data/repository";
+import { getProfileUsers, getHomework, getAllResults, getFinalResultsByID } from "../data/repository";
 
 function StudentResults(props) {
     const [users, setUsersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [homeworks, setHomeworks] = useState([]);
     const [results, setResults] = useState([]);
+    const [finalResults, setFinalResults] = useState([]);
 
     useEffect(() => {
         async function loadUserDetails() {
@@ -24,20 +25,42 @@ function StudentResults(props) {
             setResults(currentResults);
         }
 
+        async function loadFinalResultsDetails() {
+            const currentFinalResults = await getFinalResultsByID(props.user.id);
+            setFinalResults(currentFinalResults);
+        }
+
         loadUserDetails();
         loadHomeworkDetails();
         loadResultsDetails();
-    }, []);
+        loadFinalResultsDetails();
+    }, [props.user.id]);
 
     // Get unique classes from the results data
     const classes = [...new Set(results.map((result) => result.class))];
 
     return (
         <div>
-            <p>&nbsp;</p>
-            <h3 className="text-center">Results:</h3>
 
-            <br />
+            <div>
+                <p>&nbsp;</p>
+                <h3 className="text-center">Overall Result:</h3>
+                {finalResults?.map((final) => (
+                    <div key={final?.studentID}>
+                        {final?.finalResult}
+                    </div>
+                ))}
+                <h3 className="text-center">Overall Attendance:</h3>
+                {finalResults?.map((final) => (
+                    <div key={final?.studentID}>
+                        {final?.attendanceResult}
+                    </div>
+                ))}
+            </div>
+
+
+            <p>&nbsp;</p>
+            <h3 className="text-center">Individual Subject Results:</h3>
 
             <div className="table-responsive">
                 {isLoading ? (
@@ -73,7 +96,7 @@ function StudentResults(props) {
                                                     const isChecked = results.some((result) => result.studentID === userDetails.id && result.markedHomework[checkboxID] === true && result.class === classItem);
                                                     return (
                                                         <td key={homework.id}>
-                                                            <input type="checkbox" className="checkbox" checked={isChecked} />
+                                                            <input type="checkbox" className="checkbox" checked={isChecked} readOnly />
                                                         </td>
                                                     );
                                                 })}
@@ -81,7 +104,7 @@ function StudentResults(props) {
                                                     {results
                                                         .filter((result) => result.studentID === userDetails.id && result.class === classItem)
                                                         .map((result) => (
-                                                            <span key={result.id}>{result.result}</span>
+                                                            <span key={userDetails.id}>{result.result}</span>
                                                         ))}
                                                 </td>
                                             </tr>

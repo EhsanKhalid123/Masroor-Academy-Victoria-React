@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getProfileUsers, getGroups, getAttendance, createAttendance, updateAttendance, getAllAttendance } from "../data/repository";
+import { getProfileUsers, getGroups, getAttendance, createAttendance, updateAttendance, getAllAttendance, updateFinalResults, createFinalResults, getFinalResultsByID } from "../data/repository";
 
 
 // Functional Component for Login Page
@@ -15,6 +15,7 @@ function Attendance(props) {
     const { groupNumber } = useParams();
     const [attendanceRecords, setAttendanceRecords] = useState([]);
     const [attendanceData, setAttendanceData] = useState([]);
+    const [attendanceData2, setAttendanceData2] = useState([]);
     const currentDate = new Date().toLocaleDateString();
 
     useEffect(() => {
@@ -35,7 +36,11 @@ function Attendance(props) {
         const loadAttendanceData = async () => {
             const attendance = await getAttendance(currentDate);
             setAttendanceData(attendance?.attendance || []);
+        }
 
+        const loadAttendanceData2 = async () => {
+            const attendance = await getAllAttendance();
+            setAttendanceData2(attendance);
         }
 
         const loadAllAttendanceData = async () => {
@@ -48,6 +53,7 @@ function Attendance(props) {
         loadUserDetails();
         loadGroupDetails();
         loadAttendanceData();
+        loadAttendanceData2();
         loadAllAttendanceData();
 
     }, [currentDate]);
@@ -97,7 +103,32 @@ function Attendance(props) {
             await createAttendance(currentDate, updatedAttendanceData);
         }
 
-        setAttendanceData(updatedAttendanceData);
+        await setAttendanceData(updatedAttendanceData);
+
+        // Update attendanceData2 with the new or updated attendance data
+        const updatedAttendanceData2 = attendanceData2.map((record) => {
+            const updatedAttendance = record.attendance.map((student) => {
+                if (student.id === studentId) {
+                    return { ...student, status };
+                }
+                return student;
+            });
+            return { ...record, attendance: updatedAttendance };
+        });
+
+        setAttendanceData2(updatedAttendanceData2);
+
+        const presentMark = await calculatePercentages(studentId).presentPercentage.toFixed(2);
+        console.log(presentMark);
+
+        const existingFinalResults = await getFinalResultsByID(studentId);
+        const student = users.find((user) => user.id === studentId);
+        if (existingFinalResults)
+            await updateFinalResults(studentId, presentMark);
+        else
+            await createFinalResults(studentId, student?.name, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail, presentMark);
+
+
     };
 
     let groupDetails;
@@ -112,12 +143,12 @@ function Attendance(props) {
 
     // Calculate present and absent percentages
     const calculatePercentages = (studentId) => {
-        let totalAttendance = attendanceRecords.length;
+        let totalAttendance = attendanceData2.length;
         let presentCount = 0;
         let absenceCount = 0;
         let approvedLeaveCount = 0;
-    
-        attendanceRecords.forEach((record) => {
+
+        attendanceData2.forEach((record) => {
             record.attendance.forEach((student) => {
                 if (student.id === studentId) {
                     // totalAttendance++;
@@ -131,16 +162,16 @@ function Attendance(props) {
                 }
             });
         });
-    
+
         // Add 15% to the present count for approved leave
         presentCount += approvedLeaveCount * 0.15;
-    
+
         return {
             presentPercentage: totalAttendance > 0 ? (presentCount / totalAttendance) * 100 : 0,
             absencePercentage: totalAttendance > 0 ? (absenceCount / totalAttendance) * 100 : 0,
         };
     };
-    
+
 
     return (
 
@@ -228,7 +259,7 @@ function Attendance(props) {
                                                     (props.user.group === "Admin" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
                                                     (props.user.group === "Admin" && props.user.id === "Admin" && (groupNumber === "5" || userDetails.group === groupDetails)) ||
                                                     (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.gender === "Nasirat" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails)) ||
-                                                    (props.user.group === "Principal" && props.user.gender === "Male"  && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
+                                                    (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.gender === "Atfal" && userDetails.archived !== true && (groupNumber === "5" || userDetails.group === groupDetails))
                                                 ) &&
                                                     <tr>
                                                         <td></td>

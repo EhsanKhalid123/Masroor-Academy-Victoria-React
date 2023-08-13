@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults, getHomeworksByID, createHomeworks, editHomeworks, deleteHomeworksByID } from "../data/repository";
+import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults, getHomeworksByID, createHomeworks, editHomeworks, deleteHomeworksByID, createFinalResults, updateFinalResults, getFinalResultsByID} from "../data/repository";
 
 // Functional Component for Login Page
 function Homework(props) {
@@ -147,8 +147,10 @@ function Homework(props) {
 
             const updatedRecord = await updateResults(className, updatedResult.markedHomework, studentID, studentGroup, studentResult);
             setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
+
+            await updateFinalResults(studentID, null);
         } else {
-            
+
             // Result to Calculate the Correct Initial Local Score for Student being marked for first time
             const newResult2 = [
                 {
@@ -166,9 +168,7 @@ function Homework(props) {
                 [homeworkID]: checked,
             };
 
-
             const studentResult = calculateStudentResults(studentID, studentGroup, newResult2, true);
-            console.log(studentResult);
 
             // Get the next homework item ID in the column
             const homeworksForClass = homeworks.filter(homework => homework.classname === className);
@@ -196,52 +196,18 @@ function Homework(props) {
             }
 
             const createdResult = await createResults(className, newResult, studentID, studentGroup, studentResult);
-            console.log(createdResult)
             setResults([...results, createdResult]);
+            
+            const existingFinalResults = await getFinalResultsByID(studentID);
+            const student = users.find((user) => user.id === studentID);
+
+            if (existingFinalResults)
+                await updateFinalResults(studentID, null)
+            else
+                await createFinalResults(studentID, student?.name, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
+
         }
     };
-
-    // // Function to calculate the student result based on the updated results
-    // const calculateRecentStudentResults = (studentID, studentGroup, updatedResults) => {
-    //     const studentResults = updatedResults.filter(
-    //         (result) =>
-    //             result.studentID === studentID &&
-    //             result.studentGroup === studentGroup &&
-    //             result.class === className
-    //     );
-
-    //     if (studentResults.length === 0) {
-    //         return "0%";
-    //     }
-
-    //     const totalHomeworks = homeworks.filter(
-    //         (homework) =>
-    //             homework.classname === className &&
-    //             homework.group.includes(studentGroup)
-    //     ).length;
-
-    //     const checkedHomeworks = studentResults.reduce((count, result) => {
-    //         return count + Object.entries(result.markedHomework).reduce((marks, [homeworkId, isChecked]) => {
-    //             const homework = homeworks.find((item) => item.id.toString() === homeworkId);
-    //             if (isChecked && homework && homework.group.includes(studentGroup)) {
-    //                 marks++;
-    //             }
-    //             return marks;
-    //         }, 0);
-    //     }, 0);
-
-    //     let percentage = (checkedHomeworks / totalHomeworks) * 100;
-
-    //     if (totalHomeworks === 0) {
-    //         return "0%";
-    //     }
-
-    //     if (percentage > 100) {
-    //         percentage = 100;
-    //     }
-
-    //     return percentage.toFixed(2) + "%";
-    // };
 
     // Group Based Calculations Depending on what group student belongs they get marked accordingly
     const calculateStudentResults = (studentID, userGroup, updatedResult, flag) => {
@@ -253,8 +219,6 @@ function Homework(props) {
         } else {
             filteredResult = results;
         }
-
-
 
         const studentResults = filteredResult.filter(
             (result) =>

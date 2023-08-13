@@ -442,6 +442,37 @@ async function deleteResults(result) {
 }
 
 
+// ---------- Fianl Results --------------------------------------------
+async function createFinalResults(studentID, studentName, fathersName, mothersName, parentEmail, studentEmail, attendanceResult) {
+  const response = await axios.post(API_HOST + "/MAApi/finalResults", { studentID, studentName, fathersName, mothersName, parentEmail, studentEmail, attendanceResult }, getHeaders());
+
+  return response.data;
+}
+
+async function getFinalResultsByID(studentID) {
+  const response = await axios.get(API_HOST + `/MAApi/finalResults/get/${studentID}`, getHeaders());
+
+  return response.data;
+}
+
+async function getAllFinalResults() {
+  const response = await axios.get(API_HOST + "/MAApi/finalResults", getHeaders());
+
+  return response.data;
+}
+
+async function updateFinalResults(studentID, attendanceResult) {
+  const response = await axios.post(API_HOST + `/MAApi/finalResults/update/${studentID}`, {attendanceResult}, getHeaders());
+
+  return response.data;
+}
+
+async function deleteFinalResults(result) {
+  const response = await axios.post(API_HOST + "/MAApi/finalResults/delete", result, getHeaders());
+
+  return response.data;
+}
+
 
 // --- Helper functions to interact with local storage --------------------------------------------
 // Sets Current User In Local Storage
@@ -513,5 +544,6 @@ export {
   getSyllabusById, deleteSyllabus, updateSyllabus, editGroup, editClass,
   createAttendance, getAttendance, updateAttendance, deleteAttendance, getAllAttendance,
   createHomework, getHomework, getHomeworkById, editHomework, deleteHomework,
-  createResults, updateResults, deleteResults, getAllResults, getResults, getResultsByID
+  createResults, updateResults, deleteResults, getAllResults, getResults, getResultsByID,
+  createFinalResults, updateFinalResults, deleteFinalResults, getAllFinalResults, getFinalResultsByID
 }

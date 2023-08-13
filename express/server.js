@@ -33,6 +33,7 @@ require("./src/routes/syllabusRoutes.js")(express, app);
 require("./src/routes/attendanceRoutes.js")(express, app);
 require("./src/routes/homeworkRoutes.js")(express, app);
 require("./src/routes/resultRoutes.js")(express, app);
+require("./src/routes/finalResultRoutes.js")(express, app);
 
 if (process.env.NODE_ENV === "production"){
   app.use(express.static('react/build'))
