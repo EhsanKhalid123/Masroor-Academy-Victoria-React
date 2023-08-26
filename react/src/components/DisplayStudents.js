@@ -77,6 +77,16 @@ function DisplayStudents(props) {
         }
     };
 
+    const findFatherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.fathersName : "";
+    };
+
+    const findMotherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.mothersName : "";
+    };
+
     let groupDetails;
 
     const group = groups.find((group) => group.id === groupNumber);
@@ -161,6 +171,9 @@ function DisplayStudents(props) {
                                             }
                                             <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">
+                                                {props.user.gender === "Female" || props.user.gender === "Nasirat" ? "Mother" : "Father"}
+                                            </th>
                                             <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                             <th style={{ color: "#112c3f" }} scope="col">DOB</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Gender</th>
@@ -195,6 +208,11 @@ function DisplayStudents(props) {
                                                             </td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                            <td style={{ color: "#112c3f" }}>
+                                                                {userDetails.gender === "Female" || userDetails.gender === "Nasirat"
+                                                                    ? findMotherName(userDetails.id)
+                                                                    : findFatherName(userDetails.id)}
+                                                            </td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.studentDob}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.gender}</td>

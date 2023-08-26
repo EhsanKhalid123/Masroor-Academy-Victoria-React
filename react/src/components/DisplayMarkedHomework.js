@@ -1,6 +1,6 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { selectedId, getSelectedId, getAllResults, getResultsByID, deleteResults } from "../data/repository";
+import { selectedId, getSelectedId, getAllResults, getResultsByID, deleteResults, getProfileUsers } from "../data/repository";
 import Toolbar from "./Toolbar";
 
 function DisplayMarkedHomework(props) {
@@ -11,6 +11,7 @@ function DisplayMarkedHomework(props) {
     const [confirmPopup, setconfirmPopup] = useState(false);
     const [selectedIds, setSelectedIds] = useState([]);
     const [selectAll, setSelectAll] = useState(false);
+    const [users, setUsersData] = useState([]);
 
     // Load users from DB.
     useEffect(() => {
@@ -22,8 +23,16 @@ function DisplayMarkedHomework(props) {
             setIsLoading(false);
         }
 
+        // Loads User Details from DB
+        async function loadUserDetails() {
+            const currentDetails = await getProfileUsers();
+            setUsersData(currentDetails)
+            setIsLoading(false);
+        }
+
         // Calls the functions above
         loadResultsData();
+        loadUserDetails();
 
     }, []);
 
@@ -31,6 +40,16 @@ function DisplayMarkedHomework(props) {
     const togglePopup = () => {
         setconfirmPopup(!confirmPopup);
     }
+
+    const findStudentName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.name : "";
+    };
+
+    const findFatherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.fathersName : "";
+    };
 
     const deleteSelectedResult = async (event) => {
 
@@ -117,10 +136,11 @@ function DisplayMarkedHomework(props) {
                                             }
                                             <th style={{ color: "#112c3f" }} scope="col">Results ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Student ID</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                            <th style={{ color: "#112c3f" }} scope="col">Father</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Student Group</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Class</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Result</th>
-                                            <th style={{ color: "#112c3f" }} scope="col">Attendance Result</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -139,10 +159,11 @@ function DisplayMarkedHomework(props) {
                                                 </td>
                                                 <td style={{ color: "#112c3f" }}>{result.resultID}</td>
                                                 <td style={{ color: "#112c3f" }}>{result.studentID}</td>
+                                                <td style={{ color: "#112c3f" }}>{findStudentName(result.studentID)}</td>
+                                                <td style={{ color: "#112c3f" }}>{findFatherName(result.studentID)}</td>
                                                 <td style={{ color: "#112c3f" }}>{result.studentGroup}</td>
                                                 <td style={{ color: "#112c3f" }}>{result.class}</td>
                                                 <td style={{ color: "#112c3f" }}>{result.result}</td>
-                                                <td style={{ color: "#112c3f" }}>{result.attendanceResult}</td>
                                                 <td>
                                                     {props.user.group === "Admin" &&
                                                         <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(result.resultID); await togglePopup() }} >Delete</button>

@@ -95,7 +95,7 @@ function Navigation(props) {
                           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                             <Link className="dropdown-item" to="/SelectGroupAttendance">Mark Student Attendance</Link>
                             <Link className="dropdown-item" to="/AttendanceStaff">Mark Staff Attendance</Link>
-                            <Link className="dropdown-item" to="/ViewAttendance">View Attendance</Link>
+                            <Link className="dropdown-item" to="/ViewAttendance">View Attendance Records</Link>
                           </div>
                         </li>
                       </>
