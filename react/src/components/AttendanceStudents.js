@@ -65,16 +65,27 @@ function Attendance(props) {
 
     const handleAttendanceChange = async (studentId, status, studentGroup) => {
 
+        let updatedAttendanceData = attendanceData.map((student) => {
+            if (student && student.id === studentId) {
+                return { ...student, status };
+            }
+            return student;
+        });
+
+        const formattedCurrentDate = new Date(currentDate).toISOString();
+        // Update attendanceData2 locally
+        const updatedAttendanceData2 = attendanceData2.map(record => {
+            if (record.date === formattedCurrentDate) {
+                return { ...record, attendance: updatedAttendanceData };
+            }
+            return record;
+        });
+
+        setAttendanceData2(updatedAttendanceData2);
+
         const existingAttendance = await getAttendance(currentDate);;
-        let updatedAttendanceData = [];
 
         if (existingAttendance) {
-            updatedAttendanceData = attendanceData.map((student) => {
-                if (student && student.id === studentId) {
-                    return { ...student, status };
-                }
-                return student;
-            });
 
             const existingStudent = updatedAttendanceData.find((student) => student?.id === studentId);
             if (!existingStudent) {
@@ -82,7 +93,6 @@ function Attendance(props) {
                     id: studentId,
                     group: studentGroup,
                     status: status,
-                    // Add other properties based on the model schema
                 });
             }
         } else {
@@ -92,7 +102,6 @@ function Attendance(props) {
                     id: studentId,
                     group: studentGroup,
                     status: status,
-                    // Add other properties based on the model schema
                 },
             ];
         }
@@ -105,21 +114,7 @@ function Attendance(props) {
 
         await setAttendanceData(updatedAttendanceData);
 
-        // Update attendanceData2 with the new or updated attendance data
-        const updatedAttendanceData2 = attendanceData2.map((record) => {
-            const updatedAttendance = record.attendance.map((student) => {
-                if (student.id === studentId) {
-                    return { ...student, status };
-                }
-                return student;
-            });
-            return { ...record, attendance: updatedAttendance };
-        });
-
-        setAttendanceData2(updatedAttendanceData2);
-
-        const presentMark = await calculatePercentages(studentId).presentPercentage.toFixed(2);
-        console.log(presentMark);
+        const presentMark = await calculatePercentages(studentId, updatedAttendanceData2, true).presentPercentage.toFixed(2);
 
         const existingFinalResults = await getFinalResultsByID(studentId);
         const student = users.find((user) => user.id === studentId);
@@ -130,6 +125,7 @@ function Attendance(props) {
 
 
     };
+
 
     let groupDetails;
 
@@ -142,13 +138,22 @@ function Attendance(props) {
     }
 
     // Calculate present and absent percentages
-    const calculatePercentages = (studentId) => {
-        let totalAttendance = attendanceData2.length;
+    const calculatePercentages = (studentId, updatedAttendance, flag) => {
+
+        let filteredResult;
+
+        if (flag) {
+            filteredResult = updatedAttendance;
+        } else {
+            filteredResult = attendanceData2;
+        }
+
+        let totalAttendance = filteredResult.length;
         let presentCount = 0;
         let absenceCount = 0;
         let approvedLeaveCount = 0;
 
-        attendanceData2.forEach((record) => {
+        filteredResult.forEach((record) => {
             record.attendance.forEach((student) => {
                 if (student.id === studentId) {
                     // totalAttendance++;

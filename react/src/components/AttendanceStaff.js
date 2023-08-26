@@ -12,6 +12,7 @@ function Attendance(props) {
     const [search, setSearch] = useState('');
     const [attendanceRecords, setAttendanceRecords] = useState([]);
     const [attendanceData, setAttendanceData] = useState([]);
+    const [attendanceData2, setAttendanceData2] = useState([]);
     const currentDate = new Date().toLocaleDateString();
 
     useEffect(() => {
@@ -29,6 +30,11 @@ function Attendance(props) {
 
         }
 
+        const loadAttendanceData2 = async () => {
+            const attendance = await getAllAttendance();
+            setAttendanceData2(attendance);
+        }
+
         const loadAllAttendanceData = async () => {
             const attendance = await getAllAttendance();
             const lastFiveRecords = attendance.slice(-5); // Get the last 5 records
@@ -38,6 +44,7 @@ function Attendance(props) {
         // Calls the functions above
         loadUserDetails();
         loadAttendanceData();
+        loadAttendanceData2();
         loadAllAttendanceData();
 
     }, [currentDate]);
@@ -49,16 +56,27 @@ function Attendance(props) {
 
     const handleAttendanceChange = async (staffId, status, staffGroup) => {
 
+        let updatedAttendanceData = attendanceData.map((staff) => {
+            if (staff && staff.id === staffId) {
+                return { ...staff, status };
+            }
+            return staff;
+        });
+
+        const formattedCurrentDate = new Date(currentDate).toISOString();
+        // Update attendanceData2 locally
+        const updatedAttendanceData2 = attendanceData2.map(record => {
+            if (record.date === formattedCurrentDate) {
+                return { ...record, attendance: updatedAttendanceData };
+            }
+            return record;
+        });
+
+        setAttendanceData2(updatedAttendanceData2);
+
         const existingAttendance = await getAttendance(currentDate);;
-        let updatedAttendanceData = [];
 
         if (existingAttendance) {
-            updatedAttendanceData = attendanceData.map((staff) => {
-                if (staff && staff.id === staffId) {
-                    return { ...staff, status };
-                }
-                return staff;
-            });
 
             const existingstaff = updatedAttendanceData.find((staff) => staff?.id === staffId);
             if (!existingstaff) {
@@ -92,12 +110,12 @@ function Attendance(props) {
 
     // Calculate present and absent percentages
     const calculatePercentages = (staffId) => {
-        let totalAttendance = attendanceRecords.length;
+        let totalAttendance = attendanceData2.length;
         let presentCount = 0;
         let absenceCount = 0;
         let approvedLeaveCount = 0;
 
-        attendanceRecords.forEach((record) => {
+        attendanceData2.forEach((record) => {
             record.attendance.forEach((staff) => {
                 if (staff.id === staffId) {
                     // totalAttendance++;

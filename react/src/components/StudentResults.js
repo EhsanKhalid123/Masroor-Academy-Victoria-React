@@ -45,22 +45,26 @@ function StudentResults(props) {
             <div>
                 <p>&nbsp;</p>
                 <h3 className="text-center">Overall Result:</h3>
-                {finalResults?.map((final) => (
-                    <div key={final?.studentID}>
-                        {final?.finalResult}
-                    </div>
-                ))}
+                <div className="text-center">
+                    {finalResults?.finalResult ? (
+                        <p style={{ fontSize: "30px", color: "#0097b5" }}>{finalResults.finalResult}</p>
+                    ) : (
+                        <p style={{ fontSize: "20px", color: "#a50000" }}>Student hasn't been marked</p>
+                    )}
+                </div>
                 <h3 className="text-center">Overall Attendance:</h3>
-                {finalResults?.map((final) => (
-                    <div key={final?.studentID}>
-                        {final?.attendanceResult}
-                    </div>
-                ))}
+                <div className="text-center">
+                    {finalResults?.attendanceResult ? (
+                        <p style={{ fontSize: "30px", color: "#0097b5" }}>{finalResults.attendanceResult}</p>
+                    ) : (
+                        <p style={{ fontSize: "20px", color: "#a50000" }}>Student hasn't been marked</p>
+                    )}
+                </div>
             </div>
 
 
             <p>&nbsp;</p>
-            <h3 className="text-center">Individual Subject Results:</h3>
+            <h3 className="text-center" style={{ marginBottom: "30px" }}>Individual Subject Results:</h3>
 
             <div className="table-responsive">
                 {isLoading ? (
@@ -72,10 +76,10 @@ function StudentResults(props) {
                         {classes.map((classItem) => (
                             <div key={classItem}>
 
-                                <p>&nbsp;</p>
+                                {/* <p>&nbsp;</p> */}
                                 <h3 className="text-center" style={{ color: "#ac0100" }}>{classItem}</h3>
 
-                                <table className="table table-striped" style={{ margin: "0" }}>
+                                <table className="table table-striped" style={{ margin: "0", marginBottom: "30px" }}>
                                     <thead>
                                         <tr>
                                             <th></th>
