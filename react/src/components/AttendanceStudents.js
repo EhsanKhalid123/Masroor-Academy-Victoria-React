@@ -63,6 +63,16 @@ function Attendance(props) {
         setSearch(event.target.value.toLowerCase());
     }
 
+    const findFatherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.fathersName : "";
+    };
+
+    const findMotherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.mothersName : "";
+    };
+
     const handleAttendanceChange = async (studentId, status, studentGroup) => {
 
         let updatedAttendanceData = attendanceData.map((student) => {
@@ -212,6 +222,9 @@ function Attendance(props) {
                                     <th></th>
                                     <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">
+                                        {props.user.gender === "Female" || props.user.gender === "Nasirat" ? "Mother" : "Father"}
+                                    </th>
                                     <th style={{ color: "#112c3f" }} scope="col">Group</th>
                                     <th className="text-center" style={{ color: "#112c3f" }} scope="col">Mark Attendance</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Last 5 Attendances</th>
@@ -270,6 +283,11 @@ function Attendance(props) {
                                                         <td></td>
                                                         <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                         <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                        <td style={{ color: "#112c3f" }}>
+                                                            {userDetails.gender === "Female" || userDetails.gender === "Nasirat"
+                                                                ? findMotherName(userDetails.id)
+                                                                : findFatherName(userDetails.id)}
+                                                        </td>
                                                         <td style={{ color: "#112c3f" }}>{userDetails.group}</td>
                                                         <td style={{ color: "#112c3f" }}>
                                                             <div className="attendance-buttons">

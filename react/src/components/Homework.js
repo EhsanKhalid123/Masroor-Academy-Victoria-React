@@ -1,7 +1,7 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults, getHomeworksByID, createHomeworks, editHomeworks, deleteHomeworksByID, createFinalResults, updateFinalResults, getFinalResultsByID} from "../data/repository";
+import { getProfileUsers, getGroups, getHomework, getResults, createResults, updateResults, getAllResults, getHomeworksByID, createHomeworks, editHomeworks, deleteHomeworksByID, createFinalResults, updateFinalResults, getFinalResultsByID } from "../data/repository";
 
 // Functional Component for Login Page
 function Homework(props) {
@@ -78,6 +78,16 @@ function Homework(props) {
             }
         }
         return null;
+    };
+
+    const findFatherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.fathersName : "";
+    };
+
+    const findMotherName = (studentID) => {
+        const userWithMatchingID = users.find(user => user.id === studentID);
+        return userWithMatchingID ? userWithMatchingID.mothersName : "";
     };
 
     const handleCheckboxChange = async (studentID, homeworkID, checked, studentGroup) => {
@@ -197,7 +207,7 @@ function Homework(props) {
 
             const createdResult = await createResults(className, newResult, studentID, studentGroup, studentResult);
             setResults([...results, createdResult]);
-            
+
             const existingFinalResults = await getFinalResultsByID(studentID);
             const student = users.find((user) => user.id === studentID);
 
@@ -284,8 +294,7 @@ function Homework(props) {
             </div>
 
             <div className="text-center">
-                <p style={{ color: "#de0300" }}>Please double click, so tick and then untick the checkbox to automatically create the Homework for that student</p>
-                <p style={{ color: "#de0300" }}>Please note only the homework after the first ticked checkbox will be displayed as the homework for that Student</p>
+                <p style={{ color: "#de0300" }}>Please note only the homework after the first ticked checkbox will be displayed as the homework for that Student on their dashboard</p>
             </div>
 
             <div className="table-responsive">
@@ -300,7 +309,11 @@ function Homework(props) {
                             <thead>
                                 <tr>
                                     <th></th>
+                                    <th style={{ color: "#112c3f" }} scope="col">ID</th>
                                     <th style={{ color: "#112c3f" }} scope="col">Name</th>
+                                    <th style={{ color: "#112c3f" }} scope="col">
+                                        {props.user.gender === "Female" || props.user.gender === "Nasirat" ? "Mother" : "Father"}
+                                    </th>
                                     {/* Render homework columns */}
                                     {homeworks
                                         .filter((homework) => homework.classname === className) // Filter homeworks based on className
@@ -332,7 +345,13 @@ function Homework(props) {
                                                     <>
                                                         <tr>
                                                             <td></td>
+                                                            <td style={{ color: "#112c3f" }}>{userDetails.id}</td>
                                                             <td style={{ color: "#112c3f" }}>{userDetails.name}</td>
+                                                            <td style={{ color: "#112c3f" }}>
+                                                                {userDetails.gender === "Female" || userDetails.gender === "Nasirat"
+                                                                    ? findMotherName(userDetails.id)
+                                                                    : findFatherName(userDetails.id)}
+                                                            </td>
                                                             {homeworks
                                                                 .filter((homework) => homework.classname === className)
                                                                 .map((homework) => {
