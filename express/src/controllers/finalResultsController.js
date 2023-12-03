@@ -34,7 +34,7 @@ exports.getByID = async (req, res) => {
 
 // Create a new attendance record
 exports.create = async (req, res) => {
-  const { fathersName, mothersName, parentEmail, studentID, studentName, studentGroup, studentEmail, attendanceResult } = req.body;
+  const { fathersName, mothersName, parentEmail, studentID, studentName, studentGroup, studentGender, studentEmail, attendanceResult } = req.body;
 
   // Fetch result records where studentID matches
   const resultRecords = await db.results.findAll({
@@ -72,6 +72,7 @@ exports.create = async (req, res) => {
       studentID: studentID,
       studentName: studentName,
       studentGroup: studentGroup,
+      studentGender: studentGender,
       fathersName: fathersName,
       mothersName: mothersName,
       parentEmail: parentEmail,

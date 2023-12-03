@@ -1,12 +1,15 @@
 // Importing React classes and functions from node modules
 import React, { useState, useEffect } from "react";
-import { getAllFinalResults, getProfileUsers } from "../data/repository";
+import { useParams, Link } from "react-router-dom";
+import { getAllFinalResults, getProfileUsers, getGroups } from "../data/repository";
 
 function ViewAllResults(props) {
 
     const [finalResults, setFinalResults] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [groups, setGroupsData] = useState([]);
+    const { groupNumber } = useParams();
 
     // Load users from DB.
     useEffect(() => {
@@ -18,8 +21,15 @@ function ViewAllResults(props) {
             setIsLoading(false);
         }
 
+        // Loads User Details from DB
+        async function loadGroupDetails() {
+            const currentGroups = await getGroups();
+            setGroupsData(currentGroups)
+        }
+
         // Calls the functions above
         loadFinalResultsDetails();
+        loadGroupDetails();
 
     }, []);
 
@@ -27,6 +37,25 @@ function ViewAllResults(props) {
     const handleSearch = async (event) => {
         setSearch(event.target.value.toLowerCase());
     }
+
+
+    // Check if groupNumber is 5 to determine filtering
+    const shouldFilterResults = groupNumber !== "5";
+
+    let groupDetails;
+
+    const group = groups.find((group) => group.id === groupNumber);
+
+    if (group) {
+        groupDetails = group.group;
+    } else {
+        groupDetails = "Invalid group number";
+    }
+
+    // Filter final results based on selected group (if applicable)
+    const filteredResults = shouldFilterResults
+        ? finalResults.filter((result) => result.studentGroup === groupDetails)
+        : finalResults;
 
 
     return (
@@ -37,6 +66,12 @@ function ViewAllResults(props) {
                     <span className="fa fa-search form-control-feedback"></span>
                     <input type="text" style={{ border: "1px solid #112c3f", borderRadius: "10rem" }} className="form-control" placeholder="Search" aria-label="Search" onChange={handleSearch} />
                 </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "center" }}>
+                <Link to="/SelectGroupResults">
+                    <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
+                </Link>
             </div>
 
             <div className="table-responsive">
@@ -73,8 +108,18 @@ function ViewAllResults(props) {
                                         </tr>
                                     </thead>
                                     {/* Mapping Users state Variable to access its content easily to display in Table */}
-                                    {finalResults.filter((result) => {
+                                    {filteredResults.filter((result) => {
                                         return search.toLowerCase() === '' ? result : (result.studentID && result.studentID.toLowerCase().includes(search)) || (result.studentName && result.studentName.toLowerCase().includes(search)) || (result.fathersName && result.fathersName.toLowerCase().includes(search)) || (result.mothersName && result.mothersName.toLowerCase().includes(search)) || (result.finalResult && result.finalResult.includes(search)) || (result.attendanceResult && result.attendanceResult.includes(search));
+                                    }).filter((userDetails) => {
+                                        return(
+                                        ((props.user.group === "Female Teacher" && userDetails.studentGender === "Nasirat" && userDetails.archived !== true) ||
+                                                    (props.user.group === "Male Teacher" && userDetails.studentGender === "Atfal" && userDetails.archived !== true) ||
+                                                    (props.user.group === "Admin" && userDetails.archived !== true) ||
+                                                    (props.user.group === "Admin" && props.user.id === "Admin") ||
+                                                    (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.studentGender === "Nasirat" && userDetails.archived !== true) ||
+                                                    (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.studentGender === "Atfal" && userDetails.archived !== true)
+                                                ) 
+                                        );
                                     }).map((result) =>
                                         <tbody key={result.studentID}>
                                             <>

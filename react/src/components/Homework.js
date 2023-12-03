@@ -158,7 +158,16 @@ function Homework(props) {
             const updatedRecord = await updateResults(className, updatedResult.markedHomework, studentID, studentGroup, studentResult);
             setResults([...results.filter((result) => result.studentID !== studentID), updatedRecord]);
 
-            await updateFinalResults(studentID, null);
+            const existingFinalResults = await getFinalResultsByID(studentID);
+            const student = users.find((user) => user.id === studentID);
+            if (existingFinalResults){
+                alert("Running First above");
+                await updateFinalResults(studentID, null);
+            }
+            else {
+                alert("Running above");
+                await createFinalResults(studentID, student?.name, student?.group, student?.gender, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
+            }
         } else {
 
             // Result to Calculate the Correct Initial Local Score for Student being marked for first time
@@ -210,12 +219,16 @@ function Homework(props) {
 
             const existingFinalResults = await getFinalResultsByID(studentID);
             const student = users.find((user) => user.id === studentID);
-
-            if (existingFinalResults)
-                await updateFinalResults(studentID, null)
-            else
-                await createFinalResults(studentID, student?.name, student?.group, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
-
+            console.log(existingFinalResults);
+            
+            if (existingFinalResults){
+                alert("Running First");
+                await updateFinalResults(studentID, null);
+            }
+            else {
+                alert("Running");
+                await createFinalResults(studentID, student?.name, student?.group, student?.gender, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
+            }
         }
     };
 
