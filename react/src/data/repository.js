@@ -443,8 +443,8 @@ async function deleteResults(result) {
 
 
 // ---------- Fianl Results --------------------------------------------
-async function createFinalResults(studentID, studentName, fathersName, mothersName, parentEmail, studentEmail, attendanceResult) {
-  const response = await axios.post(API_HOST + "/MAApi/finalResults", { studentID, studentName, fathersName, mothersName, parentEmail, studentEmail, attendanceResult }, getHeaders());
+async function createFinalResults(studentID, studentName, studentGroup, fathersName, mothersName, parentEmail, studentEmail, attendanceResult) {
+  const response = await axios.post(API_HOST + "/MAApi/finalResults", { studentID, studentName, studentGroup, fathersName, mothersName, parentEmail, studentEmail, attendanceResult }, getHeaders());
 
   return response.data;
 }

@@ -38,6 +38,9 @@ function SelectGroup(props) {
     } else if (props.selectGroup === "markhomework") {
         linkTo = "/Homework";
         message = `Please select a group to mark students homework for that group for the class ${className}`;
+    } else if (props.selectGroup === "result") {
+        linkTo = "/Results";
+        message = `Please select a group to view students final results for all subjects `;
     }
 
     return (

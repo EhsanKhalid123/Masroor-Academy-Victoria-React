@@ -39,6 +39,7 @@ import DisplayHomework from './DisplayHomework';
 import CreateHomework from './CreateHomework';
 import DisplayMarkedHomework from './DisplayMarkedHomework';
 import StudentResults from './StudentResults';
+import ViewAllResults from './ViewAllResults';
 
 // Functional Component for App
 function App() {
@@ -144,6 +145,8 @@ function App() {
                       <Route path="/Attendance/:groupNumber" element={<AttendanceStudents user={decodedUser} />} />
                       <Route path="/AttendanceStaff" element={<AttendanceStaff user={decodedUser} />} />
                       <Route path="/Homework/:groupNumber/:className" element={<Homework user={decodedUser} />} />
+                      <Route path="/SelectGroupResults" element={<SelectGroup user={decodedUser} selectGroup={"result"} />} />
+                      <Route path="/Results/:groupNumber" element={<ViewAllResults user={decodedUser} />} />
                     </>
                   }
 

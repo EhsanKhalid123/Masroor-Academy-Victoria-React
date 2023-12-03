@@ -131,7 +131,7 @@ function Attendance(props) {
         if (existingFinalResults)
             await updateFinalResults(studentId, presentMark);
         else
-            await createFinalResults(studentId, student?.name, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail, presentMark);
+            await createFinalResults(studentId, student?.name, student?.group, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail, presentMark);
 
 
     };

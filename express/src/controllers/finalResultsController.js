@@ -8,7 +8,7 @@ exports.all = async (req, res) => {
 
     const finalResults = await db.finalResults.findAll();
 
-    res.json(results);
+    res.json(finalResults);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Internal server error' });
@@ -34,7 +34,7 @@ exports.getByID = async (req, res) => {
 
 // Create a new attendance record
 exports.create = async (req, res) => {
-  const { fathersName, mothersName, parentEmail, studentID, studentName, studentEmail, attendanceResult } = req.body;
+  const { fathersName, mothersName, parentEmail, studentID, studentName, studentGroup, studentEmail, attendanceResult } = req.body;
 
   // Fetch result records where studentID matches
   const resultRecords = await db.results.findAll({
@@ -71,6 +71,7 @@ exports.create = async (req, res) => {
     const finalResults = await db.finalResults.create({
       studentID: studentID,
       studentName: studentName,
+      studentGroup: studentGroup,
       fathersName: fathersName,
       mothersName: mothersName,
       parentEmail: parentEmail,

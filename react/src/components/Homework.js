@@ -214,7 +214,7 @@ function Homework(props) {
             if (existingFinalResults)
                 await updateFinalResults(studentID, null)
             else
-                await createFinalResults(studentID, student?.name, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
+                await createFinalResults(studentID, student?.name, student?.group, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
 
         }
     };

@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(45),
       allowNull: true,
     },
+    studentGroup: {
+      type: DataTypes.STRING(45),
+      allowNull: true,
+    },
     fathersName: {
       type: DataTypes.STRING(45),
       allowNull: true,
