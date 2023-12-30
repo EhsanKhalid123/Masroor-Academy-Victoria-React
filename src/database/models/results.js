@@ -23,25 +23,25 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(45),
       allowNull: false,
     },
-    markedHomework: {
-      type: DataTypes.JSON,
-      allowNull: false,
-    },
-    // result: {
-    //   type: DataTypes.STRING(45),
-    //   allowNull: true
+    // markedHomework: {
+    //   type: DataTypes.JSON,
+    //   allowNull: false,
     // },
-    result: {
+    markedHomework: {
       type: DataTypes.TEXT,
-      allowNull: true,
+      allowNull: false,
       get() {
-        const data = this.getDataValue('result');
+        const data = this.getDataValue('markedHomework');
         return data ? JSON.parse(data) : null;
       },
       set(val) {
-        this.setDataValue('result', JSON.stringify(val));
+        this.setDataValue('markedHomework', JSON.stringify(val));
       },
     },
+    result: {
+      type: DataTypes.STRING(45),
+      allowNull: true
+    }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).
     timestamps: false
