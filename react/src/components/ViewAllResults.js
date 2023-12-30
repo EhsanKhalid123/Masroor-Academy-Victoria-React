@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getAllFinalResults, getFinalResultsByID, getGroups, selectedId, getSelectedId, deleteFinalResults } from "../data/repository";
+import Toolbar from "./Toolbar";
 
 function ViewAllResults(props) {
 
@@ -10,6 +11,8 @@ function ViewAllResults(props) {
     const [search, setSearch] = useState('');
     const [groups, setGroupsData] = useState([]);
     const [confirmPopup, setconfirmPopup] = useState(false);
+    const [selectedIds, setSelectedIds] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
     const { groupNumber } = useParams();
 
     // Load users from DB.
@@ -57,6 +60,31 @@ function ViewAllResults(props) {
         togglePopup();
     }
 
+    const handleBulkUpdate = async () => {
+        const updatedDetails = await getAllFinalResults();
+        setFinalResults(updatedDetails);
+        setSelectedIds([]);
+    };
+
+    const handleSelectResult = (id) => {
+        if (selectedIds.includes(id)) {
+            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+        } else {
+            setSelectedIds([...selectedIds, id]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        if (!selectAll) {
+            const result = finalResults
+                .map(result => result.studentID);
+            setSelectedIds(result);
+        } else {
+            setSelectedIds([]);
+        }
+        setSelectAll(!selectAll);
+    };
+
 
     // Check if groupNumber is 5 to determine filtering
     const shouldFilterResults = groupNumber !== "5";
@@ -87,6 +115,13 @@ function ViewAllResults(props) {
                 </div>
             </div>
 
+            {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                <>
+                    {selectedIds.length > 0 && <Toolbar selectedUser={selectedIds} onUpdate={handleBulkUpdate} props={props} />}
+                    <br />
+                </>
+            }
+
             <div style={{ display: "flex", justifyContent: "center" }}>
                 <Link to="/SelectGroupResults">
                     <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
@@ -112,7 +147,11 @@ function ViewAllResults(props) {
                                 <table className="table table-striped" style={{ margin: "0" }}>
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) ?
+                                                <th><input type="checkbox" className="checkbox" checked={selectAll} onChange={handleSelectAll} /></th>
+                                                :
+                                                <th></th>
+                                            }
                                             <th style={{ color: "#112c3f" }} scope="col">Student ID</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Student Name</th>
                                             <th style={{ color: "#112c3f" }} scope="col">Student Group</th>
@@ -130,20 +169,25 @@ function ViewAllResults(props) {
                                     {filteredResults.filter((result) => {
                                         return search.toLowerCase() === '' ? result : (result.studentID && result.studentID.toLowerCase().includes(search)) || (result.studentName && result.studentName.toLowerCase().includes(search)) || (result.fathersName && result.fathersName.toLowerCase().includes(search)) || (result.mothersName && result.mothersName.toLowerCase().includes(search)) || (result.finalResult && result.finalResult.includes(search)) || (result.attendanceResult && result.attendanceResult.includes(search));
                                     }).filter((userDetails) => {
-                                        return(
-                                        ((props.user.group === "Female Teacher" && userDetails.studentGender === "Nasirat" && userDetails.archived !== true) ||
-                                                    (props.user.group === "Male Teacher" && userDetails.studentGender === "Atfal" && userDetails.archived !== true) ||
-                                                    (props.user.group === "Admin" && userDetails.archived !== true) ||
-                                                    (props.user.group === "Admin" && props.user.id === "Admin") ||
-                                                    (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.studentGender === "Nasirat" && userDetails.archived !== true) ||
-                                                    (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.studentGender === "Atfal" && userDetails.archived !== true)
-                                                ) 
+                                        return (
+                                            ((props.user.group === "Female Teacher" && userDetails.studentGender === "Nasirat" && userDetails.archived !== true) ||
+                                                (props.user.group === "Male Teacher" && userDetails.studentGender === "Atfal" && userDetails.archived !== true) ||
+                                                (props.user.group === "Admin" && userDetails.archived !== true) ||
+                                                (props.user.group === "Admin" && props.user.id === "Admin") ||
+                                                (props.user.group === "Principal" && props.user.gender === "Female" && userDetails.studentGender === "Nasirat" && userDetails.archived !== true) ||
+                                                (props.user.group === "Principal" && props.user.gender === "Male" && userDetails.studentGender === "Atfal" && userDetails.archived !== true)
+                                            )
                                         );
                                     }).map((result) =>
                                         <tbody key={result.studentID}>
                                             <>
                                                 <tr>
-                                                    <td></td>
+                                                    <td>
+                                                        {/*    Check if staff member is selected                                 Call handleSelectStaff function on selection/deselection */}
+                                                        {(props.user.group === "Admin" || (props.user.group === "Principal" && props.user.gender === "Male")) &&
+                                                            <input type="checkbox" className="checkbox" checked={selectedIds.includes(result.studentID)} onChange={() => handleSelectResult(result.studentID)} />
+                                                        }
+                                                    </td>
                                                     <td style={{ color: "#112c3f" }}>{result?.studentID}</td>
                                                     <td style={{ color: "#112c3f" }}>{result?.studentName}</td>
                                                     <td style={{ color: "#112c3f" }}>{result?.studentGroup}</td>
@@ -163,10 +207,10 @@ function ViewAllResults(props) {
                                                     <td style={{ color: "#112c3f" }}>{result?.finalResult}</td>
                                                     <td style={{ color: "#112c3f" }}>{result?.attendanceResult}</td>
                                                     <td>
-                                                    {props.user.group === "Admin" &&
-                                                        <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(result?.studentID); await togglePopup() }} >Delete</button>
-                                                    }
-                                                </td>
+                                                        {props.user.group === "Admin" &&
+                                                            <button type="submit" style={{ float: "right", textAlign: "right" }} className="btn btn-danger mr-sm-2" onClick={async () => { await selectedId(result?.studentID); await togglePopup() }} >Delete</button>
+                                                        }
+                                                    </td>
                                                 </tr>
                                             </>
                                         </tbody>
