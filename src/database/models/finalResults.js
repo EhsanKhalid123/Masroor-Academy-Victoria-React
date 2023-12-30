@@ -39,9 +39,20 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.STRING(45),
       allowNull: true,
     },
+    // subjectResult: {
+    //   type: DataTypes.JSON,
+    //   allowNull: true,
+    // },
     subjectResult: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: true,
+      get() {
+        const data = this.getDataValue('subjectResult');
+        return data ? JSON.parse(data) : null;
+      },
+      set(val) {
+        this.setDataValue('subjectResult', JSON.stringify(val));
+      },
     },
     finalResult: {
       type: DataTypes.STRING(45),

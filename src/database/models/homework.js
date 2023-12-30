@@ -19,10 +19,21 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.TEXT,
       allowNull: false
     },
+    // group: {
+    //   type: DataTypes.JSON,
+    //   allowNull: false
+    // },
     group: {
-      type: DataTypes.JSON,
-      allowNull: false
-    }
+      type: DataTypes.TEXT,
+      allowNull: false,
+      get() {
+        const data = this.getDataValue('group');
+        return data ? JSON.parse(data) : null;
+      },
+      set(val) {
+        this.setDataValue('group', JSON.stringify(val));
+      },
+    },
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).
     timestamps: false
