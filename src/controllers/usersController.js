@@ -126,7 +126,7 @@ exports.create = async (req, res) => {
       const groups = await db.groups.findAll();
       assignedGroup = assignGroup(groups, req.body.studentDob);
     } else {
-      assignedGroup = null;
+      assignedGroup = req.body.group;
     }
 
     // Following properties are required for user to be created in DB
