@@ -133,7 +133,7 @@ function ViewAllResults(props) {
 
             // Sort by gender (male first)
             if (a['Student Gender'] !== b['Student Gender']) {
-                return a['Student Gender'] === 'Male' ? -1 : 1;
+                return a['Student Gender'] === 'Atfal' ? -1 : 1;
             }
 
             return 0; // Maintain original order if both gender and group are the same
