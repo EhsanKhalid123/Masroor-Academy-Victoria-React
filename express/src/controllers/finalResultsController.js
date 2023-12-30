@@ -151,7 +151,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
 
-    const id = req.body.resultID;
+    const id = req.body.studentID;
 
     let removed = false;
 

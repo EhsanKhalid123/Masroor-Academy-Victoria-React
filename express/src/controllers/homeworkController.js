@@ -1,7 +1,5 @@
 // Old fashioned Import statements for libraries and files
 const db = require("../database");
-const { Op } = require('sequelize');
-const Sequelize = require('sequelize');
 
 // Endpoint for Select all classes from the database.
 exports.all = async (req, res) => {
@@ -85,4 +83,3 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: "Error Deleting Data" });
   }
 };
-
