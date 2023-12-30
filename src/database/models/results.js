@@ -27,10 +27,21 @@ module.exports = (sequelize, DataTypes) =>
       type: DataTypes.JSON,
       allowNull: false,
     },
+    // result: {
+    //   type: DataTypes.STRING(45),
+    //   allowNull: true
+    // },
     result: {
-      type: DataTypes.STRING(45),
-      allowNull: true
-    }
+      type: DataTypes.TEXT,
+      allowNull: true,
+      get() {
+        const data = this.getDataValue('result');
+        return data ? JSON.parse(data) : null;
+      },
+      set(val) {
+        this.setDataValue('result', JSON.stringify(val));
+      },
+    },
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).
     timestamps: false
