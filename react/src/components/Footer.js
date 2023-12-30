@@ -21,7 +21,7 @@ function Footer() {
                 <ul className="list-unstyled list-inline text-center py-2">
                     <li className="list-inline-item">
                         <h5 className="mb-1 text-uppercase footer-parralax-text">Masroor Academy Victoria</h5>
-                        <p style={{ color: "white", fontSize: "20px", margin: "0 20px 20px 20px" }}>Students Portal</p>
+                        <p style={{ color: "white", fontSize: "20px", margin: "0 20px 20px 20px" }}>Student & Staff Portal</p>
                     </li>
                 </ul>
             </div>
