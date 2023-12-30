@@ -56,12 +56,13 @@ exports.login = async (req, res) => {
       // Login failed.
       res.json(null);
     } else {
-      const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender, jamaat: user.jamaat, studentEmail: user.studentEmail }, process.env.jwtkey, {
+      const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, archived: user.archived, class: user.class, gender: user.gender, jamaat: user.jamaat, studentEmail: user.studentEmail, forcePasswordChange: user.forcePasswordChange }, process.env.jwtkey, {
         expiresIn: 7200,
       })
       res.json(accessToken);
     }
   } catch (error) {
+    console.log(error);
     // Send an error response.
     res.status(500).json({ message: "Error Logging In" });
   }
@@ -144,7 +145,7 @@ exports.create = async (req, res) => {
       mothersName: req.body.mothersName,
       mothersEmail: req.body.mothersEmail,
       mothersContact: req.body.mothersContact,
-
+      forcePasswordChange: req.body.forcePasswordChange
     });
 
     res.json(user);
@@ -175,16 +176,18 @@ exports.update = async (req, res) => {
     user.mothersName = req.body.mothersName;
     user.mothersEmail = req.body.mothersEmail;
     user.mothersContact = req.body.mothersContact;
+    user.forcePasswordChange = req.body.forcePasswordChange
 
 
     await user.save();
 
-    const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, gender: user.gender, class: user.class, archived: user.archived, studentEmail: user.studentEmail, jamaat: user.jamaat }, process.env.jwtkey, {
+    const accessToken = sign({ id: user.id, name: user.name, hashed_password: user.hashed_password, group: user.group, gender: user.gender, class: user.class, archived: user.archived, studentEmail: user.studentEmail, jamaat: user.jamaat, forcePasswordChange: user.forcePasswordChange }, process.env.jwtkey, {
       expiresIn: 7200,
     })
 
     return res.json(accessToken);
   } catch (error) {
+    console.log(error);
     // Send an error response.
     res.status(500).json({ message: "Error Updating Data" });
   }

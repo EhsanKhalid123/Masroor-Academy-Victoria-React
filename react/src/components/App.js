@@ -182,7 +182,7 @@ function App() {
               <>
                 <Route path="/" element={<Home user={decodedUser} />} />
                 <Route path="/Home" element={<Home user={decodedUser} />} />
-                <Route path="/Sign-in" element={<Login loginUser={loginUser} />} />
+                <Route path="/Sign-in" element={<Login loginUser={loginUser} logoutUser={logoutUser} />} />
                 <Route path="/Register" element={<Register />} />
                 <Route path="/About" element={<About loginUser={loginUser} />} />
               </>

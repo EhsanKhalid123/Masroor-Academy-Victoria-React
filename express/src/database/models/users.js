@@ -73,6 +73,11 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.STRING(10),
             allowNull: true
         },
+        forcePasswordChange: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
+            allowNull: false
+        },
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).
         timestamps: false
