@@ -3,6 +3,7 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./src/database");
+const path = require('path');
 
 // Database will be sync'ed in the background.
 // Create the tables as the server runs. Function called from index.js.
@@ -35,54 +36,14 @@ require("./src/routes/homeworkRoutes.js")(express, app);
 require("./src/routes/resultRoutes.js")(express, app);
 require("./src/routes/finalResultRoutes.js")(express, app);
 
-if (process.env.NODE_ENV === "production"){
-  app.use(express.static('react/build'))
-}
 
-// // List of all the files that should be served as-is
-// let protected = ['About.js', 'App.css', 'Masroor Academy Victoria 2.ico', 'Announcement.js', 'Dashboard.js', 'ErrorPage.js', 'Home.js', 'Homework.js', 'Login.js', 'Sign-in']
+app.use(express.static(path.join(__dirname, 'react/build')));
 
-// app.get("*", (req, res) => {
+// Serve React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/react/build/index.html'));
+});
 
-//   let path = req.params['0'].substring(1)
-
-//   if (protected.includes(path)) {
-//     // Return the actual file
-//     res.sendFile(`react/build/${path}`);
-//   } else {
-//     // Otherwise, redirect to /build/index.html
-//     res.sendFile(`react/build/index.html`);
-//   }
-// });
-
-// app.get("*", (req, res) => {
-//   let url = path.join(__dirname, 'react/build', 'index.html');
-//   if (!url.startsWith('/app/')) // since we're on local windows
-//     url = url.substring(1);
-//   res.sendFile(url);
-// });
-
-
-
-// UnComment All Lines Below
-
-// var http = require("http");
-// setInterval(function() {
-//     http.get("http://masroor-academy-vic.herokuapp.com/");
-// }, 100000); // every 5 minutes (300000)
-
-// (function wakeup() {
-//   require('open')('https://masroor-academy-vic.herokuapp.com/', (err) => {
-//     if (err) throw err;
-//     console.log('Woke up!');
-//     setTimeout(wakeup, 100000); //29m
-//   });
-// })();
-
-// var tcpp = require('tcp-ping');
-// tcpp.ping({ address: 'https://masroor-academy-vic.herokuapp.com/', port: 443 }, function(err, data) {
-//     console.log(data, err);
-// });
 
 // Set port, listen for requests.
 // Starts the Server on Port 4000.
