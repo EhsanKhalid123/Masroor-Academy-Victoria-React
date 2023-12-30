@@ -10,10 +10,21 @@ module.exports = (sequelize, DataTypes) =>
             type: DataTypes.DATE,
             primaryKey: true,
           },
+          // attendance: {
+          //   type: DataTypes.JSON, // or DataTypes.ARRAY(DataTypes.JSON)
+          //   allowNull: false,
+          // }
           attendance: {
-            type: DataTypes.JSON, // or DataTypes.ARRAY(DataTypes.JSON)
+            type: DataTypes.TEXT,
             allowNull: false,
-          }
+            get() {
+              const data = this.getDataValue('attendance');
+              return data ? JSON.parse(data) : null;
+            },
+            set(val) {
+              this.setDataValue('attendance', JSON.stringify(val));
+            },
+          },
     }, {
         // Don't add the timestamp attributes (updatedAt, createdAt).
         timestamps: false
