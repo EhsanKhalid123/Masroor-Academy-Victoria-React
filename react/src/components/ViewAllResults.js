@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getAllFinalResults, getFinalResultsByID, getGroups, selectedId, getSelectedId, deleteFinalResults } from "../data/repository";
 import Toolbar from "./Toolbar";
+import * as XLSX from 'xlsx';
 
 function ViewAllResults(props) {
 
@@ -86,6 +87,80 @@ function ViewAllResults(props) {
     };
 
 
+    const exportToExcel = () => {
+        const formattedData = filteredResults.map(result => {
+            const data = {
+                'Student ID': result.studentID,
+                'Student Name': result.studentName,
+                'Student Group': result.studentGroup,
+                'Student Gender': result.studentGender,
+                'Fathers Name': result.fathersName,
+                'Mothers Name': result.mothersName,
+                'Parent Email': result.parentEmail,
+                'Student Email': result.studentEmail,
+            };
+
+            // Extract subject names dynamically from the first item
+            const subjectNames = result.subjectResult.reduce((acc, subject) => {
+                Object.keys(subject).forEach(key => {
+                    if (!acc.includes(key)) {
+                        acc.push(key);
+                    }
+                });
+                return acc;
+            }, []);
+
+            // Assign values to subject columns
+            subjectNames.forEach(subject => {
+                const subjectValue = result.subjectResult.reduce((val, subjectObj) => {
+                    return subjectObj[subject] ? `${val}${val ? ', ' : ''}${subjectObj[subject]}` : val;
+                }, '');
+                data[subject] = subjectValue;
+            });
+
+            data['Final Result'] = result.finalResult;
+            data['Attendance Result'] = result.attendanceResult;
+
+            return data;
+        });
+
+        // Sorting the formatted data
+        formattedData.sort((a, b) => {
+            // Sort by group
+            if (a['Student Group'] !== b['Student Group']) {
+                return a['Student Group'].localeCompare(b['Student Group']);
+            }
+
+            // Sort by gender (male first)
+            if (a['Student Gender'] !== b['Student Gender']) {
+                return a['Student Gender'] === 'Male' ? -1 : 1;
+            }
+
+            return 0; // Maintain original order if both gender and group are the same
+        });
+
+        const ws = XLSX.utils.json_to_sheet(formattedData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Results');
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        saveExcelFile(excelBuffer, 'Final Student Result Sheet.xlsx');
+    };
+
+    // The saveExcelFile function remains the same
+
+
+    const saveExcelFile = (buffer, fileName) => {
+        const data = new Blob([buffer], { type: 'application/octet-stream' });
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+
     // Check if groupNumber is 5 to determine filtering
     const shouldFilterResults = groupNumber !== "5";
 
@@ -100,9 +175,7 @@ function ViewAllResults(props) {
     }
 
     // Filter final results based on selected group (if applicable)
-    const filteredResults = shouldFilterResults
-        ? finalResults.filter((result) => result.studentGroup === groupDetails)
-        : finalResults;
+    const filteredResults = shouldFilterResults ? finalResults.filter((result) => result.studentGroup === groupDetails) : finalResults;
 
 
     return (
@@ -126,6 +199,8 @@ function ViewAllResults(props) {
                 <Link to="/SelectGroupResults">
                     <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
                 </Link>
+
+                <button type="button" onClick={exportToExcel} style={{ margin: "5px" }} className="text-center btn btn-primary">Export to Excel</button>
             </div>
 
             <div className="table-responsive">
