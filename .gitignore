@@ -6,7 +6,8 @@ express/node_modules
 node_modules
 react/ckeditor5/node_modules
 .env
-#react/build
+react/build
+Important Notes.md
 
 /.pnp
 .pnp.js

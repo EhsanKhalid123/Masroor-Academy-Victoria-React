@@ -97,7 +97,7 @@ function Login(props) {
                     <label htmlFor="password">Password:</label>
                     <input type="password" className="form-control" id="password" name="password" placeholder="Please enter your Password" autoComplete="current-password" value={fields.password} onChange={handleInputChange} />
                 </div>
-                <button type="submit" className="btn btn-custom">Submit</button>
+                <button type="submit" className="btn btn-custom">Login</button>
 
                 {/* Error Message */}
                 {errorMessage !== null &&

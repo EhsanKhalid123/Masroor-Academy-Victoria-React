@@ -160,14 +160,11 @@ function Homework(props) {
 
             const existingFinalResults = await getFinalResultsByID(studentID);
             const student = users.find((user) => user.id === studentID);
-            if (existingFinalResults){
-                alert("Running First above");
+            if (existingFinalResults)
                 await updateFinalResults(studentID, null);
-            }
-            else {
-                alert("Running above");
+            else
                 await createFinalResults(studentID, student?.name, student?.group, student?.gender, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
-            }
+
         } else {
 
             // Result to Calculate the Correct Initial Local Score for Student being marked for first time
@@ -219,16 +216,11 @@ function Homework(props) {
 
             const existingFinalResults = await getFinalResultsByID(studentID);
             const student = users.find((user) => user.id === studentID);
-            console.log(existingFinalResults);
-            
-            if (existingFinalResults){
-                alert("Running First");
+
+            if (existingFinalResults)
                 await updateFinalResults(studentID, null);
-            }
-            else {
-                alert("Running");
+            else
                 await createFinalResults(studentID, student?.name, student?.group, student?.gender, student?.fathersName, student?.mothersName, student?.fathersEmail, student?.studentEmail);
-            }
         }
     };
 
