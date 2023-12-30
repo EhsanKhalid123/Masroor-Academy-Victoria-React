@@ -125,8 +125,8 @@ function Register(props) {
                 setErrors(formErrors);
                 return;
             }
-            
-            var gender = null; 
+
+            var gender = null;
             if (trimmedValues.gender === "Atfal-ul-Ahmadiyya")
                 gender = "Atfal";
             else if (trimmedValues.gender === "Nasirat-ul-Ahmadiyya")
@@ -149,8 +149,8 @@ function Register(props) {
             // Show success message.
             setMessage(
                 <>
-                    Jazzakallah for your response, you will soon be contacted for future events and details.<br/>
-                    Please note your Login details - ID: {generatedID} Password: student <br/>
+                    Jazzakallah for your response, you will soon be contacted for future events and details.<br />
+                    Please note your Login details - <b style={{color: "#ff7d00"}}>ID: {generatedID} </b> <b style={{color: "#d46800"}}>Password: student </b><br />
                     Please use these details to login and please change password, if you forget the details please
                     contact masrooracademyvic1@gmail.com or contact the Principal.
                 </>);
@@ -166,6 +166,14 @@ function Register(props) {
     const handleValidation = async () => {
         const trimmedValues = trimFields();
         const formErrors = {};
+
+        const isFatherDetailsEntered = !!trimmedValues.fathersName;
+        const isMotherDetailsEntered = !!trimmedValues.mothersName;
+
+        if (!isFatherDetailsEntered && !isMotherDetailsEntered) {
+            formErrors['fathersName'] = 'Please fill at least one of the sections: fathers or mothers.';
+            formErrors['mothersName'] = 'Please fill at least one of the sections: fathers or mothers.';
+        }
 
         // Validation for Name Field
         let key = "name";
@@ -207,64 +215,69 @@ function Register(props) {
         if (value.length === 0)
             formErrors[key] = "Please select a Jama'at.";
 
-        // Validation for Fathers Name Field
-        key = "fathersName";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Name is required.";
-        else if (value.length > 40)
-            formErrors[key] = "Name length cannot be greater than 40.";
-        else if (/\d+/.test(value))
-            formErrors[key] = "Father Name cannot have any numbers.";
-        else if (value === "Admin")
-            formErrors[key] = "Father Name Cannot be Admin";
-
-        // Validation for Fathers Email Field
-        key = "fathersEmail";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Email address is required.";
-        else if (value.length > 128)
-            formErrors[key] = "Email length cannot be greater than 128.";
-        else if (!/\S+@\S+\.\S+/.test(value))
-            formErrors[key] = "Please enter a valid email address";
-
-        // Validation for Fathers Name Field
-        key = "fathersContact";
-        value = trimmedValues[key];
-        if (value.length === 0)
-            formErrors[key] = "Fathers Phone Number is Required.";
-        else if (value.length > 10)
-            formErrors[key] = "Contact Number cannot be greater than 10.";
-
-        // Validation for Mothers Name Field
-        key = "mothersName";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (/\d+/.test(value))
-                formErrors[key] = "Mother Name cannot have any numbers.";
+        if (isFatherDetailsEntered) {
+            // Validation for Fathers Name Field
+            key = "fathersName";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Name is required.";
+            else if (value.length > 40)
+                formErrors[key] = "Name length cannot be greater than 40.";
+            else if (/\d+/.test(value))
+                formErrors[key] = "Father Name cannot have any numbers.";
             else if (value === "Admin")
-                formErrors[key] = "Mother Name Cannot be Admin";
-        }
+                formErrors[key] = "Father Name Cannot be Admin";
 
-        // Validation for Mothers Email Field
-        key = "mothersEmail";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 128)
+            // Validation for Fathers Email Field
+            key = "fathersEmail";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Email address is required.";
+            else if (value.length > 128)
                 formErrors[key] = "Email length cannot be greater than 128.";
             else if (!/\S+@\S+\.\S+/.test(value))
                 formErrors[key] = "Please enter a valid email address";
-        }
 
-        // Validation for Mothers Name Field
-        key = "mothersContact";
-        value = trimmedValues[key];
-        if (value.length !== 0) {
-            if (value.length > 10)
+            // Validation for Fathers Name Field
+            key = "fathersContact";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Fathers Phone Number is Required.";
+            else if (value.length > 10)
                 formErrors[key] = "Contact Number cannot be greater than 10.";
         }
 
+        if (isMotherDetailsEntered) {
+            // Validation for Mothers Name Field
+            key = "mothersName";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Mothers Name is required.";
+            else if (value.length > 40)
+                formErrors[key] = "Name length cannot be greater than 40.";
+            else if (/\d+/.test(value))
+                formErrors[key] = "Mother Name cannot have any numbers.";
+            else if (value === "Admin")
+                formErrors[key] = "Mother Name Cannot be Admin";
+
+            // Validation for Mothers Email Field
+            key = "mothersEmail";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Mothers Email address is required.";
+            else if (value.length > 128)
+                formErrors[key] = "Email length cannot be greater than 128.";
+            else if (!/\S+@\S+\.\S+/.test(value))
+                formErrors[key] = "Please enter a valid email address";
+
+            // Validation for Mothers Name Field
+            key = "mothersContact";
+            value = trimmedValues[key];
+            if (value.length === 0)
+                formErrors[key] = "Mothers Phone Number is Required.";
+            else if (value.length > 10)
+                formErrors[key] = "Contact Number cannot be greater than 10.";
+        }
 
         // Sets Errors If any Validation Fails
         setErrors(formErrors);
@@ -336,7 +349,7 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="studentDob"><b className="required-field" style={{ fontSize: "20px" }}>Student's Date of Birth:</b></label>
                                     <input type="date" className="form-control" id="studentDob" name="studentDob" placeholder="Please enter your Date of Birth" value={values.studentDob} onChange={handleInputChange} max={current} required />
-                                    <small id="studentDobHelp" className="form-text" style={{ fontWeight: "bold", color: "rgb(217 67 67)", fontSize: "15px" }}>Please enter the correct date of birth, and make sure to select or enter the correct birth year to allocate your child to their respective groups.</small>
+                                    <small id="studentDobHelp" className="form-text" style={{ fontWeight: "bold", color: "rgb(203 145 26)", fontSize: "15px" }}>Please enter the correct date of birth, and make sure to select or enter the correct birth year to allocate your child to their respective groups.</small>
                                     {errors.studentDob && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.studentDob}</p>
                                     )}
@@ -369,9 +382,10 @@ function Register(props) {
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
                                     )}
                                 </div>
+                                <p style={{ fontWeight: "bold", color: "rgb(228 96 28)", fontSize: "15px" }}> Please make sure to enter either Fathers Details or Mothers Details, its preferred to enter both but at least one of them is required</p>
                                 {/* Fathers Name Field */}
                                 <div className="form-group">
-                                    <label htmlFor="fathersName"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Full Name:</b></label>
+                                    <label htmlFor="fathersName"><b style={{ fontSize: "20px" }}>Fathers Full Name:</b></label>
                                     <input type="text" className="form-control" id="fathersName" name="fathersName" placeholder="Please enter fathers full name" value={values.fathersName} onChange={handleInputChange} required />
                                     {errors.fathersName && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersName}</p>
@@ -379,7 +393,7 @@ function Register(props) {
                                 </div>
                                 {/* Fathers Email Field */}
                                 <div className="form-group">
-                                    <label htmlFor="fathersEmail"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Email:</b></label>
+                                    <label htmlFor="fathersEmail"><b style={{ fontSize: "20px" }}>Fathers Email:</b></label>
                                     <input type="fathersEmail" className="form-control" id="fathersEmail" name="fathersEmail" placeholder="Please enter fathers email" value={values.fathersEmail} onChange={handleInputChange} required />
                                     {errors.fathersEmail && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersEmail}</p>
@@ -387,7 +401,7 @@ function Register(props) {
                                 </div>
                                 {/* Fathers Contact Number Field */}
                                 <div className="form-group">
-                                    <label htmlFor="fathersContact"><b className="required-field" style={{ fontSize: "20px" }}>Fathers Contact Number:</b></label>
+                                    <label htmlFor="fathersContact"><b style={{ fontSize: "20px" }}>Fathers Contact Number:</b></label>
                                     <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="fathersContact" name="fathersContact" placeholder="Please enter fathers contact number" value={values.fathersContact} onChange={handleInputChange} required />
                                     <small id="fathersContact" className="form-text text-muted" style={{ fontWeight: "bold", fontSize: "15px" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
                                     {errors.fathersContact && (

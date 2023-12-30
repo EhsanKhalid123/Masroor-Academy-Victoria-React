@@ -77,25 +77,27 @@ function assignGroup(groups, studentDob) {
 
   // Find the group that matches the user's birth year
   for (const group of groups) {
-    const groupYears = group.year.split("-"); // Split the year range into an array
-    console.log(groupYears);
+    if (group.year) {
+      const groupYears = group.year.split("-"); // Split the year range into an array
+      console.log(groupYears);
 
-    if (groupYears.length === 1) {
-      // Single year case
-      const year = parseInt(groupYears[0]);
-      console.log(year);
-      if (birthYear === year) {
-        assignedGroup = group.group;
-        break;
-      }
-    } else if (groupYears.length === 2) {
-      // Range case
-      const startYear = parseInt(groupYears[0]);
-      const endYear = parseInt(groupYears[1]);
-      console.log(startYear + " " + endYear);
-      if (startYear <= birthYear && birthYear <= endYear) {
-        assignedGroup = group.group;
-        break;
+      if (groupYears.length === 1) {
+        // Single year case
+        const year = parseInt(groupYears[0]);
+        console.log(year);
+        if (birthYear === year) {
+          assignedGroup = group.group;
+          break;
+        }
+      } else if (groupYears.length === 2) {
+        // Range case
+        const startYear = parseInt(groupYears[0]);
+        const endYear = parseInt(groupYears[1]);
+        console.log(startYear + " " + endYear);
+        if (startYear <= birthYear && birthYear <= endYear) {
+          assignedGroup = group.group;
+          break;
+        }
       }
     }
   }
