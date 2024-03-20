@@ -382,7 +382,7 @@ function Register(props) {
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.jamaat}</p>
                                     )}
                                 </div>
-                                <p style={{ fontWeight: "bold", color: "rgb(228 96 28)", fontSize: "15px" }}> Please make sure to enter either Fathers Details or Mothers Details, its preferred to enter both but at least one of them is required</p>
+                                <p style={{ fontWeight: "bold", color: "rgb(228 96 28)", fontSize: "15px" }}> NOTE: We will use these number to communicate classes information & homework. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</p>
                                 {/* Fathers Name Field */}
                                 <div className="form-group">
                                     <label htmlFor="fathersName"><b style={{ fontSize: "20px" }}>Fathers Full Name:</b></label>
@@ -403,7 +403,6 @@ function Register(props) {
                                 <div className="form-group">
                                     <label htmlFor="fathersContact"><b style={{ fontSize: "20px" }}>Fathers Contact Number:</b></label>
                                     <input type="number" style={{ WebkitAppearance: "none" }} className="form-control" id="fathersContact" name="fathersContact" placeholder="Please enter fathers contact number" value={values.fathersContact} onChange={handleInputChange} required />
-                                    <small id="fathersContact" className="form-text text-muted" style={{ fontWeight: "bold", fontSize: "15px" }}>NOTE: We will use this number to communicate classes information & home work. So, please provide the number of parent who can monitor this and work on it accordingly. Jazzakallah</small>
                                     {errors.fathersContact && (
                                         <p style={{ color: "red", textAlign: "center", fontSize: "18px", margin: "10px 10px 10px 10px" }}>{errors.fathersContact}</p>
                                     )}
