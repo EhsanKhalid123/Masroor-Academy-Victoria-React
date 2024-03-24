@@ -4,8 +4,8 @@ import axios from "axios";
 import jwtDecode from 'jwt-decode'
 
 // --- Constants ----------------------------------------------------------------------------------
-// const API_HOST = "http://localhost:4000";
-const API_HOST = "https://masroor-academy-vic.herokuapp.com";
+const API_HOST = "http://localhost:4000";
+// const API_HOST = "https://masroor-academy-vic.herokuapp.com";
 const USER_KEY = "user";
 const SELECT_KEY = "SelectedID";
 const SELECT_KEY2 = "SelectedID2";

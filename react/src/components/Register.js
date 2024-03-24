@@ -39,7 +39,7 @@ function Register(props) {
             return;
 
         // Time limit for message to display
-        const id = setTimeout(() => setMessage(null), 30000);
+        const id = setTimeout(() => setMessage(null), 35000);
 
         // When message changes clear the queued timeout function.
         return () => clearTimeout(id);

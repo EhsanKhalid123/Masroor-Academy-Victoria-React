@@ -73,9 +73,9 @@ async function addData() {
     const argon2 = require("argon2");
 
     // Sample User data to add into the database user table.
-    // let hashedPassword = await argon2.hash("abc123", { type: argon2.argon2id });
+    let hashedPassword = await argon2.hash(process.env.ADMINPASS, { type: argon2.argon2id });
 
-    await db.users.create({ id: "Admin", name: "SysAdmin", hashed_password: process.env.ADMINPASS, group: "Admin", gender: "Admin", archived: false });
+    await db.users.create({ id: "Admin", name: "SysAdmin", hashed_password: hashedPassword, group: "Admin", gender: "Admin", archived: false, forcePasswordChange: false });
     // await db.homeworkPosts.create({ homeworkPosts_id: "0", homeworkText: "0", id: "Admin" });
 
     await db.formStatus.create(); // Creates the Default Form Status from Model

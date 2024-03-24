@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) =>
             allowNull: true
         },
         hashed_password: {
-            type: DataTypes.STRING(32),
+            type: DataTypes.STRING,
             allowNull: true
         },
         group: {

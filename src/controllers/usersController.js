@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
   try {
     const user = await db.users.findByPk(req.body.id.toUpperCase().trim());
 
-    if (user === null || user.hashed_password !== req.body.password) {
+    if (user === null || await argon2.verify(user.hashed_password, req.body.password) === false){
       // Login failed.
       res.json(null);
     } else {
@@ -121,6 +121,8 @@ exports.create = async (req, res) => {
       }
     }
 
+    const hashedPassword2 = await argon2.hash(hashedPassword, { type: argon2.argon2id });
+
     // Fetch groups from the database
     if (group !== "Admin" && group !== "Male Teacher" && group !== "Female Teacher" && group !== "Principal") {
       const groups = await db.groups.findAll();
@@ -133,7 +135,7 @@ exports.create = async (req, res) => {
     const user = await db.users.create({
       id: req.body.id,
       name: req.body.name,
-      hashed_password: hashedPassword,
+      hashed_password: hashedPassword2,
       group: assignedGroup,
       gender: req.body.gender,
       class: req.body.class,
@@ -165,8 +167,11 @@ exports.update = async (req, res) => {
 
     const user = await db.users.findByPk(id);
 
+    const nonHashedPassword = req.body.hashed_password;
+    const hashedPassword = await argon2.hash(nonHashedPassword, { type: argon2.argon2id });
+
     user.name = req.body.name;
-    user.hashed_password = req.body.hashed_password;
+    user.hashed_password = hashedPassword;
     user.group = req.body.group;
     user.gender = req.body.gender;
     user.class = req.body.class;

@@ -62,7 +62,7 @@ function Dashboard(props) {
             const teachers = currentDetails.filter(user => (user.group === 'Male Teacher' || user.group === 'Female Teacher'));
             setTotalTeachers(teachers.length);
 
-            const students = currentDetails.filter(user => (user.group !== 'Male Teacher' && user.group !== 'Female Teacher' && user.group !== 'Admin'));
+            const students = currentDetails.filter(user => (user.group !== 'Male Teacher' && user.group !== 'Female Teacher' && user.group !== 'Admin' && user.group !== 'Principal'));
             setTotalStudents(students.length);
 
             const admins = currentDetails.filter(user => (user.group === 'Admin'));
