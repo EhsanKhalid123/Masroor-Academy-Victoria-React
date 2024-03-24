@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { selectedId, selectedId2, getProfileUsers, deleteUserDB, getSelectedId, getProfile, deleteHomeworks2, getGroups } from "../data/repository";
 import Toolbar from "./Toolbar";
+import * as XLSX from 'xlsx';
 
 function DisplayStudents(props) {
 
@@ -109,6 +110,60 @@ function DisplayStudents(props) {
         setSelectAll(!selectAll);
     };
 
+    // Check if groupNumber is 5 to determine filtering
+    const shouldFilterResults = groupNumber !== "5";
+
+    // Define the whitelisted groups
+    const whitelistedGender = ['Atfal', 'Nasirat'];
+
+    // Filter Registered students based on selected group and whitelisted genders (if applicable)
+    const filteredResults = shouldFilterResults ? users.filter((user) => {
+            return user.group === groupDetails && whitelistedGender.includes(user.gender);
+        })
+        : users.filter((user) => whitelistedGender.includes(user.gender));
+
+    const exportToExcel = () => {
+        const formattedData = filteredResults.map(user => {
+            const data = {
+                'ID': user.id,
+                'Name': user.name,
+                'Group': user.group,
+                'Auxiliary Organisation': user.gender,
+                'Student Email': user.studentEmail,
+                'Student DOB': user.studentDob,
+                'Jamaat': user.jamaat,
+                'Fathers Name': user.fathersName,
+                'Fathers Email': user.fathersEmail,
+                'Fathers Contact': user.fathersContact,
+                'Mothers Name': user.mothersName,
+                'Mothers Email': user.mothersEmail,
+                'Mothers Contact': user.mothersContact
+            };
+
+            return data;
+        });
+
+        const ws = XLSX.utils.json_to_sheet(formattedData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Form Responses (Registrations)');
+        const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+        saveExcelFile(excelBuffer, 'Masroor Academy Registration (Responses).xlsx');
+    };
+
+    // The saveExcelFile function remains the same
+
+
+    const saveExcelFile = (buffer, fileName) => {
+        const data = new Blob([buffer], { type: 'application/octet-stream' });
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
 
     let linkTo;
     let selectLink;
@@ -143,6 +198,10 @@ function DisplayStudents(props) {
                 <Link to={linkTo}>
                     <button type="button" style={{ margin: "5px" }} className="text-center btn btn-success">Go Back to Select Group</button>
                 </Link>
+
+                {(props.user.group === "Admin" || props.user.group === "Principal") &&
+                    <button type="button" onClick={exportToExcel} style={{ margin: "5px" }} className="text-center btn btn-primary">Export to Excel</button>
+                }
             </div>
 
             <div className="table-responsive">
